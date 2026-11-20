@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Weightlifting log PWA (Hevy-style) for personal use. **No backend, no login**: all data lives in the browser's IndexedDB on each device. UI text is **Brazilian Portuguese**, mobile-first, dark theme only. Code identifiers are also in Portuguese (`sessao`, `serie`, `carga`, `programaDia`…); keep that convention.
+Weightlifting log PWA (Hevy-style) for personal use. **No backend, no login**: all data lives in the browser's IndexedDB on each device. UI text is **Brazilian Portuguese**, mobile-first, dark theme by default (optional light theme, see theming below). Code identifiers are also in Portuguese (`sessao`, `serie`, `carga`, `programaDia`…); keep that convention.
 
 ## Commands
 
 ```bash
 npm run dev          # dev server on all interfaces (phone on same Wi-Fi via the "Network" URL)
-npm test             # Vitest, all tests
+npm test             # Vitest, all tests (npm run test:watch for watch mode)
 npx vitest run src/lib/forca.test.ts      # single file
 npx vitest run -t "sugestaoProgressao"    # tests matching a name
 npm run typecheck    # tsc --noEmit
@@ -29,6 +29,7 @@ Node ≥ 22.12. TypeScript is v7 (`tsc` only typechecks; `noEmit`). No ESLint/Pr
   - First run: the `populate` event seeds `exerciciosIniciais.ts` and the default config.
   - `divisoes.ts`: ready-made splits (one per 2–6 days). Items are only **exercise name + sets**; reps and rest come from `lib/metas.ts:metaPadrao` (exercise `tipo` composto/isolado + `config.objetivo`). `divisoes.test.ts` asserts every name exists in the seed list **and** that each split meets the guide via `lib/volume.ts:analisarPrograma` (every `GRUPOS_PRINCIPAIS` muscle ≥2x/week and 10–20 weekly sets; ≥8 for the 2-day split). Changing a split means re-running that test.
   - Exercises carry `tipo` and `secundarios`; secondaries count **half a set** in volume. Sets with `rir ≥ 5` don't count.
+  - Tables (`TABELAS` in `index.ts`): exercicios, programas, programaDias, programaExercicios, sessoes, sessaoSeries, pesos (body-weight log, `pesos.ts`), config. Shared reactive hooks such as `useExerciciosMap` live in `hooks.ts`.
   - v1→v2 conversion lives in `migracoes.ts` and is shared by the Dexie upgrade and by restoring v1 backups.
 - **Sessions are copies.** `iniciarTreino` copies the program day into `sessaoSeries`, including per-set `repsMin/repsMax/descansoSeg` and `ordem`, so editing or deleting a program never changes history. Exercise position within a workout is `sessaoSeries.ordem`. There is no separate session-exercise table; `lib/treino.ts:agruparPorExercicio` groups the sets for display.
 - **The in-progress workout is just a session with `concluida = false`** (at most one; `iniciarTreino` returns the existing one). Every edit is written to Dexie immediately, which is what makes "close the app and resume" work. `finalizarTreino` deletes unchecked sets and refuses to finish when none are checked.
