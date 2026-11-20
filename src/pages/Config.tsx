@@ -89,6 +89,9 @@ export default function Config() {
           <Link to="/exercicios" className="flex min-h-12 items-center justify-center rounded-xl bg-superficie-2 active:bg-borda">
             Biblioteca de exercícios
           </Link>
+          <Link to="/sobre" className="flex min-h-12 items-center justify-center rounded-xl bg-superficie-2 active:bg-borda">
+            Sobre: base científica dos treinos
+          </Link>
         </Cartao>
 
         <Cartao className="flex flex-col gap-3">

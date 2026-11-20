@@ -113,6 +113,13 @@ export default function Inicio() {
             </Link>
           </Cartao>
         )}
+
+        <footer className="mt-2 flex flex-col items-center gap-1 pb-4 text-center text-xs text-suave">
+          <p>Conteúdo informativo. Não substitui orientação de médico, nutricionista ou profissional de educação física.</p>
+          <Link to="/sobre" className="flex min-h-12 items-center px-4 text-sm font-semibold text-acento">
+            Sobre: de onde vêm os treinos
+          </Link>
+        </footer>
       </div>
 
       <Painel aberto={outroDia} aoFechar={() => setOutroDia(false)} titulo="Qual treino?">

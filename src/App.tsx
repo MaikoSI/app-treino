@@ -14,6 +14,7 @@ import Programas from './pages/Programas';
 import Progresso from './pages/Progresso';
 import Resumo from './pages/Resumo';
 import SessaoDetalhe from './pages/SessaoDetalhe';
+import Sobre from './pages/Sobre';
 import Treino from './pages/Treino';
 
 // O gráfico (Recharts) é a maior dependência: carrega só quando abrir a tela.
@@ -51,6 +52,7 @@ export default function App() {
           }
         />
         <Route path="/config" element={<Config />} />
+        <Route path="/sobre" element={<Sobre />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       {!semNavegacao && <Navegacao />}
