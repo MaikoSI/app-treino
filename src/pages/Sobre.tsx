@@ -47,23 +47,44 @@ export default function Sobre() {
         <Secao titulo="Como o app usa este guia">
           <ul className="flex flex-col gap-3">
             <Item titulo="Divisões prontas">
-              2 dias: Full Body A/B. 3 dias: Full Body A/B/C ou ABC. 4 dias: Superiores/Inferiores. 6 dias: Push/Pull/Legs. Nessas
-              divisões, cada músculo é treinado cerca de 2x por semana (o ABC treina 1x). A opção de 5 dias é o ABCDE, que treina cada
-              músculo 1x por semana: funciona, mas fica abaixo da frequência recomendada.
+              2 dias: Full Body A/B. 3 dias: Full Body A/B/C. 4 dias: Superiores/Inferiores. 5 dias: Superiores/Inferiores + Push/Pull/Legs.
+              6 dias: Push/Pull/Legs. Todas treinam cada músculo principal pelo menos 2x por semana, com 10 a 20 séries semanais (8 ou mais
+              na de 2 dias, faixa de iniciante). Panturrilha, abdômen e antebraço entram como complementares.
+            </Item>
+            <Item titulo="Repetições e descanso">
+              Compostos: 6–10 repetições e 2:30 de descanso. Isolados: 10–15 repetições e 1:30. No modo Força (em Ajustes), compostos
+              usam 3–6 repetições e pelo menos 3:00. Os descansos são ajustáveis, e “Aplicar ao programa ativo” reaplica essas metas.
+            </Item>
+            <Item titulo="Contador de volume">
+              Na tela Progresso, séries de trabalho por músculo em cada semana. Compostos contam meia série para os músculos auxiliares
+              (o supino conta para tríceps e ombros). Abaixo de 10 aparece como “abaixo”; acima de 20, como “alto”.
+            </Item>
+            <Item titulo="Análise do programa">
+              Ao editar um programa, “Volume por semana” mostra séries e frequência de cada músculo e avisa quando algum fica abaixo de
+              10 séries, acima de 20 ou treinado só 1x por semana.
+            </Item>
+            <Item titulo="RIR">
+              Campo opcional em cada série (ligue em Ajustes), de 0 a 5+. Séries com RIR 5 ou mais não contam no volume.
             </Item>
             <Item titulo="Progressão dupla">
               Quando todas as séries de um exercício chegam ao topo da faixa de repetições, o próximo treino mostra “Tente +2,5 kg”
-              (+5 kg em quadríceps, posteriores, glúteos e panturrilha).
+              (+5 kg em quadríceps, posteriores, glúteos e panturrilha). Carga e repetições já vêm com o que você fez da última vez.
             </Item>
-            <Item titulo="Registro de tudo">
-              Carga e repetições já vêm com o que você fez da última vez, para facilitar a sobrecarga progressiva.
+            <Item titulo="Estagnação">
+              Se um exercício passa 3 treinos sem superar o melhor anterior (nem em 1RM estimado, nem em volume), o treino sugere
+              conferir sono, alimentação e fadiga e trocar por uma variação ou fazer uma semana leve.
+            </Item>
+            <Item titulo="Semana leve (deload)">
+              Botão na tela Início: por 7 dias, mesmos exercícios com metade das séries.
+            </Item>
+            <Item titulo="Check-in de sono">
+              Antes do treino, o app pergunta como você dormiu. Se dormiu mal, tira uma série dos exercícios com 3 ou mais. Dá para
+              desligar em Ajustes.
             </Item>
             <Item titulo="1RM e recordes">1RM estimado pela fórmula de Epley; o app comemora quando você bate um recorde.</Item>
-            <Item titulo="Séries por grupo muscular">Na tela Progresso, a contagem de séries feitas por músculo em cada semana.</Item>
-            <Item titulo="RPE">Campo opcional em cada série (ligue em Ajustes). Veja a tabela RPE × RIR na seção “Proximidade da falha”.</Item>
-            <Item titulo="Descanso">
-              Definido por exercício no programa. O padrão é 1:30, e 2:30 em exercícios de até 8 repetições; ajuste em Ajustes e na
-              edição do programa.
+            <Item titulo="Peso e nutrição">
+              Registro de peso com média semanal e ritmo comparado à meta (ganhar +0,25 a +0,5%, perder −0,5 a −1% por semana), proteína
+              de 1,6–2,2 g/kg em 4 refeições e as doses de creatina e cafeína, com o aviso médico.
             </Item>
           </ul>
         </Secao>
@@ -146,8 +167,8 @@ export default function Sobre() {
             ]}
           />
           <p className="text-sm text-secundario">
-            O clássico ABCDE (cada músculo 1x por semana) funciona, mas fica abaixo da frequência recomendada. Se preferir, garanta pelo
-            menos 10 séries semanais por músculo.
+            O clássico ABCDE (cada músculo 1x por semana) funciona, mas fica abaixo da frequência recomendada; por isso o app não o
+            oferece pronto. Se preferir montá-lo, garanta pelo menos 10 séries semanais por músculo.
           </p>
         </Secao>
 

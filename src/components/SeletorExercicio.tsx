@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo, useState } from 'react';
 import { db } from '../db';
-import { EQUIPAMENTOS, GRUPOS_MUSCULARES, type Equipamento, type Exercicio, type GrupoMuscular } from '../db/tipos';
+import { EQUIPAMENTOS, GRUPOS_MUSCULARES, type Equipamento, type Exercicio, type GrupoMuscular, type TipoExercicio } from '../db/tipos';
 import { Botao, Painel } from './ui';
 
 const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -138,6 +138,7 @@ function FormNovoExercicio({
   const [nome, setNome] = useState(nomeInicial);
   const [grupo, setGrupo] = useState<GrupoMuscular>(grupoInicial);
   const [equipamento, setEquipamento] = useState<Equipamento>('Máquina');
+  const [tipo, setTipo] = useState<TipoExercicio>('isolado');
   const [erro, setErro] = useState('');
 
   async function salvar() {
@@ -145,7 +146,7 @@ function FormNovoExercicio({
     if (!n) return setErro('Dê um nome ao exercício.');
     const existe = await db.exercicios.filter((e) => semAcento(e.nome) === semAcento(n)).first();
     if (existe) return setErro('Já existe um exercício com esse nome.');
-    const novo = { nome: n, grupoMuscular: grupo, equipamento, personalizado: true };
+    const novo = { nome: n, grupoMuscular: grupo, equipamento, tipo, secundarios: [], personalizado: true };
     aoCriar({ ...novo, id: await db.exercicios.add(novo) });
   }
 
@@ -172,6 +173,25 @@ function FormNovoExercicio({
           ))}
         </select>
       </label>
+      <fieldset className="flex flex-col gap-1">
+        <legend className="mb-1 text-sm text-secundario">Tipo</legend>
+        <div className="grid grid-cols-2 gap-1 rounded-xl bg-cartao-2 p-1">
+          {(['composto', 'isolado'] as const).map((t) => (
+            <button
+              key={t}
+              type="button"
+              aria-pressed={tipo === t}
+              onClick={() => setTipo(t)}
+              className={`min-h-12 rounded-lg px-3 font-semibold capitalize ${tipo === t ? 'bg-primaria text-sobre-primaria' : 'text-secundario active:bg-borda'}`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+        <span className="text-xs text-secundario">
+          Composto: vários músculos e cargas altas (6–10 reps, 2–3 min de descanso). Isolado: um músculo (10–15 reps, ~1,5 min).
+        </span>
+      </fieldset>
       {erro && <p className="text-alerta-texto">{erro}</p>}
       <Botao variante="primario" grande onClick={salvar}>
         Salvar exercício

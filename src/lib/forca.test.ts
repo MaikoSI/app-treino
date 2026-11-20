@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { detectarRecordes, sugestaoProgressao, umRmEpley, volumeTotal } from './forca';
+import { detectarRecordes, estagnado, sugestaoProgressao, umRmEpley, volumeTotal } from './forca';
 
 describe('umRmEpley', () => {
   it('aplica carga × (1 + reps/30)', () => {
@@ -64,5 +64,28 @@ describe('detectarRecordes', () => {
   });
   it('não detecta quando não superou', () => {
     expect(detectarRecordes([sf(1, 90, 5)], [sf(1, 100, 5)])).toEqual([]);
+  });
+});
+
+describe('estagnado', () => {
+  const t = (inicio: number, ...series: [number, number][]) => ({
+    sessaoId: inicio,
+    inicio,
+    series: series.map(([carga, reps]) => ({ carga, reps })),
+  });
+
+  it('3 treinos seguidos sem bater o melhor anterior (1RM e volume) = estagnado', () => {
+    expect(estagnado([t(1, [80, 8], [80, 8]), t(2, [80, 8], [80, 7]), t(3, [80, 7], [80, 7]), t(4, [80, 8], [80, 8])])).toBe(true);
+  });
+  it('mais repetições ou mais carga em algum dos 3 = progresso', () => {
+    expect(estagnado([t(1, [80, 8]), t(2, [80, 8]), t(3, [80, 9]), t(4, [80, 8])])).toBe(false);
+    expect(estagnado([t(1, [80, 8]), t(2, [80, 8]), t(3, [80, 8], [80, 4]), t(4, [80, 8])])).toBe(false); // volume
+  });
+  it('precisa de pelo menos 4 treinos', () => {
+    expect(estagnado([t(1, [80, 8]), t(2, [80, 8]), t(3, [80, 8])])).toBe(false);
+  });
+  it('peso corporal compara repetições', () => {
+    expect(estagnado([t(1, [0, 12]), t(2, [0, 10]), t(3, [0, 11]), t(4, [0, 12])])).toBe(true);
+    expect(estagnado([t(1, [0, 12]), t(2, [0, 10]), t(3, [0, 13]), t(4, [0, 12])])).toBe(false);
   });
 });

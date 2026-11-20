@@ -1,14 +1,16 @@
 import { db } from './index';
 import { lerConfig } from './config';
-import { descansoSugerido, type Divisao } from './divisoes';
+import type { Divisao } from './divisoes';
 import type { Programa, ProgramaDia, ProgramaExercicio } from './tipos';
+import { metaPadrao } from '../lib/metas';
+import type { DiaPlanejado } from '../lib/volume';
 
 /** Cria um programa a partir de uma divisão pronta. Devolve o id. */
 export async function criarProgramaDeDivisao(divisao: Divisao, ativar = true): Promise<number> {
-  const { descansoPadraoSeg } = await lerConfig();
+  const config = await lerConfig();
   return db.transaction('rw', [db.programas, db.programaDias, db.programaExercicios, db.exercicios], async () => {
     const exercicios = await db.exercicios.toArray();
-    const porNome = new Map(exercicios.map((e) => [e.nome, e.id!]));
+    const porNome = new Map(exercicios.map((e) => [e.nome, e]));
 
     if (ativar) await desativarTodos();
     const programaId = await db.programas.add({
@@ -22,17 +24,9 @@ export async function criarProgramaDeDivisao(divisao: Divisao, ativar = true): P
       const diaId = await db.programaDias.add({ programaId, ordem: ordemDia, nome: dia.nome });
       const itens: Omit<ProgramaExercicio, 'id'>[] = [];
       dia.exercicios.forEach((item, ordem) => {
-        const exercicioId = porNome.get(item.nome);
-        if (exercicioId === undefined) return; // exercício removido da biblioteca
-        itens.push({
-          diaId,
-          exercicioId,
-          ordem,
-          series: item.series,
-          repsMin: item.repsMin,
-          repsMax: item.repsMax,
-          descansoSeg: descansoSugerido(item.repsMax, descansoPadraoSeg),
-        });
+        const ex = porNome.get(item.nome);
+        if (!ex) return; // exercício removido da biblioteca
+        itens.push({ diaId, exercicioId: ex.id, ordem, series: item.series, ...metaPadrao(ex.tipo, config) });
       });
       await db.programaExercicios.bulkAdd(itens);
     }
@@ -120,15 +114,37 @@ export async function salvarOrdem(tabela: 'programaDias' | 'programaExercicios',
 }
 
 export async function adicionarExercicioAoDia(diaId: number, exercicioId: number): Promise<number> {
-  const { descansoPadraoSeg } = await lerConfig();
+  const [config, ex] = await Promise.all([lerConfig(), db.exercicios.get(exercicioId)]);
   const qtd = await db.programaExercicios.where('diaId').equals(diaId).count();
-  return db.programaExercicios.add({
-    diaId,
-    exercicioId,
-    ordem: qtd,
-    series: 3,
-    repsMin: 8,
-    repsMax: 12,
-    descansoSeg: descansoPadraoSeg,
+  return db.programaExercicios.add({ diaId, exercicioId, ordem: qtd, series: 3, ...metaPadrao(ex?.tipo ?? 'isolado', config) });
+}
+
+/**
+ * Reaplica as metas do guia (reps e descanso por tipo de exercício e objetivo)
+ * em todos os exercícios do programa. As séries não mudam. Devolve quantos itens mudaram.
+ */
+export async function aplicarMetasPadrao(programaId: number): Promise<number> {
+  const config = await lerConfig();
+  return db.transaction('rw', [db.programaDias, db.programaExercicios, db.exercicios], async () => {
+    const dias = await diasDoPrograma(programaId);
+    const itens = await db.programaExercicios.where('diaId').anyOf(dias.map((d) => d.id)).toArray();
+    const exercicios = new Map((await db.exercicios.toArray()).map((e) => [e.id, e]));
+    let mudou = 0;
+    for (const it of itens) {
+      const meta = metaPadrao(exercicios.get(it.exercicioId)?.tipo ?? 'isolado', config);
+      if (it.repsMin !== meta.repsMin || it.repsMax !== meta.repsMax || it.descansoSeg !== meta.descansoSeg) {
+        await db.programaExercicios.update(it.id, meta);
+        mudou++;
+      }
+    }
+    return mudou;
   });
+}
+
+/** Dias do programa com seus exercícios e séries, para a análise de volume e frequência. */
+export async function planoDoPrograma(programaId: number): Promise<DiaPlanejado[]> {
+  const dias = await diasDoPrograma(programaId);
+  return Promise.all(
+    dias.map(async (d) => ({ itens: (await exerciciosDoDia(d.id)).map((it) => ({ exercicioId: it.exercicioId, series: it.series })) })),
+  );
 }

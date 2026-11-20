@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { BarrasVolume } from '../components/BarrasVolume';
 import { IconeBaixo, IconeCima, IconeLixo, IconeMais } from '../components/Icones';
 import { SeletorExercicio } from '../components/SeletorExercicio';
 import { Botao, Cabecalho, Carregando, Cartao, Contador, Painel, Vazio } from '../components/ui';
@@ -13,10 +14,12 @@ import {
   diasDoPrograma,
   excluirDia,
   exerciciosDoDia,
+  planoDoPrograma,
   salvarOrdem,
 } from '../db/programas';
 import type { Exercicio, ProgramaDia, ProgramaExercicio } from '../db/tipos';
 import { mover } from '../lib/programa';
+import { analisarPrograma, FREQUENCIA_MIN, VOLUME_IDEAL_MAX, VOLUME_IDEAL_MIN } from '../lib/volume';
 
 const campo = 'min-h-12 w-full rounded-xl bg-cartao-2 px-4 text-base outline-none focus:ring-2 focus:ring-primaria';
 const botaoIcone = 'flex size-12 items-center justify-center rounded-xl text-secundario active:bg-cartao-2 disabled:opacity-25';
@@ -61,6 +64,8 @@ export default function EditarPrograma() {
           <Botao onClick={() => definirAtivo(programaId)}>Tornar este o programa ativo</Botao>
         )}
 
+        <AnalisePrograma programaId={programaId} diasPorSemana={programa.diasPorSemana} totalDias={dias.length} />
+
         {dias.map((dia, i) => (
           <EditorDia
             key={dia.id}
@@ -80,6 +85,52 @@ export default function EditarPrograma() {
         </Botao>
       </div>
     </>
+  );
+}
+
+/** Séries por semana e frequência de cada músculo principal, comparadas com o guia. */
+function AnalisePrograma({ programaId, diasPorSemana, totalDias }: { programaId: number; diasPorSemana: number; totalDias: number }) {
+  const plano = useLiveQuery(() => planoDoPrograma(programaId), [programaId]);
+  const exercicios = useExerciciosMap();
+  if (!plano || !exercicios || totalDias === 0) return null;
+  const analise = analisarPrograma(plano, diasPorSemana, (id) => exercicios.get(id));
+  const fora = analise.filter((m) => m.faixa !== 'ideal' || m.frequenciaBaixa);
+  const nomes = (lista: typeof analise) => lista.map((m) => m.grupo.toLowerCase()).join(', ');
+  const poucas = analise.filter((m) => m.faixa === 'baixo');
+  const muitas = analise.filter((m) => m.faixa === 'alto');
+  const raras = analise.filter((m) => m.frequenciaBaixa);
+
+  return (
+    <details className="group rounded-xl bg-cartao">
+      <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
+        <span className="flex-1">
+          <span className="block font-semibold">Volume por semana</span>
+          <span className={`block text-sm ${fora.length ? 'text-alerta-texto' : 'text-primaria-texto'}`}>
+            {fora.length === 0
+              ? 'Dentro do guia em todos os músculos'
+              : `${fora.length} ${fora.length === 1 ? 'músculo fora' : 'músculos fora'} do guia`}
+          </span>
+        </span>
+        <span aria-hidden="true" className="text-secundario transition-transform group-open:rotate-180">
+          ▾
+        </span>
+      </summary>
+      <div className="px-4 pb-4">
+        <p className="text-sm text-secundario">
+          Fazendo {diasPorSemana} {diasPorSemana === 1 ? 'treino' : 'treinos'} por semana
+          {totalDias !== diasPorSemana && ` (o programa tem ${totalDias} dias, feitos em sequência)`}. O guia pede {VOLUME_IDEAL_MIN} a{' '}
+          {VOLUME_IDEAL_MAX} séries por músculo e pelo menos {FREQUENCIA_MIN}x por semana.
+        </p>
+        {fora.length > 0 && (
+          <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-sm">
+            {poucas.length > 0 && <li>Poucas séries: {nomes(poucas)}.</li>}
+            {muitas.length > 0 && <li>Séries demais (mais fadiga sem ganho claro): {nomes(muitas)}.</li>}
+            {raras.length > 0 && <li>Treinado só 1x por semana ou menos: {nomes(raras)}.</li>}
+          </ul>
+        )}
+        <BarrasVolume linhas={analise.map((m) => ({ grupo: m.grupo, series: m.series, frequencia: m.frequencia }))} />
+      </div>
+    </details>
   );
 }
 

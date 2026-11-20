@@ -1,5 +1,11 @@
 import { useState } from 'react';
+import { useConfig } from '../db/config';
 import { divisoesPara, type Divisao } from '../db/divisoes';
+import { EXERCICIOS_INICIAIS } from '../db/exerciciosIniciais';
+import { CONFIG_PADRAO } from '../db/tipos';
+import { metaPadrao } from '../lib/metas';
+
+const TIPO_POR_NOME = new Map(EXERCICIOS_INICIAIS.map((e) => [e.nome, e.tipo]));
 import { Botao, Cartao } from './ui';
 
 /**
@@ -80,6 +86,7 @@ function CartaoDivisao({
   aoUsar: () => void;
   aoEditar: () => void;
 }) {
+  const config = useConfig() ?? CONFIG_PADRAO;
   return (
     <Cartao className={aberta ? 'ring-2 ring-primaria' : ''}>
       <button type="button" onClick={aoAbrir} aria-expanded={aberta} className="w-full text-left">
@@ -93,14 +100,17 @@ function CartaoDivisao({
               <div key={dia.nome}>
                 <p className="font-semibold text-primaria-texto">{dia.nome}</p>
                 <ul className="mt-1 text-sm">
-                  {dia.exercicios.map((ex) => (
-                    <li key={ex.nome} className="flex justify-between gap-2 py-0.5">
-                      <span>{ex.nome}</span>
-                      <span className="shrink-0 text-secundario tabular-nums">
-                        {ex.series} × {ex.repsMin}–{ex.repsMax}
-                      </span>
-                    </li>
-                  ))}
+                  {dia.exercicios.map((ex) => {
+                    const meta = metaPadrao(TIPO_POR_NOME.get(ex.nome) ?? 'isolado', config);
+                    return (
+                      <li key={ex.nome} className="flex justify-between gap-2 py-0.5">
+                        <span>{ex.nome}</span>
+                        <span className="shrink-0 text-secundario tabular-nums">
+                          {ex.series} × {meta.repsMin}–{meta.repsMax}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}

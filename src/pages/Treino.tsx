@@ -20,12 +20,14 @@ import {
   seriesAnteriores,
   seriesDaSessao,
   sessaoEmAndamento,
+  treinosPorExercicio,
   trocarExercicioNoTreino,
   ultimasSeries,
 } from '../db/sessoes';
 import type { Exercicio, SessaoSerie } from '../db/tipos';
-import { detectarRecordes, sugestaoProgressao, type SerieFeita } from '../lib/forca';
-import { duracao, kg, lerNumero, num } from '../lib/formato';
+import { detectarRecordes, estagnado, sugestaoProgressao, TREINOS_ESTAGNACAO, type SerieFeita } from '../lib/forca';
+import { duracao, kg, lerNumero, num, rotuloRir } from '../lib/formato';
+import { ROTULO_AJUSTE } from '../lib/metas';
 import { agruparPorExercicio, type GrupoExercicio } from '../lib/treino';
 
 type Acao = { tipo: 'menu' | 'trocar' | 'anilhas'; grupo: GrupoExercicio<SessaoSerie> };
@@ -40,10 +42,13 @@ export default function Treino() {
   // Histórico dos exercícios deste treino: última vez (pré-preenchimento/dica) e melhores marcas.
   const chaveIds = [...new Set((series ?? []).map((s) => s.exercicioId))].sort().join(',');
   const historico = useLiveQuery(async () => {
-    if (!sessao || !chaveIds) return { ultimas: new Map<number, SessaoSerie[]>(), anteriores: [] as SerieFeita[] };
+    if (!sessao || !chaveIds)
+      return { ultimas: new Map<number, SessaoSerie[]>(), anteriores: [] as SerieFeita[], estagnados: new Set<number>() };
     const ids = chaveIds.split(',').map(Number);
     const ultimas = new Map(await Promise.all(ids.map(async (id) => [id, await ultimasSeries(id, sessao.id)] as const)));
-    return { ultimas, anteriores: await seriesAnteriores(sessao.inicio, ids) };
+    const treinos = await treinosPorExercicio(ids, sessao.id);
+    const estagnados = new Set(ids.filter((id) => estagnado(treinos.get(id) ?? [])));
+    return { ultimas, anteriores: await seriesAnteriores(sessao.inicio, ids), estagnados };
   }, [sessaoId, chaveIds]);
 
   const descanso = useDescanso();
@@ -95,6 +100,7 @@ export default function Treino() {
               </span>{' '}
               · {feitas}/{series.length} séries
             </p>
+            {sessao.ajuste && sessao.ajuste !== 'normal' && <p className="text-sm text-secundario">{ROTULO_AJUSTE[sessao.ajuste]}</p>}
           </div>
           <Botao variante="primario" onClick={() => setFinalizando(true)}>
             Finalizar
@@ -109,9 +115,11 @@ export default function Treino() {
             grupo={g}
             exercicio={exercicios.get(g.exercicioId)}
             ultimas={historico?.ultimas.get(g.exercicioId) ?? []}
-            mostrarRpe={config.mostrarRpe}
+            mostrarRir={config.mostrarRir}
+            estagnado={historico?.estagnados.has(g.exercicioId) ?? false}
             aoMarcar={marcar}
             aoMenu={() => setAcao({ tipo: 'menu', grupo: g })}
+            aoTrocar={() => setAcao({ tipo: 'trocar', grupo: g })}
             aoAddSerie={() => adicionarSerie(sessao.id, g.ordem)}
             aoRemoverSerie={() => removerUltimaSerie(sessao.id, g.ordem)}
           />
@@ -226,18 +234,22 @@ const CartaoExercicio = memo(function CartaoExercicio({
   grupo,
   exercicio,
   ultimas,
-  mostrarRpe,
+  mostrarRir,
+  estagnado,
   aoMarcar,
   aoMenu,
+  aoTrocar,
   aoAddSerie,
   aoRemoverSerie,
 }: {
   grupo: GrupoExercicio<SessaoSerie>;
   exercicio: Exercicio | undefined;
   ultimas: SessaoSerie[];
-  mostrarRpe: boolean;
+  mostrarRir: boolean;
+  estagnado: boolean;
   aoMarcar: (s: SessaoSerie) => void;
   aoMenu: () => void;
+  aoTrocar: () => void;
   aoAddSerie: () => void;
   aoRemoverSerie: () => void;
 }) {
@@ -289,16 +301,34 @@ const CartaoExercicio = memo(function CartaoExercicio({
         </div>
       )}
 
-      <div className={`mt-3 grid items-center gap-2 text-xs text-secundario ${mostrarRpe ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'}`}>
+      {estagnado && !dica && (
+        <div className="mt-3 rounded-xl bg-cartao-2 px-3 py-2 text-sm">
+          <p>
+            <strong>Sem progresso nos últimos {TREINOS_ESTAGNACAO} treinos.</strong>{' '}
+            <span className="text-secundario">
+              Confira sono, alimentação e fadiga. Se continuar, troque por uma variação ou faça uma semana leve (na tela Início).
+            </span>
+          </p>
+          <button type="button" onClick={aoTrocar} className="mt-1 min-h-12 font-semibold text-primaria-texto">
+            Trocar por uma variação
+          </button>
+        </div>
+      )}
+
+      <div className={`mt-3 grid items-center gap-2 text-xs text-secundario ${mostrarRir ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'}`}>
         <span className="text-center">Série</span>
         <span className="text-center">kg</span>
         <span className="text-center">Reps</span>
-        {mostrarRpe && <span className="text-center">RPE</span>}
+        {mostrarRir && (
+          <span className="text-center" title="Repetições em reserva">
+            RIR
+          </span>
+        )}
         <span className="text-center">Feita</span>
       </div>
       <ol className="mt-1 flex flex-col gap-1.5">
         {series.map((s, i) => (
-          <LinhaSerie key={s.id} serie={s} indice={i + 1} mostrarRpe={mostrarRpe} aoMarcar={aoMarcar} />
+          <LinhaSerie key={s.id} serie={s} indice={i + 1} mostrarRir={mostrarRir} aoMarcar={aoMarcar} />
         ))}
       </ol>
 
@@ -317,32 +347,38 @@ const CartaoExercicio = memo(function CartaoExercicio({
 const LinhaSerie = memo(function LinhaSerie({
   serie,
   indice,
-  mostrarRpe,
+  mostrarRir,
   aoMarcar,
 }: {
   serie: SessaoSerie;
   indice: number;
-  mostrarRpe: boolean;
+  mostrarRir: boolean;
   aoMarcar: (s: SessaoSerie) => void;
 }) {
   const feita = serie.concluida;
   return (
     <li
       className={`grid items-center gap-2 rounded-xl px-1 py-1 ${feita ? 'bg-concluido/15' : ''} ${
-        mostrarRpe ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'
+        mostrarRir ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'
       }`}
     >
       <span className={`text-center font-semibold ${feita ? 'text-texto' : 'text-secundario'}`}>{indice}</span>
       <CampoNumero valor={serie.carga} decimal rotulo={`Carga da série ${indice}`} aoMudar={(carga) => atualizarSerie(serie.id, { carga })} />
       <CampoNumero valor={serie.reps} rotulo={`Repetições da série ${indice}`} aoMudar={(reps) => atualizarSerie(serie.id, { reps: Math.round(reps) })} />
-      {mostrarRpe && (
-        <CampoNumero
-          valor={serie.rpe ?? 0}
-          vazioSeZero
-          decimal
-          rotulo={`RPE da série ${indice}`}
-          aoMudar={(rpe) => atualizarSerie(serie.id, { rpe: rpe > 0 ? Math.min(10, rpe) : null })}
-        />
+      {mostrarRir && (
+        <select
+          aria-label={`Repetições em reserva da série ${indice}`}
+          value={serie.rir ?? ''}
+          onChange={(e) => atualizarSerie(serie.id, { rir: e.target.value === '' ? null : Number(e.target.value) })}
+          className="h-12 w-full min-w-0 appearance-none rounded-xl bg-cartao-2 text-center text-lg font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
+        >
+          <option value="">–</option>
+          {[0, 1, 2, 3, 4, 5].map((r) => (
+            <option key={r} value={r}>
+              {rotuloRir(r)}
+            </option>
+          ))}
+        </select>
       )}
       <button
         type="button"

@@ -1,6 +1,22 @@
+# Dependências e builds
 node_modules
 dist
 dev-dist
+coverage
+
+# Dados pessoais: backups exportados pelo app NUNCA vão para o repositório
+treino-backup-*.json
+*backup*.json
+
+# Variáveis de ambiente e arquivos locais
+.env
+.env.*
 *.local
+*.log
+
+# Editor, sistema e ferramentas
 .DS_Store
-node_modules
+Thumbs.db
+.vscode/
+.idea/
+.claude/

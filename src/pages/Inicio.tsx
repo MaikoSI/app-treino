@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IconeFogo } from '../components/Icones';
 import { Botao, Cabecalho, Carregando, Cartao, Painel } from '../components/ui';
-import { useConfig } from '../db/config';
+import { salvarConfig, useConfig } from '../db/config';
 import { useExerciciosMap } from '../db/hooks';
 import { diasDoPrograma, exerciciosDoDia, programaAtivo } from '../db/programas';
 import { iniciarTreino, sessaoEmAndamento, sessoesConcluidas } from '../db/sessoes';
-import { duracao } from '../lib/formato';
+import type { AjusteTreino } from '../db/tipos';
+import { dataLonga, duracao } from '../lib/formato';
+import { DIAS_SEMANA_LEVE, fimSemanaLeve, semanaLeveAtiva, seriesComAjuste } from '../lib/metas';
 import { proximoDia } from '../lib/programa';
 import { sequenciaSemanas, treinosNaSemana } from '../lib/semana';
 
@@ -16,6 +18,8 @@ export default function Inicio() {
   const config = useConfig();
   const exercicios = useExerciciosMap();
   const [outroDia, setOutroDia] = useState(false);
+  const [checkin, setCheckin] = useState<{ diaId: number } | null>(null);
+  const [explicarLeve, setExplicarLeve] = useState(false);
 
   const dados = useLiveQuery(async () => {
     const [programa, emAndamento, concluidas] = await Promise.all([programaAtivo(), sessaoEmAndamento(), sessoesConcluidas()]);
@@ -32,9 +36,18 @@ export default function Inicio() {
   const feitos = treinosNaSemana(datas);
   const sequencia = sequenciaSemanas(datas, meta);
 
-  async function comecar(diaId: number | null) {
-    await iniciarTreino(diaId);
+  const leve = semanaLeveAtiva(config.semanaLeveAte);
+
+  async function comecar(diaId: number | null, ajuste: AjusteTreino = 'normal') {
+    await iniciarTreino(diaId, ajuste);
     navigate('/treino');
+  }
+
+  /** Antes de um treino do programa, pergunta como foi o sono (se ligado e fora da semana leve). */
+  function pedirInicio(diaId: number | null) {
+    setOutroDia(false);
+    if (diaId != null && config!.checkinSono && !leve) setCheckin({ diaId });
+    else void comecar(diaId);
   }
 
   return (
@@ -77,7 +90,7 @@ export default function Inicio() {
             <p className="mt-1 text-secundario">Escolha ou crie um programa para ver o próximo treino aqui.</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Botao onClick={() => navigate('/programas')}>Programas</Botao>
-              <Botao variante="primario" onClick={() => comecar(null)}>
+              <Botao variante="primario" onClick={() => pedirInicio(null)}>
                 Treino livre
               </Botao>
             </div>
@@ -91,13 +104,14 @@ export default function Inicio() {
                 <li key={it.id} className="flex justify-between gap-2">
                   <span>{exercicios?.get(it.exercicioId)?.nome ?? '…'}</span>
                   <span className="shrink-0 text-secundario tabular-nums">
-                    {it.series} × {it.repsMin}–{it.repsMax}
+                    {seriesComAjuste(it.series, leve ? 'deload' : 'normal')} × {it.repsMin}–{it.repsMax}
                   </span>
                 </li>
               ))}
               {itens.length === 0 && <li className="text-secundario">Este dia ainda não tem exercícios.</li>}
             </ul>
-            <Botao variante="primario" grande className="mt-4 w-full" onClick={() => comecar(proximo.id!)}>
+            {leve && <p className="mt-3 text-sm text-secundario">Semana leve: metade das séries em cada exercício.</p>}
+            <Botao variante="primario" grande className="mt-4 w-full" onClick={() => pedirInicio(proximo.id!)}>
               Iniciar treino
             </Botao>
             <Botao variante="fantasma" className="mt-2 w-full" onClick={() => setOutroDia(true)}>
@@ -114,6 +128,24 @@ export default function Inicio() {
           </Cartao>
         )}
 
+        {/* Semana leve (deload) */}
+        {programa &&
+          (leve ? (
+            <Cartao>
+              <p className="font-semibold">Semana leve até {dataLonga(config.semanaLeveAte!).toLowerCase()}</p>
+              <p className="mt-1 text-sm text-secundario">Mesmos exercícios com metade das séries, para a fadiga baixar.</p>
+              <Botao variante="fantasma" className="mt-2 w-full" onClick={() => salvarConfig({ semanaLeveAte: null })}>
+                Encerrar semana leve
+              </Botao>
+            </Cartao>
+          ) : (
+            !emAndamento && (
+              <Botao variante="fantasma" onClick={() => setExplicarLeve(true)}>
+                Fazer uma semana leve
+              </Botao>
+            )
+          ))}
+
         <footer className="mt-2 flex flex-col items-center gap-1 pb-4 text-center text-xs text-secundario">
           <p>Conteúdo informativo. Não substitui orientação de médico, nutricionista ou profissional de educação física.</p>
           <Link to="/sobre" className="flex min-h-12 items-center px-4 text-sm font-semibold text-primaria-texto">
@@ -125,12 +157,60 @@ export default function Inicio() {
       <Painel aberto={outroDia} aoFechar={() => setOutroDia(false)} titulo="Qual treino?">
         <div className="flex flex-col gap-2">
           {dias.map((d) => (
-            <Botao key={d.id} variante={d.id === proximo?.id ? 'primario' : 'secundario'} onClick={() => comecar(d.id!)}>
+            <Botao key={d.id} variante={d.id === proximo?.id ? 'primario' : 'secundario'} onClick={() => pedirInicio(d.id!)}>
               {d.nome}
             </Botao>
           ))}
-          <Botao variante="fantasma" onClick={() => comecar(null)}>
+          <Botao variante="fantasma" onClick={() => pedirInicio(null)}>
             Treino livre (sem programa)
+          </Botao>
+        </div>
+      </Painel>
+
+      <Painel aberto={!!checkin} aoFechar={() => setCheckin(null)} titulo="Como você dormiu?">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-secundario">
+            Depois de uma noite ruim, o guia sugere treinar um pouco mais leve: o app tira uma série dos exercícios que têm 3 ou mais.
+          </p>
+          <Botao variante="primario" grande onClick={() => checkin && comecar(checkin.diaId)}>
+            Dormi bem
+          </Botao>
+          <Botao grande onClick={() => checkin && comecar(checkin.diaId, 'sono')}>
+            Dormi mal: treino mais leve
+          </Botao>
+          <Botao
+            variante="fantasma"
+            onClick={async () => {
+              await salvarConfig({ checkinSono: false });
+              if (checkin) await comecar(checkin.diaId);
+            }}
+          >
+            Não perguntar mais
+          </Botao>
+        </div>
+      </Painel>
+
+      <Painel aberto={explicarLeve} aoFechar={() => setExplicarLeve(false)} titulo="Semana leve (deload)">
+        <div className="flex flex-col gap-3">
+          <p>
+            Por {DIAS_SEMANA_LEVE} dias, os treinos do programa vêm com os <strong>mesmos exercícios e metade das séries</strong>.
+          </p>
+          <p className="text-sm text-secundario">
+            Use quando a fadiga acumular ou o progresso travar: cansaço que não passa, cargas caindo, dores. Não é obrigatório fazer de
+            tempos em tempos (Coleman et al., 2024).
+          </p>
+          <Botao
+            variante="primario"
+            grande
+            onClick={async () => {
+              await salvarConfig({ semanaLeveAte: fimSemanaLeve() });
+              setExplicarLeve(false);
+            }}
+          >
+            Começar semana leve
+          </Botao>
+          <Botao variante="fantasma" onClick={() => setExplicarLeve(false)}>
+            Agora não
           </Botao>
         </div>
       </Painel>

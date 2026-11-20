@@ -12,6 +12,7 @@ import {
   seriesAnteriores,
   seriesDaSessao,
   sessaoEmAndamento,
+  treinosPorExercicio,
   trocarExercicioNoTreino,
 } from './sessoes';
 
@@ -21,7 +22,7 @@ beforeEach(async () => {
 });
 
 async function novoTreino() {
-  const p = await criarProgramaDeDivisao(DIVISOES.find((d) => d.chave === 'abc3')!);
+  const p = await criarProgramaDeDivisao(DIVISOES.find((d) => d.chave === 'fullbody3')!);
   const [dia] = await diasDoPrograma(p);
   return iniciarTreino(dia.id);
 }
@@ -42,12 +43,14 @@ describe('durante o treino', () => {
 
   it('adicionar exercício entra no fim com 3 séries', async () => {
     const s = await novoTreino();
-    const rosca = await db.exercicios.where('nome').equals('Rosca direta').first();
+    const rosca = await db.exercicios.where('nome').equals('Rosca Scott').first(); // não está no Full Body A
     await adicionarExercicioNoTreino(s, rosca!.id);
     const series = await seriesDaSessao(s);
     const novas = series.filter((x) => x.exercicioId === rosca!.id);
     expect(novas).toHaveLength(3);
     expect(novas[0].ordem).toBe(Math.max(...series.map((x) => x.ordem)));
+    // sem histórico, usa a meta do guia para isolados
+    expect(novas[0]).toMatchObject({ repsMin: 10, repsMax: 15, descansoSeg: 90, reps: 10 });
   });
 
   it('trocar exercício mantém a quantidade de séries e desmarca', async () => {
@@ -84,5 +87,23 @@ describe('finalizar treino', () => {
     expect(await sessaoEmAndamento()).toBeUndefined();
     // aparece como histórico para treinos que começarem depois
     expect(await seriesAnteriores(Date.now() + 1)).toHaveLength(2);
+  });
+});
+
+describe('treinosPorExercicio', () => {
+  it('agrupa por treino em ordem e ignora semanas leves, sono ruim e o treino atual', async () => {
+    const ex = (await db.exercicios.where('nome').equals('Supino reto').first())!.id;
+    const sessao = async (inicio: number, ajuste?: 'normal' | 'sono' | 'deload') => {
+      const id = await db.sessoes.add({ programaDiaId: null, programaId: null, nomeDia: 'T', inicio, fim: inicio + 1, concluida: true, observacao: '', ajuste });
+      await db.sessaoSeries.add({ sessaoId: id, exercicioId: ex, ordem: 0, numero: 1, carga: inicio, reps: 5, rir: null, concluida: true, repsMin: 6, repsMax: 10, descansoSeg: 90 });
+      return id;
+    };
+    await sessao(30);
+    await sessao(10); // treino antigo, sem campo "ajuste"
+    await sessao(20, 'deload');
+    await sessao(25, 'sono');
+    const atual = await sessao(40);
+    const mapa = await treinosPorExercicio([ex], atual);
+    expect(mapa.get(ex)!.map((t) => t.inicio)).toEqual([10, 30]);
   });
 });

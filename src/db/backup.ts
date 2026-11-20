@@ -1,8 +1,9 @@
 import { db, TABELAS, type NomeTabela } from './index';
+import { migrarConfig, migrarExercicio, migrarSerie } from './migracoes';
 import { CONFIG_PADRAO } from './tipos';
 
 export const APP_BACKUP = 'app-treino';
-export const VERSAO_BACKUP = 1;
+export const VERSAO_BACKUP = 2;
 
 export interface Backup {
   app: typeof APP_BACKUP;
@@ -39,6 +40,7 @@ const CAMPOS: Record<NomeTabela, string[]> = {
   programaExercicios: ['id', 'diaId', 'exercicioId', 'series', 'repsMin', 'repsMax'],
   sessoes: ['id', 'inicio', 'concluida'],
   sessaoSeries: ['id', 'sessaoId', 'exercicioId', 'carga', 'reps', 'concluida'],
+  pesos: ['id', 'data', 'kg'],
   config: ['chave'],
 };
 
@@ -69,6 +71,13 @@ export function validarBackup(texto: string): { backup: Backup; resumo: ResumoBa
         throw new Error(`Backup corrompido: registro inválido em "${t}".`);
       }
     }
+  }
+  // Backup da versão 1: converte para o formato atual antes de restaurar.
+  if (b.versao < 2) {
+    const d = b.dados as Record<string, Record<string, unknown>[] | undefined>;
+    d.exercicios?.forEach(migrarExercicio);
+    d.sessaoSeries?.forEach(migrarSerie);
+    d.config?.forEach(migrarConfig);
   }
   const qtd = (t: NomeTabela) => ((b.dados as Record<string, unknown[]>)[t] ?? []).length;
   return {

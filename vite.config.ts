@@ -6,6 +6,8 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   // Caminhos relativos: funciona em GitHub Pages (subpasta) e Netlify sem ajustes.
   base: './',
+  // Sem source maps no build publicado: o site não expõe o código-fonte original.
+  build: { sourcemap: false },
   define: {
     __VERSAO__: JSON.stringify(process.env.npm_package_version ?? '0.0.0'),
   },

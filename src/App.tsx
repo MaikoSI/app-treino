@@ -6,6 +6,7 @@ import { useConfig } from './db/config';
 import { aplicarTema } from './lib/tema';
 import BoasVindas from './pages/BoasVindas';
 import Config from './pages/Config';
+import Corpo from './pages/Corpo';
 import EditarPrograma from './pages/EditarPrograma';
 import Exercicios from './pages/Exercicios';
 import Historico from './pages/Historico';
@@ -58,6 +59,7 @@ export default function App() {
           }
         />
         <Route path="/config" element={<Config />} />
+        <Route path="/corpo" element={<Corpo />} />
         <Route path="/sobre" element={<Sobre />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

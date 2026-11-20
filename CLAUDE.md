@@ -22,15 +22,18 @@ Node ≥ 22.12. TypeScript is v7 (`tsc` only typechecks; `noEmit`). No ESLint/Pr
 
 ## Architecture
 
-- **`src/db/`**: Dexie database (`index.ts`, schema v1) plus all data operations. Pages call these functions instead of writing to tables directly.
+- **`src/db/`**: Dexie database (`index.ts`, schema v2) plus all data operations. Pages call these functions instead of writing to tables directly.
   - `tipos.ts`: entity types. `id: number` is required in the types; Dexie's `EntityTable<T,'id'>` makes it optional on insert, so build new rows as `Omit<T,'id'>`.
   - Booleans (`ativo`, `concluida`) **cannot be IndexedDB indexes**; they are filtered in memory.
   - `config` is a single row with key `'app'`. Read and write it via `config.ts` (`lerConfig`/`salvarConfig`/`useConfig`), which merges `CONFIG_PADRAO` so new fields get defaults.
   - First run: the `populate` event seeds `exerciciosIniciais.ts` and the default config.
-  - `divisoes.ts`: ready-made splits. They reference exercises **by name**, resolved to ids when a program is created. `divisoes.test.ts` asserts every name exists in the seed list.
+  - `divisoes.ts`: ready-made splits (one per 2–6 days). Items are only **exercise name + sets**; reps and rest come from `lib/metas.ts:metaPadrao` (exercise `tipo` composto/isolado + `config.objetivo`). `divisoes.test.ts` asserts every name exists in the seed list **and** that each split meets the guide via `lib/volume.ts:analisarPrograma` (every `GRUPOS_PRINCIPAIS` muscle ≥2x/week and 10–20 weekly sets; ≥8 for the 2-day split). Changing a split means re-running that test.
+  - Exercises carry `tipo` and `secundarios`; secondaries count **half a set** in volume. Sets with `rir ≥ 5` don't count.
+  - v1→v2 conversion lives in `migracoes.ts` and is shared by the Dexie upgrade and by restoring v1 backups.
 - **Sessions are copies.** `iniciarTreino` copies the program day into `sessaoSeries`, including per-set `repsMin/repsMax/descansoSeg` and `ordem`, so editing or deleting a program never changes history. Exercise position within a workout is `sessaoSeries.ordem`. There is no separate session-exercise table; `lib/treino.ts:agruparPorExercicio` groups the sets for display.
 - **The in-progress workout is just a session with `concluida = false`** (at most one; `iniciarTreino` returns the existing one). Every edit is written to Dexie immediately, which is what makes "close the app and resume" work. `finalizarTreino` deletes unchecked sets and refuses to finish when none are checked.
 - "History"/records only count **concluded sets of concluded sessions** (`ultimasSeries`, `seriesAnteriores`, `historicoDeSeries` in `db/sessoes.ts`). A record requires prior history for that exercise; the first time an exercise is done never counts as a PR.
+- Guide rules ("Regras para o app"): `lib/metas.ts` (default reps/rest, `seriesComAjuste`: deload = half the sets, bad sleep = −1 set on exercises with ≥3), `lib/volume.ts` (weekly volume, program analysis), `forca.ts:estagnado` (3 sessions without beating the prior best e1RM or volume; deload/sleep sessions excluded via `sessao.ajuste`), `lib/nutricao.ts` (weekly weight averages and pace, protein, caffeine). Deload is `config.semanaLeveAte`; while active, `iniciarTreino` always uses `'deload'`.
 - **`src/lib/`**: pure, unit-tested rules: Epley 1RM, progression hint (+2.5 kg, or +5 kg for `GRUPOS_PERNA`), plate calculator (greedy, computed in hundredths), next day in the program, weeks starting **Monday**, weekly streak (the current week never breaks the streak), chart and record aggregation. Put new business rules here with tests, not in components.
 - **UI**: `HashRouter` (works on GitHub Pages subpaths without server config) plus `base: './'` in `vite.config.ts`. Reactive reads use `useLiveQuery` from `dexie-react-hooks`. A liveQuery that can legitimately find nothing should return `null`, not `undefined`, because `undefined` means "loading".
 - `App.tsx` redirects to `/boas-vindas` until `config.onboardingConcluido`. After changing config, navigate only once `useConfig()` reflects the change (see `BoasVindas.tsx`); otherwise the stale value bounces you back.

@@ -3,7 +3,7 @@ import { db } from '../db';
 import { useExerciciosMap } from '../db/hooks';
 import { seriesAnteriores, seriesDaSessao } from '../db/sessoes';
 import { detectarRecordes, type Recorde, volumeTotal } from '../lib/forca';
-import { dataLonga, duracaoCurta, kg, num } from '../lib/formato';
+import { dataLonga, duracaoCurta, kg, num, rotuloRir } from '../lib/formato';
 import { agruparPorExercicio } from '../lib/treino';
 import { IconeTrofeu } from './Icones';
 import { Carregando, Cartao } from './ui';
@@ -77,7 +77,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
                 <span className="w-6 text-secundario">{i + 1}</span>
                 <span>
                   {num(s.carga)} kg × {s.reps}
-                  {s.rpe != null && <span className="text-secundario"> · RPE {num(s.rpe)}</span>}
+                  {s.rir != null && <span className="text-secundario"> · RIR {rotuloRir(s.rir)}</span>}
                 </span>
               </li>
             ))}

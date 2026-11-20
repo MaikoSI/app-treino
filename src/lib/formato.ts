@@ -37,3 +37,6 @@ export function lerNumero(texto: string): number {
   const n = parseFloat(texto.replace(',', '.'));
   return Number.isFinite(n) ? n : 0;
 }
+
+/** RIR (repetições em reserva) para exibir: 5 vira "5+". */
+export const rotuloRir = (rir: number) => (rir >= 5 ? '5+' : String(rir));

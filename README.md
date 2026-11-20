@@ -6,19 +6,22 @@ Não tem login, nem servidor, nem conta. **Todos os dados ficam só no aparelho 
 
 ## O que o app faz
 
-- **Boas-vindas:** você diz quantos dias treina (2 a 6) e o app sugere uma divisão pronta (Full Body, ABC, Superiores/Inferiores, ABCDE, Push/Pull/Legs), que dá para editar.
-- **Início:** próximo treino sugerido, meta da semana ("2/4 treinos esta semana") e sequência de semanas cumprindo a meta.
+- **Boas-vindas:** você diz quantos dias treina (2 a 6) e o app sugere uma divisão pronta (Full Body, Superiores/Inferiores, Push/Pull/Legs), que dá para editar. Todas seguem o guia da tela **Sobre**: cada músculo 2x por semana e 10 a 20 séries semanais.
+- **Início:** próximo treino sugerido, meta da semana ("2/4 treinos esta semana"), sequência de semanas cumprindo a meta, pergunta opcional sobre o sono (dormiu mal → treino um pouco mais leve) e o botão **Semana leve** (metade das séries por 7 dias).
 - **Treino em andamento:**
   - carga e repetições já vêm com o que você fez da última vez;
   - descanso começa sozinho ao marcar a série, com vibração no fim e botões ±15s;
   - dica "Tente +2,5 kg" (+5 kg em perna) quando você bate o máximo de reps em todas as séries;
+  - aviso quando um exercício passa 3 treinos sem progredir;
+  - RIR (repetições em reserva) opcional em cada série;
   - comemoração quando bate recorde;
   - calculadora de anilhas;
   - se fechar o app no meio, o treino continua de onde parou.
-- **Programas:** criar, editar, duplicar, escolher o ativo, reordenar dias e exercícios.
+- **Programas:** criar, editar, duplicar, escolher o ativo, reordenar dias e exercícios. O editor mostra o volume e a frequência semanal de cada músculo e avisa o que está fora do guia.
 - **Histórico:** calendário com os dias treinados e o detalhe de cada treino.
-- **Progresso:** gráfico de carga máxima e 1RM estimado (fórmula de Epley) por exercício, recordes pessoais e séries por grupo muscular na semana.
-- **Ajustes:** meta semanal, descanso padrão, RPE opcional, exportar e importar backup (.json).
+- **Progresso:** gráfico de carga máxima e 1RM estimado (fórmula de Epley) por exercício, recordes pessoais e séries por músculo na semana (compostos contam meia série para os músculos auxiliares).
+- **Peso e nutrição:** registro de peso com média semanal e ritmo comparado à meta (ganhar, manter ou perder), proteína diária e doses de creatina e cafeína.
+- **Ajustes:** meta semanal, objetivo (hipertrofia ou força), descanso de compostos e isolados, RIR, pergunta do sono, tema claro/escuro, exportar e importar backup (.json).
 
 ## Rodar no computador
 
@@ -120,7 +123,8 @@ src/
   db/          banco local (Dexie): tipos, esquema, exercícios iniciais,
                divisões prontas, operações de programas/treinos, backup
   lib/         regras puras e testadas: 1RM, progressão, anilhas,
-               próximo treino, meta semanal, gráficos/recordes
+               próximo treino, meta semanal, gráficos/recordes, volume,
+               metas do guia, estagnação, peso e nutrição
   components/  peças de interface reutilizáveis
   pages/       uma tela por arquivo
 public/        ícones do app

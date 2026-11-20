@@ -4,6 +4,9 @@ import { CalculadoraAnilhas } from '../components/CalculadoraAnilhas';
 import { Botao, Cabecalho, Carregando, Cartao, Contador, Painel } from '../components/ui';
 import { apagarTudo, gerarBackup, nomeArquivoBackup, restaurarBackup, validarBackup } from '../db/backup';
 import { salvarConfig, useConfig } from '../db/config';
+import { aplicarMetasPadrao, programaAtivo } from '../db/programas';
+import type { Objetivo } from '../db/tipos';
+import { FAIXAS } from '../lib/metas';
 
 const plural = (n: number, um: string, varios: string) => `${n} ${n === 1 ? um : varios}`;
 const fmtTempo = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
@@ -12,6 +15,7 @@ export default function Config() {
   const config = useConfig();
   const [anilhas, setAnilhas] = useState(false);
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'erro'; texto: string } | null>(null);
+  const [msgMetas, setMsgMetas] = useState<string | null>(null);
   const arquivo = useRef<HTMLInputElement>(null);
   const persistente = useArmazenamentoPersistente();
 
@@ -56,22 +60,14 @@ export default function Config() {
           <Linha rotulo="Meta de treinos por semana">
             <Contador rotulo="meta semanal" valor={config.metaSemanal} min={1} max={7} aoMudar={(metaSemanal) => salvarConfig({ metaSemanal })} />
           </Linha>
-          <Linha rotulo="Descanso padrão" detalhe="Para exercícios novos">
-            <Contador
-              rotulo="descanso padrão"
-              valor={config.descansoPadraoSeg}
-              min={15}
-              max={600}
-              passo={15}
-              formatar={fmtTempo}
-              aoMudar={(descansoPadraoSeg) => salvarConfig({ descansoPadraoSeg })}
-            />
-          </Linha>
           <Linha rotulo="Unidade de peso">
             <span className="rounded-xl bg-cartao-2 px-4 py-3 font-semibold">kg</span>
           </Linha>
-          <Linha rotulo="Registrar RPE" detalhe="Esforço percebido (1–10) em cada série">
-            <Interruptor rotulo="Registrar RPE" ligado={config.mostrarRpe} aoMudar={(mostrarRpe) => salvarConfig({ mostrarRpe })} />
+          <Linha rotulo="Registrar RIR" detalhe="Repetições em reserva em cada série. Séries com 5+ não contam no volume">
+            <Interruptor rotulo="Registrar RIR" ligado={config.mostrarRir} aoMudar={(mostrarRir) => salvarConfig({ mostrarRir })} />
+          </Linha>
+          <Linha rotulo="Perguntar sobre o sono" detalhe="Antes do treino; se dormiu mal, o treino fica um pouco mais leve">
+            <Interruptor rotulo="Perguntar sobre o sono" ligado={config.checkinSono} aoMudar={(checkinSono) => salvarConfig({ checkinSono })} />
           </Linha>
           <Linha rotulo="Tema">
             <div className="grid grid-cols-2 gap-1 rounded-xl bg-cartao-2 p-1" role="group" aria-label="Tema">
@@ -92,7 +88,74 @@ export default function Config() {
           </Linha>
         </Cartao>
 
+        <Cartao className="flex flex-col gap-4">
+          <div>
+            <h2 className="font-semibold">Metas dos exercícios</h2>
+            <p className="text-sm text-secundario">Usadas ao criar programas e adicionar exercícios.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-1 rounded-xl bg-cartao-2 p-1" role="group" aria-label="Objetivo">
+            {(['hipertrofia', 'forca'] as const).map((o) => (
+              <button
+                key={o}
+                type="button"
+                aria-pressed={config.objetivo === o}
+                onClick={() => salvarConfig({ objetivo: o })}
+                className={`min-h-12 rounded-lg px-3 font-semibold ${
+                  config.objetivo === o ? 'bg-primaria text-sobre-primaria' : 'text-secundario active:bg-borda'
+                }`}
+              >
+                {ROTULO_OBJETIVO[o]}
+              </button>
+            ))}
+          </div>
+          <p className="text-sm text-secundario">
+            Compostos {FAIXAS[config.objetivo].composto.join('–')} reps · isolados {FAIXAS[config.objetivo].isolado.join('–')} reps
+            {config.objetivo === 'forca' && ' · compostos descansam pelo menos 3:00'}
+          </p>
+          <Linha rotulo="Descanso dos compostos" detalhe="Guia: 2 a 3 min">
+            <Contador
+              rotulo="descanso dos compostos"
+              valor={config.descansoCompostoSeg}
+              min={60}
+              max={600}
+              passo={15}
+              formatar={fmtTempo}
+              aoMudar={(descansoCompostoSeg) => salvarConfig({ descansoCompostoSeg })}
+            />
+          </Linha>
+          <Linha rotulo="Descanso dos isolados" detalhe="Guia: 1 a 1,5 min">
+            <Contador
+              rotulo="descanso dos isolados"
+              valor={config.descansoIsoladoSeg}
+              min={30}
+              max={600}
+              passo={15}
+              formatar={fmtTempo}
+              aoMudar={(descansoIsoladoSeg) => salvarConfig({ descansoIsoladoSeg })}
+            />
+          </Linha>
+          <Botao
+            onClick={async () => {
+              const p = await programaAtivo();
+              if (!p) return setMsgMetas('Nenhum programa ativo.');
+              if (!confirm(`Aplicar estas repetições e descansos a todos os exercícios de "${p.nome}"? As séries não mudam.`)) return;
+              const n = await aplicarMetasPadrao(p.id);
+              setMsgMetas(n ? `${plural(n, 'exercício atualizado', 'exercícios atualizados')} em "${p.nome}".` : 'O programa ativo já usa estas metas.');
+            }}
+          >
+            Aplicar ao programa ativo
+          </Botao>
+          {msgMetas && (
+            <p role="status" className="text-sm text-primaria-texto">
+              {msgMetas}
+            </p>
+          )}
+        </Cartao>
+
         <Cartao className="flex flex-col gap-2">
+          <Link to="/corpo" className="flex min-h-12 items-center justify-center rounded-xl bg-cartao-2 active:bg-borda">
+            Peso, proteína e suplementos
+          </Link>
           <Botao onClick={() => setAnilhas(true)}>Calculadora de anilhas</Botao>
           <Link to="/exercicios" className="flex min-h-12 items-center justify-center rounded-xl bg-cartao-2 active:bg-borda">
             Biblioteca de exercícios
@@ -155,6 +218,8 @@ export default function Config() {
     </>
   );
 }
+
+const ROTULO_OBJETIVO: Record<Objetivo, string> = { hipertrofia: 'Hipertrofia', forca: 'Força' };
 
 function Linha({ rotulo, detalhe, children }: { rotulo: string; detalhe?: string; children: ReactNode }) {
   return (

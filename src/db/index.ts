@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
 import { EXERCICIOS_INICIAIS } from './exerciciosIniciais';
+import { migrarConfig, migrarExercicio, migrarSerie } from './migracoes';
 import {
   CONFIG_PADRAO,
   type Config,
@@ -7,6 +8,7 @@ import {
   type Programa,
   type ProgramaDia,
   type ProgramaExercicio,
+  type RegistroPeso,
   type Sessao,
   type SessaoSerie,
 } from './tipos';
@@ -18,6 +20,7 @@ export class TreinoDB extends Dexie {
   programaExercicios!: EntityTable<ProgramaExercicio, 'id'>;
   sessoes!: EntityTable<Sessao, 'id'>;
   sessaoSeries!: EntityTable<SessaoSerie, 'id'>;
+  pesos!: EntityTable<RegistroPeso, 'id'>;
   config!: EntityTable<Config, 'chave'>;
 
   constructor(nome = 'app-treino') {
@@ -33,6 +36,16 @@ export class TreinoDB extends Dexie {
       sessaoSeries: '++id, sessaoId, exercicioId',
       config: 'chave',
     });
+
+    // v2 (regras do guia): tipo/secundários nos exercícios, RIR no lugar de RPE,
+    // descanso por tipo de exercício e registro de peso corporal.
+    this.version(2)
+      .stores({ pesos: '++id, data' })
+      .upgrade(async (tx) => {
+        await tx.table('exercicios').toCollection().modify(migrarExercicio);
+        await tx.table('sessaoSeries').toCollection().modify(migrarSerie);
+        await tx.table('config').toCollection().modify(migrarConfig);
+      });
 
     this.on('populate', (tx) => {
       tx.table('exercicios').bulkAdd(EXERCICIOS_INICIAIS);
@@ -51,6 +64,7 @@ export const TABELAS = [
   'programaExercicios',
   'sessoes',
   'sessaoSeries',
+  'pesos',
   'config',
 ] as const;
 export type NomeTabela = (typeof TABELAS)[number];

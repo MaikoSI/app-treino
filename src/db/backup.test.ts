@@ -4,6 +4,7 @@ import { apagarTudo, gerarBackup, restaurarBackup, validarBackup } from './backu
 import { db } from './index';
 import { salvarConfig } from './config';
 import { DIVISOES } from './divisoes';
+import { registrarPeso } from './pesos';
 import { criarProgramaDeDivisao, diasDoPrograma } from './programas';
 import { finalizarTreino, iniciarTreino, seriesDaSessao } from './sessoes';
 
@@ -20,7 +21,7 @@ async function popular() {
   const [serie] = await seriesDaSessao(s);
   await db.sessaoSeries.update(serie.id, { concluida: true, carga: 100, reps: 5 });
   await finalizarTreino(s);
-  await db.exercicios.add({ nome: 'Meu exercício', grupoMuscular: 'Peito', equipamento: 'Outro', personalizado: true });
+  await db.exercicios.add({ nome: 'Meu exercício', grupoMuscular: 'Peito', equipamento: 'Outro', tipo: 'isolado', secundarios: [], personalizado: true });
 }
 
 describe('backup', () => {
@@ -57,5 +58,35 @@ describe('backup', () => {
     expect(() => validarBackup('{"app":"app-treino","versao":99,"dados":{}}')).toThrow('versão mais nova');
     expect(() => validarBackup('{"app":"app-treino","versao":1,"dados":{"sessoes":{}}}')).toThrow('corrompido');
     expect(() => validarBackup('{"app":"app-treino","versao":1,"dados":{"sessaoSeries":[{"id":1}]}}')).toThrow('sessaoSeries');
+  });
+
+  it('restaura backup da versão 1, convertendo para o formato atual', async () => {
+    const v1 = {
+      app: 'app-treino',
+      versao: 1,
+      exportadoEm: '2026-01-01T00:00:00.000Z',
+      dados: {
+        exercicios: [{ id: 1, nome: 'Remada curvada', grupoMuscular: 'Costas', equipamento: 'Barra', personalizado: false }],
+        sessoes: [{ id: 1, inicio: 1, fim: 2, concluida: true, nomeDia: 'A', programaDiaId: null, programaId: null, observacao: '' }],
+        sessaoSeries: [{ id: 1, sessaoId: 1, exercicioId: 1, ordem: 0, numero: 1, carga: 60, reps: 8, rpe: 9.5, concluida: true }],
+        config: [{ chave: 'app', metaSemanal: 2, descansoPadraoSeg: 90, mostrarRpe: false, onboardingConcluido: true }],
+      },
+    };
+    const { backup } = validarBackup(JSON.stringify(v1));
+    await restaurarBackup(backup);
+    expect(await db.exercicios.get(1)).toMatchObject({ tipo: 'composto', secundarios: ['Bíceps'] });
+    expect((await db.sessaoSeries.get(1))?.rir).toBe(1);
+    expect(await db.config.get('app')).toMatchObject({ metaSemanal: 2, descansoCompostoSeg: 150, descansoIsoladoSeg: 90, mostrarRir: false });
+    expect(await db.pesos.count()).toBe(0);
+  });
+
+  it('inclui o registro de peso no backup', async () => {
+    await registrarPeso(80.5, new Date(2026, 10, 2, 8));
+    await registrarPeso(80.1, new Date(2026, 10, 2, 20)); // mesmo dia: substitui
+    const backup = await gerarBackup();
+    expect(backup.versao).toBe(2);
+    await apagarTudo();
+    await restaurarBackup(validarBackup(JSON.stringify(backup)).backup);
+    expect((await db.pesos.toArray()).map((p) => p.kg)).toEqual([80.1]);
   });
 });

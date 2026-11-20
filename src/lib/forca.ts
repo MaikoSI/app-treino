@@ -94,3 +94,30 @@ export function detectarRecordes(atuais: SerieFeita[], anteriores: SerieFeita[])
   }
   return recordes;
 }
+
+export interface TreinoDoExercicio {
+  sessaoId: number;
+  inicio: number;
+  series: Pick<SerieFeita, 'carga' | 'reps'>[];
+}
+
+/** Treinos seguidos sem progresso que caracterizam estagnação (guia: 2–3; app usa 3). */
+export const TREINOS_ESTAGNACAO = 3;
+
+/**
+ * Estagnado = nenhum dos últimos 3 treinos superou o melhor anterior em 1RM estimado
+ * NEM em volume (carga × reps; reps puras em peso corporal). Precisa de pelo menos
+ * 4 treinos. `treinos` em ordem cronológica, sem semanas leves/treinos de sono ruim.
+ */
+export function estagnado(treinos: TreinoDoExercicio[], n = TREINOS_ESTAGNACAO): boolean {
+  if (treinos.length < n + 1) return false;
+  const medir = (t: TreinoDoExercicio) => ({
+    rm: Math.max(0, ...t.series.map((s) => umRmEpley(s.carga, s.reps))),
+    vol: t.series.reduce((soma, s) => soma + (s.carga > 0 ? s.carga : 1) * Math.max(0, s.reps), 0),
+  });
+  const medidas = treinos.map(medir);
+  const antes = medidas.slice(0, -n);
+  const melhorRm = Math.max(...antes.map((m) => m.rm));
+  const melhorVol = Math.max(...antes.map((m) => m.vol));
+  return medidas.slice(-n).every((m) => m.rm <= melhorRm && m.vol <= melhorVol);
+}

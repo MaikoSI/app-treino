@@ -1,8 +1,9 @@
 import { db } from './index';
 import { lerConfig } from './config';
 import { exerciciosDoDia } from './programas';
-import type { Sessao, SessaoSerie } from './tipos';
-import type { SerieFeita } from '../lib/forca';
+import type { AjusteTreino, Sessao, SessaoSerie } from './tipos';
+import type { SerieFeita, TreinoDoExercicio } from '../lib/forca';
+import { metaPadrao, semanaLeveAtiva, seriesComAjuste } from '../lib/metas';
 import type { SerieComData } from '../lib/progresso';
 
 /** O treino que ainda não foi finalizado (no máximo um). */
@@ -39,11 +40,16 @@ export function valoresAnteriores(anteriores: SessaoSerie[], numero: number, rep
  * Começa um treino a partir de um dia do programa.
  * A sessão é uma CÓPIA do dia: editar o programa depois não muda o histórico.
  * Se já existe um treino em andamento, devolve ele em vez de criar outro.
+ *
+ * `ajuste` = 'sono' tira uma série dos exercícios com 3 ou mais. Com a semana leve
+ * ativa, o treino é sempre 'deload' (metade das séries).
  */
-export async function iniciarTreino(diaId: number | null): Promise<number> {
-  return db.transaction('rw', [db.sessoes, db.sessaoSeries, db.programaDias, db.programaExercicios], async () => {
+export async function iniciarTreino(diaId: number | null, ajustePedido: AjusteTreino = 'normal'): Promise<number> {
+  return db.transaction('rw', [db.sessoes, db.sessaoSeries, db.programaDias, db.programaExercicios, db.config], async () => {
     const aberta = await sessaoEmAndamento();
     if (aberta) return aberta.id!;
+    const { semanaLeveAte } = await lerConfig();
+    const ajuste: AjusteTreino = semanaLeveAtiva(semanaLeveAte) ? 'deload' : ajustePedido;
 
     const dia = diaId != null ? await db.programaDias.get(diaId) : undefined;
     const sessaoId = await db.sessoes.add({
@@ -54,6 +60,7 @@ export async function iniciarTreino(diaId: number | null): Promise<number> {
       fim: null,
       concluida: false,
       observacao: '',
+      ajuste,
     });
 
     if (dia) {
@@ -61,14 +68,14 @@ export async function iniciarTreino(diaId: number | null): Promise<number> {
       const novas: Omit<SessaoSerie, 'id'>[] = [];
       for (const [ordem, item] of itens.entries()) {
         const anteriores = await ultimasSeries(item.exercicioId);
-        for (let numero = 1; numero <= item.series; numero++) {
+        for (let numero = 1; numero <= seriesComAjuste(item.series, ajuste); numero++) {
           novas.push({
             sessaoId,
             exercicioId: item.exercicioId,
             ordem,
             numero,
             ...valoresAnteriores(anteriores, numero, item.repsMin),
-            rpe: null,
+            rir: null,
             concluida: false,
             repsMin: item.repsMin,
             repsMax: item.repsMax,
@@ -90,7 +97,7 @@ export async function seriesDaSessao(sessaoId: number): Promise<SessaoSerie[]> {
   return series.sort((a, b) => a.ordem - b.ordem || a.numero - b.numero);
 }
 
-export async function atualizarSerie(id: number, mudanca: Partial<Pick<SessaoSerie, 'carga' | 'reps' | 'rpe' | 'concluida'>>) {
+export async function atualizarSerie(id: number, mudanca: Partial<Pick<SessaoSerie, 'carga' | 'reps' | 'rir' | 'concluida'>>) {
   await db.sessaoSeries.update(id, mudanca);
 }
 
@@ -100,7 +107,7 @@ export async function adicionarSerie(sessaoId: number, ordem: number): Promise<v
   const ultima = doExercicio.at(-1);
   if (!ultima) return;
   const { id: _id, ...base } = ultima;
-  await db.sessaoSeries.add({ ...base, numero: ultima.numero + 1, concluida: false, rpe: null });
+  await db.sessaoSeries.add({ ...base, numero: ultima.numero + 1, concluida: false, rir: null });
 }
 
 export async function removerUltimaSerie(sessaoId: number, ordem: number): Promise<void> {
@@ -111,12 +118,13 @@ export async function removerUltimaSerie(sessaoId: number, ordem: number): Promi
 
 /** Adiciona um exercício no fim do treino, com 3 séries pré-preenchidas. */
 export async function adicionarExercicioNoTreino(sessaoId: number, exercicioId: number): Promise<void> {
-  const { descansoPadraoSeg } = await lerConfig();
+  const [config, exercicio] = await Promise.all([lerConfig(), db.exercicios.get(exercicioId)]);
+  const padrao = metaPadrao(exercicio?.tipo ?? 'isolado', config);
   const series = await seriesDaSessao(sessaoId);
   const ordem = series.length ? Math.max(...series.map((s) => s.ordem)) + 1 : 0;
   const anteriores = await ultimasSeries(exercicioId, sessaoId);
-  const repsMin = anteriores[0]?.repsMin ?? 8;
-  const repsMax = anteriores[0]?.repsMax ?? 12;
+  const repsMin = anteriores[0]?.repsMin ?? padrao.repsMin;
+  const repsMax = anteriores[0]?.repsMax ?? padrao.repsMax;
   const qtd = Math.max(3, anteriores.length);
   const novas: Omit<SessaoSerie, 'id'>[] = [];
   for (let numero = 1; numero <= qtd; numero++) {
@@ -126,11 +134,11 @@ export async function adicionarExercicioNoTreino(sessaoId: number, exercicioId: 
       ordem,
       numero,
       ...valoresAnteriores(anteriores, numero, repsMin),
-      rpe: null,
+      rir: null,
       concluida: false,
       repsMin,
       repsMax,
-      descansoSeg: anteriores[0]?.descansoSeg ?? descansoPadraoSeg,
+      descansoSeg: anteriores[0]?.descansoSeg ?? padrao.descansoSeg,
     });
   }
   await db.sessaoSeries.bulkAdd(novas);
@@ -146,7 +154,7 @@ export async function trocarExercicioNoTreino(sessaoId: number, ordem: number, n
         exercicioId: novoExercicioId,
         ...valoresAnteriores(anteriores, s.numero, s.repsMin),
         concluida: false,
-        rpe: null,
+        rir: null,
       });
     }
   });
@@ -200,7 +208,36 @@ export async function historicoDeSeries(exercicioId?: number): Promise<SerieComD
   return series.flatMap((s) => {
     const sessao = sessoes.get(s.sessaoId);
     return sessao && s.concluida
-      ? [{ exercicioId: s.exercicioId, sessaoId: s.sessaoId, inicio: sessao.inicio, carga: s.carga, reps: s.reps }]
+      ? [{ exercicioId: s.exercicioId, sessaoId: s.sessaoId, inicio: sessao.inicio, carga: s.carga, reps: s.reps, rir: s.rir ?? null }]
       : [];
   });
+}
+
+/**
+ * Treinos concluídos de cada exercício, em ordem, para detectar estagnação.
+ * Ignora semanas leves e treinos de sono ruim (são mais leves de propósito)
+ * e o treino `ignorarSessaoId` (o atual).
+ */
+export async function treinosPorExercicio(exercicioIds: number[], ignorarSessaoId?: number): Promise<Map<number, TreinoDoExercicio[]>> {
+  const mapa = new Map<number, TreinoDoExercicio[]>(exercicioIds.map((id) => [id, []]));
+  if (exercicioIds.length === 0) return mapa;
+  const sessoes = new Map(
+    (await sessoesConcluidas()).filter((s) => (s.ajuste ?? 'normal') === 'normal' && s.id !== ignorarSessaoId).map((s) => [s.id, s]),
+  );
+  const series = await db.sessaoSeries.where('exercicioId').anyOf(exercicioIds).toArray();
+  const porChave = new Map<string, TreinoDoExercicio>();
+  for (const s of series) {
+    const sessao = sessoes.get(s.sessaoId);
+    if (!sessao || !s.concluida) continue;
+    const chave = `${s.exercicioId}-${s.sessaoId}`;
+    let t = porChave.get(chave);
+    if (!t) {
+      t = { sessaoId: s.sessaoId, inicio: sessao.inicio, series: [] };
+      porChave.set(chave, t);
+      mapa.get(s.exercicioId)!.push(t);
+    }
+    t.series.push({ carga: s.carga, reps: s.reps });
+  }
+  for (const lista of mapa.values()) lista.sort((a, b) => a.inicio - b.inicio);
+  return mapa;
 }
