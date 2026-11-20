@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
+import { AvisoAtualizacao } from './components/AvisoAtualizacao';
 import './index.css';
 
 // Pede ao navegador para não apagar os dados do app quando faltar espaço.
@@ -14,6 +15,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HashRouter>
       <App />
+      <AvisoAtualizacao />
     </HashRouter>
   </StrictMode>,
 );

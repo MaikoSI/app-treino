@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Navegacao } from './components/Navegacao';
 import { Carregando } from './components/ui';
@@ -11,10 +12,12 @@ import Inicio from './pages/Inicio';
 import Modelos from './pages/Modelos';
 import Programas from './pages/Programas';
 import Progresso from './pages/Progresso';
-import ProgressoExercicio from './pages/ProgressoExercicio';
 import Resumo from './pages/Resumo';
 import SessaoDetalhe from './pages/SessaoDetalhe';
 import Treino from './pages/Treino';
+
+// O gráfico (Recharts) é a maior dependência: carrega só quando abrir a tela.
+const ProgressoExercicio = lazy(() => import('./pages/ProgressoExercicio'));
 
 export default function App() {
   const config = useConfig();
@@ -39,7 +42,14 @@ export default function App() {
         <Route path="/historico" element={<Historico />} />
         <Route path="/historico/:id" element={<SessaoDetalhe />} />
         <Route path="/progresso" element={<Progresso />} />
-        <Route path="/progresso/:id" element={<ProgressoExercicio />} />
+        <Route
+          path="/progresso/:id"
+          element={
+            <Suspense fallback={<Carregando />}>
+              <ProgressoExercicio />
+            </Suspense>
+          }
+        />
         <Route path="/config" element={<Config />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
