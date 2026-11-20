@@ -3,6 +3,7 @@ import { lerConfig } from './config';
 import { exerciciosDoDia } from './programas';
 import type { Sessao, SessaoSerie } from './tipos';
 import type { SerieFeita } from '../lib/forca';
+import type { SerieComData } from '../lib/progresso';
 
 /** O treino que ainda não foi finalizado (no máximo um). */
 export async function sessaoEmAndamento(): Promise<Sessao | undefined> {
@@ -187,4 +188,19 @@ export async function seriesAnteriores(antesDe: number, exercicioIds?: number[])
   const series = await db.sessaoSeries.where('sessaoId').anyOf(sessoes.map((s) => s.id)).toArray();
   const filtro = exercicioIds ? new Set(exercicioIds) : null;
   return series.filter((s) => s.concluida && (!filtro || filtro.has(s.exercicioId)));
+}
+
+/** Séries feitas em treinos concluídos, com a data do treino (para gráficos e recordes). */
+export async function historicoDeSeries(exercicioId?: number): Promise<SerieComData[]> {
+  const sessoes = new Map((await sessoesConcluidas()).map((s) => [s.id, s]));
+  const series =
+    exercicioId === undefined
+      ? await db.sessaoSeries.toArray()
+      : await db.sessaoSeries.where('exercicioId').equals(exercicioId).toArray();
+  return series.flatMap((s) => {
+    const sessao = sessoes.get(s.sessaoId);
+    return sessao && s.concluida
+      ? [{ exercicioId: s.exercicioId, sessaoId: s.sessaoId, inicio: sessao.inicio, carga: s.carga, reps: s.reps }]
+      : [];
+  });
 }

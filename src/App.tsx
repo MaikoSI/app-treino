@@ -6,10 +6,14 @@ import BoasVindas from './pages/BoasVindas';
 import EditarPrograma from './pages/EditarPrograma';
 import { EmBreve } from './pages/EmBreve';
 import Exercicios from './pages/Exercicios';
+import Historico from './pages/Historico';
 import Inicio from './pages/Inicio';
 import Modelos from './pages/Modelos';
 import Programas from './pages/Programas';
+import Progresso from './pages/Progresso';
+import ProgressoExercicio from './pages/ProgressoExercicio';
 import Resumo from './pages/Resumo';
+import SessaoDetalhe from './pages/SessaoDetalhe';
 import Treino from './pages/Treino';
 
 export default function App() {
@@ -32,8 +36,10 @@ export default function App() {
         <Route path="/treino" element={<Treino />} />
         <Route path="/resumo/:id" element={<Resumo />} />
         <Route path="/exercicios" element={<Exercicios />} />
-        <Route path="/historico" element={<EmBreve titulo="Histórico" />} />
-        <Route path="/progresso" element={<EmBreve titulo="Progresso" />} />
+        <Route path="/historico" element={<Historico />} />
+        <Route path="/historico/:id" element={<SessaoDetalhe />} />
+        <Route path="/progresso" element={<Progresso />} />
+        <Route path="/progresso/:id" element={<ProgressoExercicio />} />
         <Route path="/config" element={<EmBreve titulo="Ajustes" />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
