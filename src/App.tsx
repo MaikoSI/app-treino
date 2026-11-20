@@ -3,8 +3,8 @@ import { Navegacao } from './components/Navegacao';
 import { Carregando } from './components/ui';
 import { useConfig } from './db/config';
 import BoasVindas from './pages/BoasVindas';
+import Config from './pages/Config';
 import EditarPrograma from './pages/EditarPrograma';
-import { EmBreve } from './pages/EmBreve';
 import Exercicios from './pages/Exercicios';
 import Historico from './pages/Historico';
 import Inicio from './pages/Inicio';
@@ -40,7 +40,7 @@ export default function App() {
         <Route path="/historico/:id" element={<SessaoDetalhe />} />
         <Route path="/progresso" element={<Progresso />} />
         <Route path="/progresso/:id" element={<ProgressoExercicio />} />
-        <Route path="/config" element={<EmBreve titulo="Ajustes" />} />
+        <Route path="/config" element={<Config />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       {!semNavegacao && <Navegacao />}
