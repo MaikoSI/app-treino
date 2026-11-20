@@ -20,7 +20,7 @@ export const EQUIPAMENTOS = ['Barra', 'Halteres', 'Máquina', 'Polia', 'Smith', 
 export type Equipamento = (typeof EQUIPAMENTOS)[number];
 
 export interface Exercicio {
-  id?: number;
+  id: number;
   nome: string;
   grupoMuscular: GrupoMuscular;
   equipamento: Equipamento;
@@ -28,7 +28,7 @@ export interface Exercicio {
 }
 
 export interface Programa {
-  id?: number;
+  id: number;
   nome: string;
   diasPorSemana: number;
   ativo: boolean;
@@ -36,14 +36,14 @@ export interface Programa {
 }
 
 export interface ProgramaDia {
-  id?: number;
+  id: number;
   programaId: number;
   ordem: number;
   nome: string;
 }
 
 export interface ProgramaExercicio {
-  id?: number;
+  id: number;
   diaId: number;
   exercicioId: number;
   ordem: number;
@@ -54,7 +54,7 @@ export interface ProgramaExercicio {
 }
 
 export interface Sessao {
-  id?: number;
+  id: number;
   /** Dia do programa que originou a sessão (pode não existir mais). */
   programaDiaId: number | null;
   programaId: number | null;
@@ -71,7 +71,7 @@ export interface Sessao {
  * programa quando o treino começou, para o histórico não mudar depois.
  */
 export interface SessaoSerie {
-  id?: number;
+  id: number;
   sessaoId: number;
   exercicioId: number;
   /** Posição do exercício dentro da sessão. */

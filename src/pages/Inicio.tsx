@@ -1,19 +1,132 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Link } from 'react-router-dom';
-import { Cabecalho, Cartao } from '../components/ui';
-import { db } from '../db';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { IconeFogo } from '../components/Icones';
+import { Botao, Cabecalho, Carregando, Cartao, Painel } from '../components/ui';
+import { useConfig } from '../db/config';
+import { useExerciciosMap } from '../db/hooks';
+import { diasDoPrograma, exerciciosDoDia, programaAtivo } from '../db/programas';
+import { iniciarTreino, sessaoEmAndamento, sessoesConcluidas } from '../db/sessoes';
+import { duracao } from '../lib/formato';
+import { proximoDia } from '../lib/programa';
+import { sequenciaSemanas, treinosNaSemana } from '../lib/semana';
 
 export default function Inicio() {
-  const total = useLiveQuery(() => db.exercicios.count(), []);
+  const navigate = useNavigate();
+  const config = useConfig();
+  const exercicios = useExerciciosMap();
+  const [outroDia, setOutroDia] = useState(false);
+
+  const dados = useLiveQuery(async () => {
+    const [programa, emAndamento, concluidas] = await Promise.all([programaAtivo(), sessaoEmAndamento(), sessoesConcluidas()]);
+    const dias = programa ? await diasDoPrograma(programa.id!) : [];
+    const ultimaDoPrograma = concluidas.filter((s) => s.programaId === programa?.id).at(-1);
+    const proximo = proximoDia(dias, ultimaDoPrograma?.programaDiaId);
+    const itens = proximo ? await exerciciosDoDia(proximo.id!) : [];
+    return { programa, emAndamento, datas: concluidas.map((s) => s.inicio), dias, proximo, itens };
+  }, []);
+
+  if (!dados || !config) return <Carregando />;
+  const { programa, emAndamento, datas, dias, proximo, itens } = dados;
+  const meta = config.metaSemanal;
+  const feitos = treinosNaSemana(datas);
+  const sequencia = sequenciaSemanas(datas, meta);
+
+  async function comecar(diaId: number | null) {
+    await iniciarTreino(diaId);
+    navigate('/treino');
+  }
+
   return (
     <>
       <Cabecalho titulo="Início" />
-      <div className="px-4">
+      <div className="flex flex-col gap-4 px-4">
+        {/* Meta semanal */}
         <Cartao>
-          <p>{total ?? '…'} exercícios na biblioteca.</p>
-          <Link to="/exercicios" className="mt-2 inline-block text-acento">Ver exercícios</Link>
+          <div className="flex items-baseline justify-between">
+            <p className="text-sm text-suave">Meta da semana</p>
+            {sequencia > 0 && (
+              <p className="flex items-center gap-1 text-sm font-semibold text-ouro">
+                <IconeFogo width={18} height={18} /> {sequencia} {sequencia === 1 ? 'semana' : 'semanas'} seguidas
+              </p>
+            )}
+          </div>
+          <p className="mt-1 text-2xl font-bold">
+            {feitos}/{meta} <span className="text-base font-normal text-suave">treinos esta semana</span>
+          </p>
+          <div className="mt-3 flex gap-1.5" aria-hidden="true">
+            {Array.from({ length: Math.max(meta, feitos) }, (_, i) => (
+              <div key={i} className={`h-2 flex-1 rounded-full ${i < feitos ? 'bg-acento' : 'bg-superficie-2'}`} />
+            ))}
+          </div>
         </Cartao>
+
+        {/* Próximo treino */}
+        {emAndamento ? (
+          <Cartao className="ring-2 ring-acento">
+            <p className="text-sm text-suave">Treino em andamento</p>
+            <p className="mt-1 text-xl font-bold">{emAndamento.nomeDia}</p>
+            <p className="text-sm text-suave tabular-nums">Começou há {duracao(Date.now() - emAndamento.inicio)}</p>
+            <Botao variante="primario" grande className="mt-4 w-full" onClick={() => navigate('/treino')}>
+              Continuar treino
+            </Botao>
+          </Cartao>
+        ) : !programa ? (
+          <Cartao>
+            <p className="text-lg font-bold">Nenhum programa ativo</p>
+            <p className="mt-1 text-suave">Escolha ou crie um programa para ver o próximo treino aqui.</p>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <Botao onClick={() => navigate('/programas')}>Programas</Botao>
+              <Botao variante="primario" onClick={() => comecar(null)}>
+                Treino livre
+              </Botao>
+            </div>
+          </Cartao>
+        ) : proximo ? (
+          <Cartao>
+            <p className="text-sm text-suave">Próximo treino · {programa.nome}</p>
+            <p className="mt-1 text-xl font-bold">{proximo.nome}</p>
+            <ul className="mt-3 flex flex-col gap-1 text-sm">
+              {itens.map((it) => (
+                <li key={it.id} className="flex justify-between gap-2">
+                  <span>{exercicios?.get(it.exercicioId)?.nome ?? '…'}</span>
+                  <span className="shrink-0 text-suave tabular-nums">
+                    {it.series} × {it.repsMin}–{it.repsMax}
+                  </span>
+                </li>
+              ))}
+              {itens.length === 0 && <li className="text-suave">Este dia ainda não tem exercícios.</li>}
+            </ul>
+            <Botao variante="primario" grande className="mt-4 w-full" onClick={() => comecar(proximo.id!)}>
+              Iniciar treino
+            </Botao>
+            <Botao variante="fantasma" className="mt-2 w-full" onClick={() => setOutroDia(true)}>
+              Fazer outro treino
+            </Botao>
+          </Cartao>
+        ) : (
+          <Cartao>
+            <p className="text-lg font-bold">{programa.nome}</p>
+            <p className="mt-1 text-suave">Este programa ainda não tem dias de treino.</p>
+            <Link to={`/programas/${programa.id}`} className="mt-3 inline-block text-acento">
+              Editar programa
+            </Link>
+          </Cartao>
+        )}
       </div>
+
+      <Painel aberto={outroDia} aoFechar={() => setOutroDia(false)} titulo="Qual treino?">
+        <div className="flex flex-col gap-2">
+          {dias.map((d) => (
+            <Botao key={d.id} variante={d.id === proximo?.id ? 'primario' : 'secundario'} onClick={() => comecar(d.id!)}>
+              {d.nome}
+            </Botao>
+          ))}
+          <Botao variante="fantasma" onClick={() => comecar(null)}>
+            Treino livre (sem programa)
+          </Botao>
+        </div>
+      </Painel>
     </>
   );
 }

@@ -145,9 +145,8 @@ function FormNovoExercicio({
     if (!n) return setErro('Dê um nome ao exercício.');
     const existe = await db.exercicios.filter((e) => semAcento(e.nome) === semAcento(n)).first();
     if (existe) return setErro('Já existe um exercício com esse nome.');
-    const ex: Exercicio = { nome: n, grupoMuscular: grupo, equipamento, personalizado: true };
-    ex.id = await db.exercicios.add(ex);
-    aoCriar(ex);
+    const novo = { nome: n, grupoMuscular: grupo, equipamento, personalizado: true };
+    aoCriar({ ...novo, id: await db.exercicios.add(novo) });
   }
 
   const campo = 'min-h-12 w-full rounded-xl bg-superficie-2 px-4 text-base outline-none focus:ring-2 focus:ring-acento';

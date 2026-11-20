@@ -77,7 +77,7 @@ const lista: [string, GrupoMuscular, Equipamento][] = [
   ['Prancha (segundos)', 'Abdômen', 'Peso corporal'],
 ];
 
-export const EXERCICIOS_INICIAIS: Exercicio[] = lista.map(([nome, grupoMuscular, equipamento]) => ({
+export const EXERCICIOS_INICIAIS: Omit<Exercicio, 'id'>[] = lista.map(([nome, grupoMuscular, equipamento]) => ({
   nome,
   grupoMuscular,
   equipamento,

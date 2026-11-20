@@ -2,9 +2,13 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Navegacao } from './components/Navegacao';
 import { Carregando } from './components/ui';
 import { useConfig } from './db/config';
+import BoasVindas from './pages/BoasVindas';
+import EditarPrograma from './pages/EditarPrograma';
+import { EmBreve } from './pages/EmBreve';
 import Exercicios from './pages/Exercicios';
 import Inicio from './pages/Inicio';
-import { EmBreve } from './pages/EmBreve';
+import Modelos from './pages/Modelos';
+import Programas from './pages/Programas';
 
 export default function App() {
   const config = useConfig();
@@ -19,8 +23,11 @@ export default function App() {
     <div className={`mx-auto min-h-dvh max-w-lg ${semNavegacao ? '' : 'pb-24'}`}>
       <Routes>
         <Route path="/" element={<Inicio />} />
-        <Route path="/boas-vindas" element={<EmBreve titulo="Boas-vindas" />} />
-        <Route path="/programas" element={<EmBreve titulo="Programas" />} />
+        <Route path="/boas-vindas" element={<BoasVindas />} />
+        <Route path="/programas" element={<Programas />} />
+        <Route path="/programas/modelos" element={<Modelos />} />
+        <Route path="/programas/:id" element={<EditarPrograma />} />
+        <Route path="/treino" element={<EmBreve titulo="Treino" />} />
         <Route path="/exercicios" element={<Exercicios />} />
         <Route path="/historico" element={<EmBreve titulo="Histórico" />} />
         <Route path="/progresso" element={<EmBreve titulo="Progresso" />} />
