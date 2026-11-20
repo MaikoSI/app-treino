@@ -9,6 +9,8 @@ import Exercicios from './pages/Exercicios';
 import Inicio from './pages/Inicio';
 import Modelos from './pages/Modelos';
 import Programas from './pages/Programas';
+import Resumo from './pages/Resumo';
+import Treino from './pages/Treino';
 
 export default function App() {
   const config = useConfig();
@@ -17,7 +19,7 @@ export default function App() {
   if (!config) return <Carregando />;
   if (!config.onboardingConcluido && pathname !== '/boas-vindas') return <Navigate to="/boas-vindas" replace />;
 
-  const semNavegacao = pathname === '/boas-vindas' || pathname === '/treino';
+  const semNavegacao = pathname === '/boas-vindas' || pathname === '/treino' || pathname.startsWith('/resumo/');
 
   return (
     <div className={`mx-auto min-h-dvh max-w-lg ${semNavegacao ? '' : 'pb-24'}`}>
@@ -27,7 +29,8 @@ export default function App() {
         <Route path="/programas" element={<Programas />} />
         <Route path="/programas/modelos" element={<Modelos />} />
         <Route path="/programas/:id" element={<EditarPrograma />} />
-        <Route path="/treino" element={<EmBreve titulo="Treino" />} />
+        <Route path="/treino" element={<Treino />} />
+        <Route path="/resumo/:id" element={<Resumo />} />
         <Route path="/exercicios" element={<Exercicios />} />
         <Route path="/historico" element={<EmBreve titulo="Histórico" />} />
         <Route path="/progresso" element={<EmBreve titulo="Progresso" />} />

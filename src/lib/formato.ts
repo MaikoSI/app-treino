@@ -26,8 +26,11 @@ export function duracaoCurta(ms: number): string {
 export const dataCurta = (t: number) =>
   new Date(t).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
 
-export const dataLonga = (t: number) =>
-  new Date(t).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+/** "Sexta-feira, 20 de novembro" */
+export const dataLonga = (t: number) => {
+  const s = new Date(t).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
 
 /** Aceita "2,5" ou "2.5" vindos do teclado do celular. */
 export function lerNumero(texto: string): number {

@@ -92,6 +92,8 @@ export interface Config {
   metaSemanal: number;
   descansoPadraoSeg: number;
   unidade: 'kg';
+  /** Mostra o campo RPE (esforço percebido, 1–10) nas séries do treino. */
+  mostrarRpe: boolean;
   onboardingConcluido: boolean;
 }
 
@@ -100,5 +102,6 @@ export const CONFIG_PADRAO: Config = {
   metaSemanal: 3,
   descansoPadraoSeg: 90,
   unidade: 'kg',
+  mostrarRpe: false,
   onboardingConcluido: false,
 };
