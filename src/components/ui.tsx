@@ -5,10 +5,10 @@ import { IconeVoltar, IconeX } from './Icones';
 type Variante = 'primario' | 'secundario' | 'fantasma' | 'perigo';
 
 const estilos: Record<Variante, string> = {
-  primario: 'bg-acento text-black font-semibold active:bg-acento-escuro',
-  secundario: 'bg-superficie-2 text-texto active:bg-borda',
-  fantasma: 'bg-transparent text-suave active:bg-superficie-2',
-  perigo: 'bg-perigo/15 text-perigo active:bg-perigo/25',
+  primario: 'bg-primaria text-sobre-primaria font-semibold active:bg-primaria-ativo',
+  secundario: 'bg-cartao-2 text-texto active:bg-borda',
+  fantasma: 'bg-transparent text-secundario active:bg-cartao-2',
+  perigo: 'bg-alerta/10 text-alerta-texto active:bg-alerta/20',
 };
 
 export function Botao({
@@ -29,7 +29,7 @@ export function Botao({
 }
 
 export function Cartao({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-2xl bg-superficie p-4 ${className}`}>{children}</div>;
+  return <div className={`rounded-xl bg-cartao p-4 ${className}`}>{children}</div>;
 }
 
 /** Cabeçalho de página. Com `voltar`, mostra a seta de voltar. */
@@ -43,7 +43,7 @@ export function Cabecalho({ titulo, voltar, acao }: { titulo: string; voltar?: b
             type="button"
             aria-label="Voltar"
             onClick={() => navigate(-1)}
-            className="-ml-2 flex size-12 items-center justify-center rounded-xl active:bg-superficie-2"
+            className="-ml-2 flex size-12 items-center justify-center rounded-xl active:bg-cartao-2"
           >
             <IconeVoltar />
           </button>
@@ -81,7 +81,7 @@ export function Painel({
         role="dialog"
         aria-modal="true"
         aria-label={titulo}
-        className="pb-seguro flex max-h-[90dvh] w-full max-w-lg flex-col rounded-t-3xl bg-superficie"
+        className="pb-seguro flex max-h-[90dvh] w-full max-w-lg flex-col rounded-t-3xl bg-cartao"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 border-b border-borda px-4 py-2">
@@ -90,7 +90,7 @@ export function Painel({
             type="button"
             aria-label="Fechar"
             onClick={aoFechar}
-            className="flex size-12 items-center justify-center rounded-xl active:bg-superficie-2"
+            className="flex size-12 items-center justify-center rounded-xl active:bg-cartao-2"
           >
             <IconeX />
           </button>
@@ -119,7 +119,7 @@ export function Contador({
   rotulo: string;
   formatar?: (v: number) => string;
 }) {
-  const btn = 'flex size-12 items-center justify-center rounded-xl bg-superficie-2 text-2xl active:bg-borda disabled:opacity-30';
+  const btn = 'flex size-12 items-center justify-center rounded-xl bg-cartao-2 text-2xl active:bg-borda disabled:opacity-30';
   return (
     <div className="flex items-center gap-2">
       <button type="button" aria-label={`Diminuir ${rotulo}`} className={btn} disabled={valor <= min} onClick={() => aoMudar(Math.max(min, valor - passo))}>
@@ -136,9 +136,9 @@ export function Contador({
 }
 
 export function Vazio({ children }: { children: ReactNode }) {
-  return <p className="px-4 py-10 text-center text-suave">{children}</p>;
+  return <p className="px-4 py-10 text-center text-secundario">{children}</p>;
 }
 
 export function Carregando() {
-  return <div className="p-10 text-center text-suave">Carregando…</div>;
+  return <div className="p-10 text-center text-secundario">Carregando…</div>;
 }

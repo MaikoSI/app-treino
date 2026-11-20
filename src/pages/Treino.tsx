@@ -89,8 +89,11 @@ export default function Treino() {
         <div className="flex min-h-16 items-center gap-3 px-4">
           <div className="min-w-0 flex-1">
             <p className="truncate font-bold">{sessao.nomeDia}</p>
-            <p className="text-sm text-suave tabular-nums">
-              <Relogio desde={sessao.inicio} /> · {feitas}/{series.length} séries
+            <p className="text-sm text-secundario tabular-nums">
+              <span className="font-semibold text-destaque-texto">
+                <Relogio desde={sessao.inicio} />
+              </span>{' '}
+              · {feitas}/{series.length} séries
             </p>
           </div>
           <Botao variante="primario" onClick={() => setFinalizando(true)}>
@@ -114,7 +117,7 @@ export default function Treino() {
           />
         ))}
 
-        {grupos.length === 0 && <p className="py-6 text-center text-suave">Adicione o primeiro exercício.</p>}
+        {grupos.length === 0 && <p className="py-6 text-center text-secundario">Adicione o primeiro exercício.</p>}
 
         <Botao grande onClick={() => setAdicionando(true)}>
           <IconeMais /> Adicionar exercício
@@ -246,15 +249,15 @@ const CartaoExercicio = memo(function CartaoExercicio({
   const todasFeitas = pendentes.length === 0;
 
   return (
-    <section className={`rounded-2xl bg-superficie p-4 ${todasFeitas ? 'ring-1 ring-acento/40' : ''}`}>
+    <section className={`rounded-xl bg-cartao p-4 ${todasFeitas ? 'ring-1 ring-concluido/40' : ''}`}>
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
           <h2 className="text-lg font-bold leading-tight">{exercicio?.nome ?? 'Exercício removido'}</h2>
-          <p className="text-sm text-suave">
+          <p className="text-sm text-secundario">
             Meta: {meta.repsMin === meta.repsMax ? meta.repsMax : `${meta.repsMin}–${meta.repsMax}`} reps · descanso {meta.descansoSeg}s
           </p>
           {ultimas.length > 0 && (
-            <p className="mt-0.5 text-sm text-suave tabular-nums">
+            <p className="mt-0.5 text-sm text-secundario tabular-nums">
               Última vez: {ultimas.map((s) => `${num(s.carga)}×${s.reps}`).join(' · ')}
             </p>
           )}
@@ -263,21 +266,21 @@ const CartaoExercicio = memo(function CartaoExercicio({
           type="button"
           aria-label="Opções do exercício"
           onClick={aoMenu}
-          className="-mr-2 flex size-12 shrink-0 items-center justify-center rounded-xl active:bg-superficie-2"
+          className="-mr-2 flex size-12 shrink-0 items-center justify-center rounded-xl active:bg-cartao-2"
         >
           <IconeMenu />
         </button>
       </div>
 
       {dica && (
-        <div className="mt-3 flex items-center gap-2 rounded-xl bg-acento/10 px-3 py-2">
-          <p className="flex-1 text-sm text-acento">
+        <div className="mt-3 flex items-center gap-2 rounded-xl bg-primaria/10 px-3 py-2">
+          <p className="flex-1 text-sm text-primaria-texto">
             <strong>Tente +{num(dica.incremento)} kg</strong> — você bateu {meta.repsMax} reps em todas as séries.
           </p>
           {dicaAplicavel && (
             <button
               type="button"
-              className="min-h-10 rounded-lg bg-acento px-3 text-sm font-semibold text-black"
+              className="min-h-12 rounded-lg bg-primaria px-3 text-sm font-semibold text-sobre-primaria"
               onClick={() => pendentes.forEach((s) => atualizarSerie(s.id, { carga: dica.novaCarga }))}
             >
               Usar {num(dica.novaCarga)}
@@ -286,7 +289,7 @@ const CartaoExercicio = memo(function CartaoExercicio({
         </div>
       )}
 
-      <div className={`mt-3 grid items-center gap-2 text-xs text-suave ${mostrarRpe ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'}`}>
+      <div className={`mt-3 grid items-center gap-2 text-xs text-secundario ${mostrarRpe ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'}`}>
         <span className="text-center">Série</span>
         <span className="text-center">kg</span>
         <span className="text-center">Reps</span>
@@ -325,11 +328,11 @@ const LinhaSerie = memo(function LinhaSerie({
   const feita = serie.concluida;
   return (
     <li
-      className={`grid items-center gap-2 rounded-xl px-1 py-1 ${feita ? 'bg-acento/15' : ''} ${
+      className={`grid items-center gap-2 rounded-xl px-1 py-1 ${feita ? 'bg-concluido/15' : ''} ${
         mostrarRpe ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'
       }`}
     >
-      <span className="text-center font-semibold text-suave">{indice}</span>
+      <span className={`text-center font-semibold ${feita ? 'text-texto' : 'text-secundario'}`}>{indice}</span>
       <CampoNumero valor={serie.carga} decimal rotulo={`Carga da série ${indice}`} aoMudar={(carga) => atualizarSerie(serie.id, { carga })} />
       <CampoNumero valor={serie.reps} rotulo={`Repetições da série ${indice}`} aoMudar={(reps) => atualizarSerie(serie.id, { reps: Math.round(reps) })} />
       {mostrarRpe && (
@@ -347,7 +350,7 @@ const LinhaSerie = memo(function LinhaSerie({
         aria-checked={feita}
         aria-label={`Série ${indice} feita`}
         onClick={() => aoMarcar(serie)}
-        className={`flex h-12 w-full items-center justify-center rounded-xl ${feita ? 'bg-acento text-black' : 'bg-superficie-2 text-suave active:bg-borda'}`}
+        className={`flex h-12 w-full items-center justify-center rounded-xl ${feita ? 'bg-primaria text-sobre-primaria' : 'bg-cartao-2 text-secundario active:bg-borda'}`}
       >
         <IconeCheck />
       </button>
@@ -398,7 +401,7 @@ function CampoNumero({
         setTexto(t);
         aoMudar(Math.max(0, lerNumero(t)));
       }}
-      className="h-12 w-full min-w-0 rounded-xl bg-superficie-2 text-center text-lg font-semibold tabular-nums outline-none focus:ring-2 focus:ring-acento"
+      className="h-12 w-full min-w-0 rounded-xl bg-cartao-2 text-center text-lg font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
     />
   );
 }
@@ -424,20 +427,20 @@ function PainelFinalizar({
     <Painel aberto={aberto} aoFechar={aoFechar} titulo="Finalizar treino">
       <div className="flex flex-col gap-3">
         {feitas === 0 ? (
-          <p className="text-suave">Nenhuma série foi marcada como feita. Marque as séries ou descarte o treino.</p>
+          <p className="text-secundario">Nenhuma série foi marcada como feita. Marque as séries ou descarte o treino.</p>
         ) : (
           <>
             <p>
               <strong>{feitas}</strong> {feitas === 1 ? 'série feita' : 'séries feitas'}.
-              {faltam > 0 && <span className="text-suave"> As {faltam} não marcadas serão descartadas.</span>}
+              {faltam > 0 && <span className="text-secundario"> As {faltam} não marcadas serão descartadas.</span>}
             </p>
             <label className="flex flex-col gap-1">
-              <span className="text-sm text-suave">Observação (opcional)</span>
+              <span className="text-sm text-secundario">Observação (opcional)</span>
               <textarea
                 value={obs}
                 onChange={(e) => setObs(e.target.value)}
                 rows={2}
-                className="rounded-xl bg-superficie-2 p-3 text-base outline-none focus:ring-2 focus:ring-acento"
+                className="rounded-xl bg-cartao-2 p-3 text-base outline-none focus:ring-2 focus:ring-primaria"
                 placeholder="Como foi o treino?"
               />
             </label>

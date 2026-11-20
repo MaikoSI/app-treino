@@ -68,41 +68,49 @@ export default function Config() {
             />
           </Linha>
           <Linha rotulo="Unidade de peso">
-            <span className="rounded-xl bg-superficie-2 px-4 py-3 font-semibold">kg</span>
+            <span className="rounded-xl bg-cartao-2 px-4 py-3 font-semibold">kg</span>
           </Linha>
           <Linha rotulo="Registrar RPE" detalhe="Esforço percebido (1–10) em cada série">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={config.mostrarRpe}
-              aria-label="Registrar RPE"
-              onClick={() => salvarConfig({ mostrarRpe: !config.mostrarRpe })}
-              className={`relative h-8 w-14 shrink-0 rounded-full transition-colors ${config.mostrarRpe ? 'bg-acento' : 'bg-superficie-2'}`}
-            >
-              <span className={`absolute top-1 size-6 rounded-full bg-white transition-all ${config.mostrarRpe ? 'left-7' : 'left-1'}`} />
-            </button>
+            <Interruptor rotulo="Registrar RPE" ligado={config.mostrarRpe} aoMudar={(mostrarRpe) => salvarConfig({ mostrarRpe })} />
+          </Linha>
+          <Linha rotulo="Tema">
+            <div className="grid grid-cols-2 gap-1 rounded-xl bg-cartao-2 p-1" role="group" aria-label="Tema">
+              {(['escuro', 'claro'] as const).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  aria-pressed={config.tema === t}
+                  onClick={() => salvarConfig({ tema: t })}
+                  className={`min-h-12 rounded-lg px-4 font-semibold capitalize ${
+                    config.tema === t ? 'bg-primaria text-sobre-primaria' : 'text-secundario active:bg-borda'
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
           </Linha>
         </Cartao>
 
         <Cartao className="flex flex-col gap-2">
           <Botao onClick={() => setAnilhas(true)}>Calculadora de anilhas</Botao>
-          <Link to="/exercicios" className="flex min-h-12 items-center justify-center rounded-xl bg-superficie-2 active:bg-borda">
+          <Link to="/exercicios" className="flex min-h-12 items-center justify-center rounded-xl bg-cartao-2 active:bg-borda">
             Biblioteca de exercícios
           </Link>
-          <Link to="/sobre" className="flex min-h-12 items-center justify-center rounded-xl bg-superficie-2 active:bg-borda">
+          <Link to="/sobre" className="flex min-h-12 items-center justify-center rounded-xl bg-cartao-2 active:bg-borda">
             Sobre: base científica dos treinos
           </Link>
         </Cartao>
 
         <Cartao className="flex flex-col gap-3">
           <h2 className="font-semibold">Seus dados</h2>
-          <p className="text-sm text-suave">
+          <p className="text-sm text-secundario">
             Tudo fica salvo <strong className="text-texto">só neste aparelho</strong>, sem conta e sem servidor. Se você limpar os dados do
             navegador, desinstalar o app ou trocar de celular, os treinos se perdem.{' '}
             <strong className="text-texto">Exporte um backup de vez em quando</strong> e guarde fora do celular.
           </p>
           {persistente === false && (
-            <p className="text-sm text-ouro">O navegador ainda não garantiu armazenamento permanente. Instalar o app na tela inicial ajuda.</p>
+            <p className="text-sm text-alerta-texto">O navegador ainda não garantiu armazenamento permanente. Instalar o app na tela inicial ajuda.</p>
           )}
           <Botao variante="primario" onClick={exportar}>
             Exportar backup
@@ -120,7 +128,7 @@ export default function Config() {
             }}
           />
           {msg && (
-            <p role="status" className={`text-sm ${msg.tipo === 'ok' ? 'text-acento' : 'text-perigo'}`}>
+            <p role="status" className={`text-sm ${msg.tipo === 'ok' ? 'text-primaria-texto' : 'text-alerta-texto'}`}>
               {msg.texto}
             </p>
           )}
@@ -138,7 +146,7 @@ export default function Config() {
           Apagar todos os dados
         </Botao>
 
-        <p className="text-center text-xs text-suave">Versão {__VERSAO__}</p>
+        <p className="text-center text-xs text-secundario">Versão {__VERSAO__}</p>
       </div>
 
       <Painel aberto={anilhas} aoFechar={() => setAnilhas(false)} titulo="Calculadora de anilhas">
@@ -153,7 +161,7 @@ function Linha({ rotulo, detalhe, children }: { rotulo: string; detalhe?: string
     <div className="flex items-center justify-between gap-3">
       <div>
         <p>{rotulo}</p>
-        {detalhe && <p className="text-xs text-suave">{detalhe}</p>}
+        {detalhe && <p className="text-xs text-secundario">{detalhe}</p>}
       </div>
       {children}
     </div>
@@ -167,4 +175,21 @@ function useArmazenamentoPersistente() {
     navigator.storage?.persisted?.().then(setValor, () => {});
   }, []);
   return valor;
+}
+
+function Interruptor({ rotulo, ligado, aoMudar }: { rotulo: string; ligado: boolean; aoMudar: (v: boolean) => void }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={ligado}
+      aria-label={rotulo}
+      onClick={() => aoMudar(!ligado)}
+      className="flex min-h-12 min-w-16 shrink-0 items-center justify-center"
+    >
+      <span className={`relative h-8 w-14 rounded-full transition-colors ${ligado ? 'bg-concluido' : 'bg-secundario'}`}>
+        <span className={`absolute top-1 size-6 rounded-full bg-white shadow transition-all ${ligado ? 'left-7' : 'left-1'}`} />
+      </span>
+    </button>
+  );
 }

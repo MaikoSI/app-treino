@@ -33,8 +33,8 @@ export function EscolhaDivisao({
                 setDias(n);
                 setAberta(divisoesPara(n)[0]?.chave ?? null);
               }}
-              className={`flex aspect-square flex-col items-center justify-center rounded-2xl text-2xl font-bold ${
-                dias === n ? 'bg-acento text-black' : 'bg-superficie-2 text-texto active:bg-borda'
+              className={`flex aspect-square flex-col items-center justify-center rounded-xl text-2xl font-bold ${
+                dias === n ? 'bg-primaria text-sobre-primaria' : 'bg-cartao-2 text-texto active:bg-borda'
               }`}
             >
               {n}
@@ -81,22 +81,22 @@ function CartaoDivisao({
   aoEditar: () => void;
 }) {
   return (
-    <Cartao className={aberta ? 'ring-2 ring-acento' : ''}>
+    <Cartao className={aberta ? 'ring-2 ring-primaria' : ''}>
       <button type="button" onClick={aoAbrir} aria-expanded={aberta} className="w-full text-left">
         <p className="text-lg font-bold">{divisao.nome}</p>
-        <p className="text-sm text-suave">{divisao.descricao}</p>
+        <p className="text-sm text-secundario">{divisao.descricao}</p>
       </button>
       {aberta && (
         <>
           <div className="mt-4 flex flex-col gap-4">
             {divisao.dias.map((dia) => (
               <div key={dia.nome}>
-                <p className="font-semibold text-acento">{dia.nome}</p>
+                <p className="font-semibold text-primaria-texto">{dia.nome}</p>
                 <ul className="mt-1 text-sm">
                   {dia.exercicios.map((ex) => (
                     <li key={ex.nome} className="flex justify-between gap-2 py-0.5">
                       <span>{ex.nome}</span>
-                      <span className="shrink-0 text-suave tabular-nums">
+                      <span className="shrink-0 text-secundario tabular-nums">
                         {ex.series} × {ex.repsMin}–{ex.repsMax}
                       </span>
                     </li>

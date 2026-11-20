@@ -11,13 +11,13 @@ export default function Sobre() {
       <Cabecalho titulo="Sobre" voltar />
       <div className="flex flex-col gap-4 px-4 pb-10">
         <header>
-          <p className="text-sm font-semibold uppercase tracking-widest text-acento">Base científica</p>
+          <p className="text-sm font-semibold uppercase tracking-widest text-primaria-texto">Base científica</p>
           <h2 className="mt-1 text-2xl font-bold leading-tight">Guia científico de musculação: hipertrofia, força e nutrição</h2>
-          <p className="mt-3 text-suave">
+          <p className="mt-3 text-secundario">
             O que mais faz o corpo mudar é treinar com regularidade, progredir a carga, comer proteína suficiente e dormir bem. O resto
             é ajuste fino. Este guia reúne o que as melhores pesquisas dizem sobre treino, nutrição, suplementos e recuperação.
           </p>
-          <p className="mt-3 text-sm text-suave">
+          <p className="mt-3 text-sm text-secundario">
             <strong className="text-texto">Como ler as evidências:</strong> quase tudo aqui vem de meta-análises e revisões
             sistemáticas, estudos que juntam os resultados de dezenas de pesquisas. São a forma mais forte de evidência na área. Quando
             algo ainda é incerto, o guia avisa.
@@ -115,7 +115,7 @@ export default function Sobre() {
               ['Avançado', '12–20+, testando a resposta'],
             ]}
           />
-          <p className="text-sm text-suave">
+          <p className="text-sm text-secundario">
             Como contar: só contam séries de trabalho (perto da falha), não aquecimento. Compostos contam para os músculos principais:
             o supino conta para peito e meia série para tríceps e ombro anterior.
           </p>
@@ -145,7 +145,7 @@ export default function Sobre() {
               ['6', 'Push / Pull / Legs x2', '2x'],
             ]}
           />
-          <p className="text-sm text-suave">
+          <p className="text-sm text-secundario">
             O clássico ABCDE (cada músculo 1x por semana) funciona, mas fica abaixo da frequência recomendada. Se preferir, garanta pelo
             menos 10 séries semanais por músculo.
           </p>
@@ -176,10 +176,10 @@ export default function Sobre() {
             Na prática: compostos pesados (agachamento, supino, remada) em 5–10 repetições; isoladores (rosca, elevação lateral, cadeira
             extensora) em 10–20.
           </p>
-          <div className="rounded-xl bg-superficie-2 p-3">
-            <p className="text-sm text-suave">1RM estimado (fórmula de Epley)</p>
+          <div className="rounded-xl bg-cartao-2 p-3">
+            <p className="text-sm text-secundario">1RM estimado (fórmula de Epley)</p>
             <p className="mt-1 font-semibold">1RM = carga × (1 + repetições ÷ 30)</p>
-            <p className="mt-1 text-sm text-suave">
+            <p className="mt-1 text-sm text-secundario">
               Exemplo: 80 kg × 8 repetições ≈ 101 kg. A estimativa perde precisão acima de ~10 repetições.
             </p>
           </div>
@@ -210,7 +210,7 @@ export default function Sobre() {
               ['≤6', '4+', 'Longe da falha: conta pouco para hipertrofia'],
             ]}
           />
-          <p className="text-sm text-suave">
+          <p className="text-sm text-secundario">
             Compostos pesados a RIR 1–3, por segurança. Isoladores e máquinas podem ir a RIR 0–1, especialmente na última série.
             Iniciantes costumam subestimar quanto ainda aguentam.
           </p>
@@ -234,7 +234,7 @@ export default function Sobre() {
               ['Isoladores (rosca, elevação lateral)', '1–1,5 min'],
             ]}
           />
-          <p className="text-sm text-suave">
+          <p className="text-sm text-secundario">
             Descanso curto demais derruba as repetições das séries seguintes. Superséries de antagonistas (bíceps + tríceps) economizam
             tempo sem esse prejuízo.
           </p>
@@ -263,7 +263,7 @@ export default function Sobre() {
 
         <Secao titulo="Progressão, periodização e deload">
           <p>Progrida em pequenos passos e registre tudo. Deload é uma ferramenta para quando a fadiga acumula, não uma obrigação.</p>
-          <div className="rounded-xl bg-superficie-2 p-3">
+          <div className="rounded-xl bg-cartao-2 p-3">
             <p className="font-semibold">Progressão dupla</p>
             <ol className="mt-2 flex list-decimal flex-col gap-1 pl-5 text-sm">
               <li>Defina uma faixa de repetições, por exemplo 8–12.</li>
@@ -361,7 +361,7 @@ export default function Sobre() {
               ['90 kg', '144–198 g', '~36 g'],
             ]}
           />
-          <p className="text-sm text-suave">
+          <p className="text-sm text-secundario">
             Gorduras: cerca de 20–35% das calorias (15–30% em dieta). Carboidratos completam o restante e são o principal combustível do
             treino intenso. Água: o suficiente para a urina ficar clara.
           </p>
@@ -388,7 +388,7 @@ export default function Sobre() {
               da hora de dormir.
             </Item>
           </ul>
-          <p className="text-sm text-ouro">
+          <p className="text-sm font-semibold text-alerta-texto">
             Quem tem doença renal, hipertensão, é menor de idade ou está grávida deve consultar um médico antes de usar suplementos.
           </p>
         </Secao>
@@ -426,7 +426,7 @@ export default function Sobre() {
               Manter o treino pesado durante o déficit; proteína alta; perder 0,5–1% do peso por semana.
             </Item>
           </ul>
-          <p className="text-sm text-ouro">
+          <p className="text-sm font-semibold text-alerta-texto">
             Pessoas com lesões, doenças cardíacas, hipertensão não controlada ou gestantes devem ter liberação médica e acompanhamento
             profissional.
           </p>
@@ -488,14 +488,14 @@ export default function Sobre() {
               'Lamon et al. (2021). The effect of acute sleep deprivation on skeletal muscle protein synthesis. Physiol Rep.',
             ]}
           />
-          <p className="text-sm text-suave">
+          <p className="text-sm text-secundario">
             Para continuar estudando: livro <em>Science and Development of Muscle Hypertrophy</em> (Brad Schoenfeld); site Stronger By
             Science (Greg Nuckols); pesquisadores Brad Schoenfeld, James Krieger, Stuart Phillips, Eric Helms, Menno Henselmans e, no
             Brasil, Paulo Gentil.
           </p>
         </Secao>
 
-        <p className="text-center text-xs text-suave">Versão {__VERSAO__}</p>
+        <p className="text-center text-xs text-secundario">Versão {__VERSAO__}</p>
       </div>
     </>
   );
@@ -503,7 +503,7 @@ export default function Sobre() {
 
 function Aviso() {
   return (
-    <p className="rounded-xl bg-ouro/10 px-4 py-3 text-sm text-ouro">
+    <p className="rounded-xl border border-borda bg-cartao px-4 py-3 text-sm text-secundario">
       Conteúdo informativo. Não substitui orientação de médico, nutricionista ou profissional de educação física.
     </p>
   );
@@ -511,10 +511,10 @@ function Aviso() {
 
 function Secao({ titulo, aberta, children }: { titulo: string; aberta?: boolean; children: ReactNode }) {
   return (
-    <details open={aberta} className="group rounded-2xl bg-superficie">
+    <details open={aberta} className="group rounded-xl bg-cartao">
       <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3 font-semibold [&::-webkit-details-marker]:hidden">
         <span className="flex-1">{titulo}</span>
-        <span aria-hidden="true" className="text-suave transition-transform group-open:rotate-180">
+        <span aria-hidden="true" className="text-secundario transition-transform group-open:rotate-180">
           ▾
         </span>
       </summary>
@@ -527,7 +527,7 @@ function Item({ titulo, children }: { titulo: string; children: ReactNode }) {
   return (
     <li className="text-sm">
       <p className="font-semibold">{titulo}</p>
-      <p className="text-suave">{children}</p>
+      <p className="text-secundario">{children}</p>
     </li>
   );
 }
@@ -539,7 +539,7 @@ function Tabela({ cabecalho, linhas }: { cabecalho: string[]; linhas: string[][]
         <thead>
           <tr>
             {cabecalho.map((c) => (
-              <th key={c} className="px-1 py-2 text-left font-normal text-suave">
+              <th key={c} className="px-1 py-2 text-left font-normal text-secundario">
                 {c}
               </th>
             ))}
@@ -565,7 +565,7 @@ function Refs({ titulo, itens }: { titulo: string; itens: string[] }) {
   return (
     <div>
       <p className="font-semibold">{titulo}</p>
-      <ul className="mt-1 flex list-disc flex-col gap-1 pl-5 text-sm text-suave">
+      <ul className="mt-1 flex list-disc flex-col gap-1 pl-5 text-sm text-secundario">
         {itens.map((r) => (
           <li key={r}>{r}</li>
         ))}

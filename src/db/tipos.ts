@@ -94,8 +94,11 @@ export interface Config {
   unidade: 'kg';
   /** Mostra o campo RPE (esforço percebido, 1–10) nas séries do treino. */
   mostrarRpe: boolean;
+  tema: Tema;
   onboardingConcluido: boolean;
 }
+
+export type Tema = 'escuro' | 'claro';
 
 export const CONFIG_PADRAO: Config = {
   chave: 'app',
@@ -103,5 +106,6 @@ export const CONFIG_PADRAO: Config = {
   descansoPadraoSeg: 90,
   unidade: 'kg',
   mostrarRpe: false,
+  tema: 'escuro',
   onboardingConcluido: false,
 };

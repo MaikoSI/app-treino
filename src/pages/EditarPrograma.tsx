@@ -18,8 +18,8 @@ import {
 import type { Exercicio, ProgramaDia, ProgramaExercicio } from '../db/tipos';
 import { mover } from '../lib/programa';
 
-const campo = 'min-h-12 w-full rounded-xl bg-superficie-2 px-4 text-base outline-none focus:ring-2 focus:ring-acento';
-const botaoIcone = 'flex size-11 items-center justify-center rounded-xl text-suave active:bg-superficie-2 disabled:opacity-25';
+const campo = 'min-h-12 w-full rounded-xl bg-cartao-2 px-4 text-base outline-none focus:ring-2 focus:ring-primaria';
+const botaoIcone = 'flex size-12 items-center justify-center rounded-xl text-secundario active:bg-cartao-2 disabled:opacity-25';
 
 export default function EditarPrograma() {
   const { id } = useParams();
@@ -40,7 +40,7 @@ export default function EditarPrograma() {
       <Cabecalho titulo="Editar programa" voltar />
       <div className="flex flex-col gap-4 px-4 pb-8">
         <label className="flex flex-col gap-1">
-          <span className="text-sm text-suave">Nome do programa</span>
+          <span className="text-sm text-secundario">Nome do programa</span>
           <CampoTexto valor={programa.nome} aoSalvar={(nome) => db.programas.update(programaId, { nome })} />
         </label>
 
@@ -56,7 +56,7 @@ export default function EditarPrograma() {
         </div>
 
         {programa.ativo ? (
-          <p className="rounded-xl bg-acento/10 px-4 py-3 text-acento">Este é o programa ativo.</p>
+          <p className="rounded-xl bg-primaria/10 px-4 py-3 text-primaria-texto">Este é o programa ativo.</p>
         ) : (
           <Botao onClick={() => definirAtivo(programaId)}>Tornar este o programa ativo</Botao>
         )}
@@ -152,7 +152,7 @@ function EditorDia({
             <li key={item.id} className="flex items-center gap-1 py-1">
               <button type="button" onClick={() => setEditando(item)} className="flex min-h-12 flex-1 flex-col items-start justify-center text-left">
                 <span className="font-medium">{ex?.nome ?? 'Exercício removido'}</span>
-                <span className="text-sm text-suave tabular-nums">
+                <span className="text-sm text-secundario tabular-nums">
                   {item.series} × {item.repsMin}–{item.repsMax} · {item.descansoSeg}s descanso
                 </span>
               </button>
@@ -171,7 +171,7 @@ function EditorDia({
             </li>
           );
         })}
-        {itens?.length === 0 && <li className="py-3 text-sm text-suave">Nenhum exercício neste dia.</li>}
+        {itens?.length === 0 && <li className="py-3 text-sm text-secundario">Nenhum exercício neste dia.</li>}
       </ul>
 
       <Botao variante="fantasma" onClick={() => setEscolhendo(true)}>

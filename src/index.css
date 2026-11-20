@@ -1,23 +1,105 @@
 @import 'tailwindcss';
 
-@theme {
-  --color-fundo: #0b0b0c;
-  --color-superficie: #161618;
-  --color-superficie-2: #212124;
-  --color-borda: #2c2c30;
-  --color-texto: #f4f4f5;
-  --color-suave: #a1a1aa;
-  --color-acento: #c6f432;
-  --color-acento-escuro: #9ccc0f;
-  --color-perigo: #f87171;
-  --color-ouro: #fbbf24;
+/*
+ * Identidade visual. No Tailwind v4 os tokens ficam aqui (não há tailwind.config).
+ * As cores vêm de variáveis CSS para trocar de tema (escuro padrão / claro) sem
+ * recompilar: bg-cartao, text-secundario, bg-primaria, text-alerta-texto…
+ *
+ * Papéis:  verde = ação principal e "concluído/ideal"
+ *          azul  = recordes e cronômetro
+ *          vermelho = só alertas (volume alto, excluir, erros)
+ * Todos os pares de texto foram conferidos para WCAG AA (≥ 4,5:1).
+ */
+@theme inline {
+  --color-fundo: var(--fundo);
+  --color-cartao: var(--cartao);
+  --color-cartao-2: var(--cartao-2); /* campos, botões secundários */
+  --color-borda: var(--borda);
+  --color-texto: var(--texto);
+  --color-secundario: var(--secundario);
+
+  --color-primaria: var(--primaria); /* fundo de botão principal */
+  --color-primaria-ativo: var(--primaria-ativo);
+  --color-sobre-primaria: var(--sobre-primaria);
+  --color-primaria-texto: var(--primaria-texto); /* verde usado como texto */
+  --color-concluido: var(--concluido); /* preenchimento de "feito" (série, dia, meta) */
+  --color-sobre-concluido: var(--sobre-concluido);
+
+  --color-destaque: var(--destaque); /* recordes e cronômetro */
+  --color-sobre-destaque: var(--sobre-destaque);
+  --color-destaque-texto: var(--destaque-texto);
+
+  --color-alerta: var(--alerta);
+  --color-alerta-texto: var(--alerta-texto);
+
+  --color-volume-baixo: var(--volume-baixo);
+  --color-volume-ideal: var(--volume-ideal);
+  --color-volume-alto: var(--volume-alto);
+  --color-trilho: var(--trilho); /* fundo das barras */
+
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Tema escuro (padrão): a paleta da identidade, sem alterações. */
+:root {
+  color-scheme: dark;
+  --fundo: #0a0a0a;
+  --cartao: #161818;
+  --cartao-2: #202423;
+  --borda: #262a29;
+  --texto: #f2f4f3;
+  --secundario: #8f9794;
+  --primaria: #22e06b;
+  --primaria-ativo: #1bc45c;
+  --sobre-primaria: #0a0a0a;
+  --primaria-texto: #22e06b;
+  --concluido: #22e06b;
+  --sobre-concluido: #0a0a0a;
+  --destaque: #3d8bff;
+  --sobre-destaque: #0a0a0a;
+  --destaque-texto: #3d8bff;
+  --alerta: #ff3b4a;
+  --alerta-texto: #ff3b4a;
+  --volume-baixo: #5c6662;
+  --volume-ideal: #22e06b;
+  --volume-alto: #ff3b4a;
+  --trilho: #0a0a0a;
+}
+
+/*
+ * Tema claro. Verde, azul e vermelho originais não chegam a 4,5:1 sobre branco,
+ * então aqui viram tons mais escuros das mesmas cores quando usados como texto ou
+ * indicador. O botão principal continua #22E06B com texto preto.
+ */
+:root[data-theme='claro'] {
+  color-scheme: light;
+  --fundo: #f4f6f5;
+  --cartao: #ffffff;
+  --cartao-2: #e9edeb;
+  --borda: #d3d9d6;
+  --texto: #0a0a0a;
+  --secundario: #56605c;
+  --primaria: #22e06b;
+  --primaria-ativo: #1bc45c;
+  --sobre-primaria: #0a0a0a;
+  --primaria-texto: #0b7a38;
+  --concluido: #0b7a38;
+  --sobre-concluido: #ffffff;
+  --destaque: #1f64d6;
+  --sobre-destaque: #ffffff;
+  --destaque-texto: #1f64d6;
+  --alerta: #c8142a;
+  --alerta-texto: #c8142a;
+  --volume-baixo: #5c6662;
+  --volume-ideal: #0b7a38;
+  --volume-alto: #c8142a;
+  --trilho: #e9edeb;
 }
 
 html,
 body {
-  background: var(--color-fundo);
-  color: var(--color-texto);
+  background: var(--fundo);
+  color: var(--texto);
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
 }

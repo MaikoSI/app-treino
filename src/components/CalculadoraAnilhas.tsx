@@ -25,17 +25,17 @@ export function CalculadoraAnilhas({ cargaInicial = 60 }: { cargaInicial?: numbe
   return (
     <div className="flex flex-col gap-4">
       <label className="flex flex-col gap-1">
-        <span className="text-sm text-suave">Carga total (kg)</span>
+        <span className="text-sm text-secundario">Carga total (kg)</span>
         <input
           inputMode="decimal"
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           onFocus={(e) => e.target.select()}
-          className="min-h-14 rounded-xl bg-superficie-2 px-4 text-2xl font-bold tabular-nums outline-none focus:ring-2 focus:ring-acento"
+          className="min-h-14 rounded-xl bg-cartao-2 px-4 text-2xl font-bold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
         />
       </label>
       <div>
-        <span className="text-sm text-suave">Barra</span>
+        <span className="text-sm text-secundario">Barra</span>
         <div className="mt-1 grid grid-cols-3 gap-2">
           {[20, 15, 10].map((b) => (
             <button
@@ -43,7 +43,7 @@ export function CalculadoraAnilhas({ cargaInicial = 60 }: { cargaInicial?: numbe
               type="button"
               aria-pressed={barra === b}
               onClick={() => setBarra(b)}
-              className={`min-h-12 rounded-xl ${barra === b ? 'bg-acento font-semibold text-black' : 'bg-superficie-2'}`}
+              className={`min-h-12 rounded-xl ${barra === b ? 'bg-primaria font-semibold text-sobre-primaria' : 'bg-cartao-2'}`}
             >
               {b} kg
             </button>
@@ -52,7 +52,7 @@ export function CalculadoraAnilhas({ cargaInicial = 60 }: { cargaInicial?: numbe
       </div>
 
       {!r.valido ? (
-        <p className="text-suave">A carga precisa ser pelo menos o peso da barra ({barra} kg).</p>
+        <p className="text-secundario">A carga precisa ser pelo menos o peso da barra ({barra} kg).</p>
       ) : (
         <>
           <div className="flex h-32 items-center rounded-xl bg-fundo px-3" aria-hidden="true">
@@ -72,13 +72,13 @@ export function CalculadoraAnilhas({ cargaInicial = 60 }: { cargaInicial?: numbe
               'Só a barra.'
             ) : (
               <>
-                <span className="text-suave">De cada lado: </span>
+                <span className="text-secundario">De cada lado: </span>
                 <strong>{r.porLado.map(num).join(' + ')}</strong>
-                <span className="text-suave"> kg</span>
+                <span className="text-secundario"> kg</span>
               </>
             )}
           </p>
-          {r.resto > 0 && <p className="text-ouro">Não fecha exato: sobram {kg(r.resto)} sem anilha.</p>}
+          {r.resto > 0 && <p className="text-secundario">Não fecha exato: sobram {kg(r.resto)} sem anilha.</p>}
         </>
       )}
     </div>

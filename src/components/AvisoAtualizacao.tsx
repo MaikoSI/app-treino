@@ -29,7 +29,7 @@ export function AvisoAtualizacao() {
 
   return (
     <div className="pt-seguro fixed inset-x-0 top-0 z-[70] flex justify-center px-4 pt-2" role="status">
-      <div className="flex w-full max-w-lg items-center gap-3 rounded-2xl border border-borda bg-superficie-2 p-3 shadow-lg">
+      <div className="flex w-full max-w-lg items-center gap-3 rounded-xl border border-borda bg-cartao-2 p-3 shadow-lg">
         <p className="flex-1 text-sm">
           {temNovaVersao ? 'Nova versão disponível.' : 'Pronto! O app agora funciona sem internet.'}
         </p>

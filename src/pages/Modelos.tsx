@@ -20,7 +20,7 @@ export default function Modelos() {
     <>
       <Cabecalho titulo="Modelos prontos" voltar />
       <div className="px-4 pb-6">
-        <p className="mb-4 text-suave">O programa criado vira o ativo. Você pode trocar depois.</p>
+        <p className="mb-4 text-secundario">O programa criado vira o ativo. Você pode trocar depois.</p>
         <EscolhaDivisao
           aoUsar={(d) => criar(() => criarProgramaDeDivisao(d, true), false)}
           aoEditar={(d) => criar(() => criarProgramaDeDivisao(d, true), true)}

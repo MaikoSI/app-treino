@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { IconeTrofeu } from './Icones';
 
-const CORES = ['#c6f432', '#fbbf24', '#f87171', '#60a5fa', '#f4f4f5'];
+// Confete nas cores da identidade (sem vermelho: vermelho é só para alertas).
+const CORES = ['#3D8BFF', '#22E06B', '#F2F4F3', '#8F9794'];
 
 /** Confete + selo de recorde. Some sozinho depois de alguns segundos. */
 export function Comemoracao({ texto, aoAcabar }: { texto: string; aoAcabar: () => void }) {
@@ -44,7 +45,7 @@ export function Comemoracao({ texto, aoAcabar }: { texto: string; aoAcabar: () =
       ))}
       <div className="absolute inset-x-0 top-24 flex justify-center">
         <div
-          className="flex items-center gap-2 rounded-full bg-ouro px-5 py-3 text-lg font-bold text-black shadow-lg"
+          className="flex items-center gap-2 rounded-full bg-destaque px-5 py-3 text-lg font-bold text-sobre-destaque shadow-lg"
           style={{ animation: 'pulsar 0.6s ease-in-out 3' }}
         >
           <IconeTrofeu /> {texto}

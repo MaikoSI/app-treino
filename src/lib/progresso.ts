@@ -94,3 +94,15 @@ export function celulasDoMes(ano: number, mes: number): (number | null)[] {
   const totalDias = new Date(ano, mes + 1, 0).getDate();
   return [...Array<null>(vazios).fill(null), ...Array.from({ length: totalDias }, (_, i) => i + 1)];
 }
+
+export type FaixaVolume = 'baixo' | 'ideal' | 'alto';
+
+/** Limites de séries semanais por músculo (guia: mínimo ~10; acima de ~20 a fadiga cresce). */
+export const VOLUME_IDEAL_MIN = 10;
+export const VOLUME_IDEAL_MAX = 20;
+
+export function faixaVolume(series: number): FaixaVolume {
+  if (series < VOLUME_IDEAL_MIN) return 'baixo';
+  if (series > VOLUME_IDEAL_MAX) return 'alto';
+  return 'ideal';
+}

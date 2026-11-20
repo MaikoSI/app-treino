@@ -1,17 +1,38 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Cabecalho, Carregando, Cartao, Vazio } from '../components/ui';
 import { db } from '../db';
+import { useConfig } from '../db/config';
 import { historicoDeSeries } from '../db/sessoes';
 import { dataCurta, dataLonga, kg, num } from '../lib/formato';
 import { recordesPessoais, serieTemporal } from '../lib/progresso';
+import { corDoTema } from '../lib/tema';
 
-// Validadas para o fundo escuro (faixa de luminosidade, daltonismo e contraste).
-const COR_CARGA = '#3987e5';
-const COR_1RM = '#d95926';
-const SUPERFICIE = '#161618';
+/**
+ * Cores do gráfico, lidas do tema ativo:
+ * - carga máxima: azul de destaque (recordes), linha sólida;
+ * - 1RM estimado: cinza secundário, linha TRACEJADA (estimativa). O tracejado e a
+ *   legenda garantem que as linhas não se distinguem só pela cor.
+ */
+function useCoresGrafico() {
+  const tema = useConfig()?.tema;
+  // useMemo com [tema]: as cores são relidas quando o tema muda.
+  return useMemo(
+    () => ({
+      tema,
+      carga: corDoTema('--destaque'),
+      umRm: corDoTema('--secundario'),
+      superficie: corDoTema('--cartao'),
+      grade: corDoTema('--borda'),
+      textoSec: corDoTema('--secundario'),
+      texto: corDoTema('--texto'),
+      tooltip: corDoTema('--cartao-2'),
+    }),
+    [tema],
+  );
+}
 
 const PERIODOS = [
   { rotulo: '3 meses', dias: 90 },
@@ -26,6 +47,7 @@ export default function ProgressoExercicio() {
   const exercicio = useLiveQuery(async () => (await db.exercicios.get(exercicioId)) ?? null, [exercicioId]);
   const series = useLiveQuery(() => historicoDeSeries(exercicioId), [exercicioId]);
   const [periodo, setPeriodo] = useState(0);
+  const cor = useCoresGrafico();
 
   if (exercicio === undefined || !series) return <Carregando />;
 
@@ -43,14 +65,14 @@ export default function ProgressoExercicio() {
           <>
             <div className="grid grid-cols-2 gap-2">
               <Cartao>
-                <p className="text-xs text-suave">Carga máxima</p>
+                <p className="text-xs text-secundario">Carga máxima</p>
                 <p className="mt-1 text-xl font-bold tabular-nums">{rec.cargaMax > 0 ? `${kg(rec.cargaMax)} × ${rec.repsNaCargaMax}` : '—'}</p>
-                <p className="text-xs text-suave">{dataCurta(rec.dataCarga)}</p>
+                <p className="text-xs text-secundario">{dataCurta(rec.dataCarga)}</p>
               </Cartao>
               <Cartao>
-                <p className="text-xs text-suave">1RM estimado</p>
+                <p className="text-xs text-secundario">1RM estimado</p>
                 <p className="mt-1 text-xl font-bold tabular-nums">{rec.umRm > 0 ? kg(rec.umRm) : '—'}</p>
-                <p className="text-xs text-suave">{dataCurta(rec.data1rm)}</p>
+                <p className="text-xs text-secundario">{dataCurta(rec.data1rm)}</p>
               </Cartao>
             </div>
 
@@ -62,7 +84,7 @@ export default function ProgressoExercicio() {
                     type="button"
                     aria-pressed={periodo === i}
                     onClick={() => setPeriodo(i)}
-                    className={`min-h-10 flex-1 rounded-lg text-sm ${periodo === i ? 'bg-superficie-2 font-semibold text-texto' : 'text-suave'}`}
+                    className={`min-h-12 flex-1 rounded-lg text-sm ${periodo === i ? 'bg-cartao-2 font-semibold text-texto' : 'text-secundario'}`}
                   >
                     {p.rotulo}
                   </button>
@@ -70,60 +92,66 @@ export default function ProgressoExercicio() {
               </div>
 
               {pontos.length < 2 ? (
-                <p className="py-10 text-center text-sm text-suave">
+                <p className="py-10 text-center text-sm text-secundario">
                   {pontos.length === 0 ? 'Sem treinos neste período.' : 'Faça pelo menos dois treinos para ver a evolução.'}
                 </p>
               ) : (
                 <div className="h-64" role="img" aria-label={`Gráfico de carga máxima e 1RM estimado de ${exercicio?.nome}`}>
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={pontos} margin={{ top: 8, right: 8, bottom: 0, left: -12 }}>
-                      <CartesianGrid vertical={false} stroke="#2c2c30" />
+                      <CartesianGrid vertical={false} stroke={cor.grade} />
                       <XAxis
                         dataKey="data"
                         type="number"
                         scale="time"
                         domain={['dataMin', 'dataMax']}
                         tickFormatter={dataCurta}
-                        tick={{ fill: '#a1a1aa', fontSize: 12 }}
+                        tick={{ fill: cor.textoSec, fontSize: 12 }}
                         axisLine={false}
                         tickLine={false}
                         minTickGap={24}
                       />
                       <YAxis
                         domain={['auto', 'auto']}
-                        tick={{ fill: '#a1a1aa', fontSize: 12 }}
+                        tick={{ fill: cor.textoSec, fontSize: 12 }}
                         tickFormatter={(v: number) => num(v)}
                         axisLine={false}
                         tickLine={false}
                         width={48}
                       />
                       <Tooltip
-                        cursor={{ stroke: '#a1a1aa', strokeWidth: 1 }}
-                        contentStyle={{ background: '#212124', border: '1px solid #2c2c30', borderRadius: 12, color: '#f4f4f5' }}
-                        labelStyle={{ color: '#a1a1aa' }}
-                        itemStyle={{ color: '#f4f4f5' }}
+                        cursor={{ stroke: cor.textoSec, strokeWidth: 1 }}
+                        contentStyle={{ background: cor.tooltip, border: `1px solid ${cor.grade}`, borderRadius: 12, color: cor.texto }}
+                        labelStyle={{ color: cor.textoSec }}
+                        itemStyle={{ color: cor.texto }}
                         labelFormatter={(v) => dataLonga(Number(v))}
                         formatter={(v, nome) => [kg(Number(v)), nome]}
                       />
-                      <Legend wrapperStyle={{ fontSize: 13, color: '#f4f4f5' }} iconType="circle" />
+                      <Legend
+                        wrapperStyle={{ fontSize: 13 }}
+                        formatter={(nome) => <span style={{ color: cor.texto }}>{nome}</span>}
+                      />
                       <Line
                         name="Carga máxima"
                         type="linear"
                         dataKey="cargaMax"
-                        stroke={COR_CARGA}
+                        stroke={cor.carga}
                         strokeWidth={2}
-                        dot={{ r: 4, fill: COR_CARGA, stroke: SUPERFICIE, strokeWidth: 2 }}
-                        activeDot={{ r: 6, stroke: SUPERFICIE, strokeWidth: 2 }}
+                        legendType="line"
+                        dot={{ r: 4, fill: cor.carga, stroke: cor.superficie, strokeWidth: 2 }}
+                        activeDot={{ r: 6, stroke: cor.superficie, strokeWidth: 2 }}
                         isAnimationActive={false}
                       />
                       <Line
                         name="1RM estimado"
                         type="linear"
                         dataKey="umRm"
-                        stroke={COR_1RM}
+                        stroke={cor.umRm}
                         strokeWidth={2}
-                        dot={{ r: 4, fill: COR_1RM, stroke: SUPERFICIE, strokeWidth: 2 }}
-                        activeDot={{ r: 6, stroke: SUPERFICIE, strokeWidth: 2 }}
+                        strokeDasharray="6 4"
+                        legendType="plainline"
+                        dot={{ r: 4, fill: cor.umRm, stroke: cor.superficie, strokeWidth: 2 }}
+                        activeDot={{ r: 6, stroke: cor.superficie, strokeWidth: 2 }}
                         isAnimationActive={false}
                       />
                     </LineChart>
@@ -136,7 +164,7 @@ export default function ProgressoExercicio() {
             <Cartao>
               <h2 className="mb-2 font-semibold">Treinos</h2>
               <table className="w-full text-sm tabular-nums">
-                <thead className="text-suave">
+                <thead className="text-secundario">
                   <tr>
                     <th className="py-1 text-left font-normal">Data</th>
                     <th className="py-1 text-right font-normal">Carga máx.</th>
@@ -153,7 +181,7 @@ export default function ProgressoExercicio() {
                   ))}
                   {pontos.length === 0 && (
                     <tr>
-                      <td colSpan={3} className="py-3 text-center text-suave">
+                      <td colSpan={3} className="py-3 text-center text-secundario">
                         Sem treinos com carga neste período.
                       </td>
                     </tr>

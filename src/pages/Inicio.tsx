@@ -44,29 +44,29 @@ export default function Inicio() {
         {/* Meta semanal */}
         <Cartao>
           <div className="flex items-baseline justify-between">
-            <p className="text-sm text-suave">Meta da semana</p>
+            <p className="text-sm text-secundario">Meta da semana</p>
             {sequencia > 0 && (
-              <p className="flex items-center gap-1 text-sm font-semibold text-ouro">
+              <p className="flex items-center gap-1 text-sm font-semibold text-primaria-texto">
                 <IconeFogo width={18} height={18} /> {sequencia} {sequencia === 1 ? 'semana' : 'semanas'} seguidas
               </p>
             )}
           </div>
           <p className="mt-1 text-2xl font-bold">
-            {feitos}/{meta} <span className="text-base font-normal text-suave">treinos esta semana</span>
+            {feitos}/{meta} <span className="text-base font-normal text-secundario">treinos esta semana</span>
           </p>
           <div className="mt-3 flex gap-1.5" aria-hidden="true">
             {Array.from({ length: Math.max(meta, feitos) }, (_, i) => (
-              <div key={i} className={`h-2 flex-1 rounded-full ${i < feitos ? 'bg-acento' : 'bg-superficie-2'}`} />
+              <div key={i} className={`h-2 flex-1 rounded-full ${i < feitos ? 'bg-concluido' : 'bg-trilho'}`} />
             ))}
           </div>
         </Cartao>
 
         {/* Próximo treino */}
         {emAndamento ? (
-          <Cartao className="ring-2 ring-acento">
-            <p className="text-sm text-suave">Treino em andamento</p>
+          <Cartao className="ring-2 ring-primaria">
+            <p className="text-sm text-secundario">Treino em andamento</p>
             <p className="mt-1 text-xl font-bold">{emAndamento.nomeDia}</p>
-            <p className="text-sm text-suave tabular-nums">Começou há {duracao(Date.now() - emAndamento.inicio)}</p>
+            <p className="text-sm text-secundario tabular-nums">Começou há {duracao(Date.now() - emAndamento.inicio)}</p>
             <Botao variante="primario" grande className="mt-4 w-full" onClick={() => navigate('/treino')}>
               Continuar treino
             </Botao>
@@ -74,7 +74,7 @@ export default function Inicio() {
         ) : !programa ? (
           <Cartao>
             <p className="text-lg font-bold">Nenhum programa ativo</p>
-            <p className="mt-1 text-suave">Escolha ou crie um programa para ver o próximo treino aqui.</p>
+            <p className="mt-1 text-secundario">Escolha ou crie um programa para ver o próximo treino aqui.</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Botao onClick={() => navigate('/programas')}>Programas</Botao>
               <Botao variante="primario" onClick={() => comecar(null)}>
@@ -84,18 +84,18 @@ export default function Inicio() {
           </Cartao>
         ) : proximo ? (
           <Cartao>
-            <p className="text-sm text-suave">Próximo treino · {programa.nome}</p>
+            <p className="text-sm text-secundario">Próximo treino · {programa.nome}</p>
             <p className="mt-1 text-xl font-bold">{proximo.nome}</p>
             <ul className="mt-3 flex flex-col gap-1 text-sm">
               {itens.map((it) => (
                 <li key={it.id} className="flex justify-between gap-2">
                   <span>{exercicios?.get(it.exercicioId)?.nome ?? '…'}</span>
-                  <span className="shrink-0 text-suave tabular-nums">
+                  <span className="shrink-0 text-secundario tabular-nums">
                     {it.series} × {it.repsMin}–{it.repsMax}
                   </span>
                 </li>
               ))}
-              {itens.length === 0 && <li className="text-suave">Este dia ainda não tem exercícios.</li>}
+              {itens.length === 0 && <li className="text-secundario">Este dia ainda não tem exercícios.</li>}
             </ul>
             <Botao variante="primario" grande className="mt-4 w-full" onClick={() => comecar(proximo.id!)}>
               Iniciar treino
@@ -107,16 +107,16 @@ export default function Inicio() {
         ) : (
           <Cartao>
             <p className="text-lg font-bold">{programa.nome}</p>
-            <p className="mt-1 text-suave">Este programa ainda não tem dias de treino.</p>
-            <Link to={`/programas/${programa.id}`} className="mt-3 inline-block text-acento">
+            <p className="mt-1 text-secundario">Este programa ainda não tem dias de treino.</p>
+            <Link to={`/programas/${programa.id}`} className="mt-2 inline-flex min-h-12 items-center text-primaria-texto">
               Editar programa
             </Link>
           </Cartao>
         )}
 
-        <footer className="mt-2 flex flex-col items-center gap-1 pb-4 text-center text-xs text-suave">
+        <footer className="mt-2 flex flex-col items-center gap-1 pb-4 text-center text-xs text-secundario">
           <p>Conteúdo informativo. Não substitui orientação de médico, nutricionista ou profissional de educação física.</p>
-          <Link to="/sobre" className="flex min-h-12 items-center px-4 text-sm font-semibold text-acento">
+          <Link to="/sobre" className="flex min-h-12 items-center px-4 text-sm font-semibold text-primaria-texto">
             Sobre: de onde vêm os treinos
           </Link>
         </footer>

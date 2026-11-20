@@ -34,13 +34,13 @@ export default function Programas() {
         {programas?.length === 0 && <Vazio>Nenhum programa ainda.</Vazio>}
 
         {programas?.map((p) => (
-          <Cartao key={p.id} className={`flex items-center gap-2 ${p.ativo ? 'ring-2 ring-acento' : ''}`}>
+          <Cartao key={p.id} className={`flex items-center gap-2 ${p.ativo ? 'ring-2 ring-primaria' : ''}`}>
             <Link to={`/programas/${p.id}`} className="flex min-h-12 flex-1 flex-col justify-center">
               <span className="flex items-center gap-2 text-lg font-bold">
                 {p.nome}
-                {p.ativo && <span className="rounded-full bg-acento px-2 py-0.5 text-xs font-semibold text-black">Ativo</span>}
+                {p.ativo && <span className="rounded-full bg-primaria px-2 py-0.5 text-xs font-semibold text-sobre-primaria">Ativo</span>}
               </span>
-              <span className="text-sm text-suave">
+              <span className="text-sm text-secundario">
                 {p.qtdDias} {p.qtdDias === 1 ? 'treino' : 'treinos'} · {p.diasPorSemana}x por semana
               </span>
             </Link>
@@ -48,14 +48,14 @@ export default function Programas() {
               type="button"
               aria-label={`Opções de ${p.nome}`}
               onClick={() => setMenu(p)}
-              className="flex size-12 items-center justify-center rounded-xl active:bg-superficie-2"
+              className="flex size-12 items-center justify-center rounded-xl active:bg-cartao-2"
             >
               <IconeMenu />
             </button>
           </Cartao>
         ))}
 
-        <Link to="/exercicios" className="py-4 text-center text-acento">
+        <Link to="/exercicios" className="flex min-h-12 items-center justify-center py-2 text-primaria-texto">
           Biblioteca de exercícios
         </Link>
       </div>

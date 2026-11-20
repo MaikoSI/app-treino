@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { celulasDoMes, recordesPessoais, serieTemporal, seriesPorGrupo } from './progresso';
+import { celulasDoMes, faixaVolume, recordesPessoais, serieTemporal, seriesPorGrupo } from './progresso';
 
 const s = (sessaoId: number, inicio: number, carga: number, reps: number, exercicioId = 1) => ({
   exercicioId,
@@ -56,5 +56,11 @@ describe('celulasDoMes', () => {
   });
   it('fevereiro de 2028 (bissexto) tem 29 dias', () => {
     expect(celulasDoMes(2028, 1).filter((x) => x !== null)).toHaveLength(29);
+  });
+});
+
+describe('faixaVolume', () => {
+  it('abaixo de 10 é baixo, 10 a 20 é ideal, acima de 20 é alto', () => {
+    expect([0, 9, 10, 15, 20, 21].map(faixaVolume)).toEqual(['baixo', 'baixo', 'ideal', 'ideal', 'ideal', 'alto']);
   });
 });

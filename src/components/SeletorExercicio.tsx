@@ -25,7 +25,7 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
         value={busca}
         onChange={(e) => setBusca(e.target.value)}
         placeholder="Buscar exercício"
-        className="min-h-12 rounded-xl bg-superficie-2 px-4 text-base outline-none focus:ring-2 focus:ring-acento"
+        className="min-h-12 rounded-xl bg-cartao-2 px-4 text-base outline-none focus:ring-2 focus:ring-primaria"
       />
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         {(['', ...GRUPOS_MUSCULARES] as const).map((g) => (
@@ -33,7 +33,7 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
             key={g || 'todos'}
             type="button"
             onClick={() => setGrupo(g)}
-            className={`min-h-10 shrink-0 rounded-full px-4 text-sm ${grupo === g ? 'bg-acento text-black font-semibold' : 'bg-superficie-2 text-suave'}`}
+            className={`min-h-12 shrink-0 rounded-full px-4 text-sm ${grupo === g ? 'bg-primaria text-sobre-primaria font-semibold' : 'bg-cartao-2 text-secundario'}`}
           >
             {g || 'Todos'}
           </button>
@@ -47,7 +47,7 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
           const conteudo = (
             <>
               <span className="font-medium">{ex.nome}</span>
-              <span className="text-sm text-suave">
+              <span className="text-sm text-secundario">
                 {ex.grupoMuscular} · {ex.equipamento}
                 {ex.personalizado && ' · próprio'}
               </span>
@@ -59,7 +59,7 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
                 <button
                   type="button"
                   onClick={() => aoEscolher(ex)}
-                  className="flex min-h-14 w-full flex-col items-start justify-center py-2 text-left active:bg-superficie-2"
+                  className="flex min-h-14 w-full flex-col items-start justify-center py-2 text-left active:bg-cartao-2"
                 >
                   {conteudo}
                 </button>
@@ -69,7 +69,7 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
             </li>
           );
         })}
-        {todos && filtrados.length === 0 && <li className="py-6 text-center text-suave">Nenhum exercício encontrado.</li>}
+        {todos && filtrados.length === 0 && <li className="py-6 text-center text-secundario">Nenhum exercício encontrado.</li>}
       </ul>
 
       <NovoExercicio
@@ -149,15 +149,15 @@ function FormNovoExercicio({
     aoCriar({ ...novo, id: await db.exercicios.add(novo) });
   }
 
-  const campo = 'min-h-12 w-full rounded-xl bg-superficie-2 px-4 text-base outline-none focus:ring-2 focus:ring-acento';
+  const campo = 'min-h-12 w-full rounded-xl bg-cartao-2 px-4 text-base outline-none focus:ring-2 focus:ring-primaria';
   return (
     <div className="flex flex-col gap-4">
       <label className="flex flex-col gap-1">
-        <span className="text-sm text-suave">Nome</span>
+        <span className="text-sm text-secundario">Nome</span>
         <input className={campo} value={nome} onChange={(e) => setNome(e.target.value)} autoFocus />
       </label>
       <label className="flex flex-col gap-1">
-        <span className="text-sm text-suave">Grupo muscular</span>
+        <span className="text-sm text-secundario">Grupo muscular</span>
         <select className={campo} value={grupo} onChange={(e) => setGrupo(e.target.value as GrupoMuscular)}>
           {GRUPOS_MUSCULARES.map((g) => (
             <option key={g}>{g}</option>
@@ -165,14 +165,14 @@ function FormNovoExercicio({
         </select>
       </label>
       <label className="flex flex-col gap-1">
-        <span className="text-sm text-suave">Equipamento</span>
+        <span className="text-sm text-secundario">Equipamento</span>
         <select className={campo} value={equipamento} onChange={(e) => setEquipamento(e.target.value as Equipamento)}>
           {EQUIPAMENTOS.map((g) => (
             <option key={g}>{g}</option>
           ))}
         </select>
       </label>
-      {erro && <p className="text-perigo">{erro}</p>}
+      {erro && <p className="text-alerta-texto">{erro}</p>}
       <Botao variante="primario" grande onClick={salvar}>
         Salvar exercício
       </Botao>

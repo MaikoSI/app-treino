@@ -28,7 +28,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
   const exercicios = useExerciciosMap();
 
   if (dados === undefined) return <Carregando />;
-  if (dados === null) return <p className="p-6 text-center text-suave">Treino não encontrado.</p>;
+  if (dados === null) return <p className="p-6 text-center text-secundario">Treino não encontrado.</p>;
 
   const { sessao, series, recordes } = dados;
   const feitas = series.filter((s) => s.concluida);
@@ -39,7 +39,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <p className="text-sm text-suave">{dataLonga(sessao.inicio)}</p>
+        <p className="text-sm text-secundario">{dataLonga(sessao.inicio)}</p>
         <p className="text-2xl font-bold">{sessao.nomeDia}</p>
       </div>
 
@@ -50,15 +50,15 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
       </div>
 
       {recordes.length > 0 && (
-        <Cartao className="ring-2 ring-ouro">
-          <p className="flex items-center gap-2 font-bold text-ouro">
+        <Cartao className="ring-2 ring-destaque">
+          <p className="flex items-center gap-2 font-bold text-destaque-texto">
             <IconeTrofeu /> {recordes.length === 1 ? '1 recorde batido' : `${recordes.length} recordes batidos`}
           </p>
           <ul className="mt-2 flex flex-col gap-1 text-sm">
             {recordes.map((r) => (
               <li key={`${r.exercicioId}-${r.tipo}`}>
                 <strong>{nome(r.exercicioId)}</strong>: {r.tipo === 'carga' ? 'carga máxima' : '1RM estimado'} {kg(r.valor)}{' '}
-                <span className="text-suave">(antes {kg(r.anterior)})</span>
+                <span className="text-secundario">(antes {kg(r.anterior)})</span>
               </li>
             ))}
           </ul>
@@ -69,15 +69,15 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
         <Cartao key={g.ordem}>
           <p className="flex items-center gap-2 font-semibold">
             {nome(g.exercicioId)}
-            {recordesPorExercicio.has(g.exercicioId) && <IconeTrofeu width={18} height={18} className="text-ouro" />}
+            {recordesPorExercicio.has(g.exercicioId) && <IconeTrofeu width={18} height={18} className="text-destaque-texto" />}
           </p>
           <ol className="mt-2 flex flex-col gap-1 text-sm tabular-nums">
             {g.series.map((s, i) => (
               <li key={s.id} className="flex gap-3">
-                <span className="w-6 text-suave">{i + 1}</span>
+                <span className="w-6 text-secundario">{i + 1}</span>
                 <span>
                   {num(s.carga)} kg × {s.reps}
-                  {s.rpe != null && <span className="text-suave"> · RPE {num(s.rpe)}</span>}
+                  {s.rpe != null && <span className="text-secundario"> · RPE {num(s.rpe)}</span>}
                 </span>
               </li>
             ))}
@@ -87,7 +87,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
 
       {sessao.observacao && (
         <Cartao>
-          <p className="text-sm text-suave">Observação</p>
+          <p className="text-sm text-secundario">Observação</p>
           <p className="mt-1 whitespace-pre-wrap">{sessao.observacao}</p>
         </Cartao>
       )}
@@ -97,8 +97,8 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
 
 function Numero({ rotulo, valor }: { rotulo: string; valor: string }) {
   return (
-    <div className="rounded-2xl bg-superficie p-3 text-center">
-      <p className="text-xs text-suave">{rotulo}</p>
+    <div className="rounded-xl bg-cartao p-3 text-center">
+      <p className="text-xs text-secundario">{rotulo}</p>
       <p className="mt-1 text-lg font-bold tabular-nums">{valor}</p>
     </div>
   );

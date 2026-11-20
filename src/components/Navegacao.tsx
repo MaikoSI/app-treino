@@ -19,7 +19,7 @@ export function Navegacao() {
               to={para}
               end={para === '/'}
               className={({ isActive }) =>
-                `flex min-h-16 flex-col items-center justify-center gap-1 text-xs ${isActive ? 'text-acento' : 'text-suave'}`
+                `flex min-h-16 flex-col items-center justify-center gap-1 text-xs ${isActive ? 'text-primaria-texto' : 'text-secundario'}`
               }
             >
               <Icone />

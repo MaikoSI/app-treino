@@ -24,7 +24,7 @@ export default function Resumo() {
   return (
     <div className="pt-seguro px-4 pb-10">
       <header className="py-6">
-        <p className="text-sm font-semibold uppercase tracking-widest text-acento">Treino concluído</p>
+        <p className="text-sm font-semibold uppercase tracking-widest text-primaria-texto">Treino concluído</p>
         <h1 className="mt-1 text-3xl font-bold">Mandou bem!</h1>
       </header>
       <DetalheSessao sessaoId={sessaoId} />

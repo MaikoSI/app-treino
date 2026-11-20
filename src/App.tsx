@@ -1,8 +1,9 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Navegacao } from './components/Navegacao';
 import { Carregando } from './components/ui';
 import { useConfig } from './db/config';
+import { aplicarTema } from './lib/tema';
 import BoasVindas from './pages/BoasVindas';
 import Config from './pages/Config';
 import EditarPrograma from './pages/EditarPrograma';
@@ -23,6 +24,11 @@ const ProgressoExercicio = lazy(() => import('./pages/ProgressoExercicio'));
 export default function App() {
   const config = useConfig();
   const { pathname } = useLocation();
+  const tema = config?.tema;
+
+  useEffect(() => {
+    if (tema) aplicarTema(tema);
+  }, [tema]);
 
   if (!config) return <Carregando />;
   if (!config.onboardingConcluido && pathname !== '/boas-vindas') return <Navigate to="/boas-vindas" replace />;
