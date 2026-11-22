@@ -14,6 +14,7 @@ npm test             # Vitest, all tests (npm run test:watch for watch mode)
 npx vitest run src/lib/forca.test.ts      # single file
 npx vitest run -t "sugestaoProgressao"    # tests matching a name
 npm run e2e          # Playwright end-to-end (builds and serves dist/ on :4173; first run: npx playwright install chromium)
+npm run test:cobertura  # Vitest with v8 coverage (coverage/lcov.info), uploaded to Codecov by CI
 npm run typecheck    # tsc --noEmit
 npm run lint         # Biome: lint + format check (CI fails on errors)
 npm run knip         # Knip: unused files, exports and dependencies (CI fails on findings)
@@ -127,6 +128,9 @@ All styling goes through the design tokens in `src/index.css` (colors, type, spa
 - **Privacy** (`privacidade.ts`, unit-tested): every outgoing event goes through `limparEvento` (drops user/extra/request data and non-device contexts, keeps only navigation breadcrumbs) and routes lose numeric ids (`/exercicios/:id`). Never attach workout, body or config data to telemetry. To check a change, build with a fake DSN/endpoint and intercept the requests in Playwright (`page.route`); the payload must contain only error name/message/stack, version, timings and id-free routes.
 
 ## CI
+
+Unit-test coverage is uploaded to Codecov with OIDC (`id-token: write`, no token stored); `codecov.yml` keeps it informational and the upload never fails CI. The owner activates it once by signing in at codecov.io with GitHub. Screens are covered by the Playwright tests, so unit coverage of `pages/` is expected to be low.
+
 
 `.github/workflows/ci.yml` runs on every PR (and pushes to other branches) in one job named `verificar`. Every new quality tool adds its step there. `scripts/proteger-main.sh` (needs `gh` with admin rights) makes `main` PR-only with `verificar` required, also for admins. Reviews required = 0 because a solo owner can't approve their own PR on GitHub; the PR + green CI is the gate.
 
