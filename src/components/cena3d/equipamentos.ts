@@ -128,7 +128,7 @@ export function montarEquipamento(e: Equipamento3D, m: Manequim, cores?: CoresCe
       const ponta = new Group();
       raiz.add(ponta);
       const de = new Vector3(...e.de);
-      if (e.acessorio === 'barra') barraX(ponta, 1.1, false, 0.016);
+      if (e.acessorio === 'barra') barraX(ponta, e.comprimento ?? 1.1, false, 0.016);
       else if (e.acessorio === 'triangulo') {
         const t = malha(new TorusGeometry(0.07, 0.012, 6, 3), 'metal', ponta);
         t.rotation.x = Math.PI / 2;
