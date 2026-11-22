@@ -66,12 +66,12 @@ export default function ProgressoExercicio() {
             <div className="grid grid-cols-2 gap-2">
               <Cartao>
                 <p className="text-xs text-secundario">Carga máxima</p>
-                <p className="mt-1 text-xl font-bold tabular-nums">{rec.cargaMax > 0 ? `${kg(rec.cargaMax)} × ${rec.repsNaCargaMax}` : '—'}</p>
+                <p className="mt-1 font-display text-2xl font-bold tabular-nums">{rec.cargaMax > 0 ? `${kg(rec.cargaMax)} × ${rec.repsNaCargaMax}` : '—'}</p>
                 <p className="text-xs text-secundario">{dataCurta(rec.dataCarga)}</p>
               </Cartao>
               <Cartao>
                 <p className="text-xs text-secundario">1RM estimado</p>
-                <p className="mt-1 text-xl font-bold tabular-nums">{rec.umRm > 0 ? kg(rec.umRm) : '—'}</p>
+                <p className="mt-1 font-display text-2xl font-bold tabular-nums">{rec.umRm > 0 ? kg(rec.umRm) : '—'}</p>
                 <p className="text-xs text-secundario">{dataCurta(rec.data1rm)}</p>
               </Cartao>
             </div>

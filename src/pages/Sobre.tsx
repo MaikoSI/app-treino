@@ -11,8 +11,8 @@ export default function Sobre() {
       <Cabecalho titulo="Sobre" voltar />
       <div className="flex flex-col gap-4 px-4 pb-10">
         <header>
-          <p className="text-sm font-semibold uppercase tracking-widest text-primaria-texto">Base científica</p>
-          <h2 className="mt-1 text-2xl font-bold leading-tight">Guia científico de musculação: hipertrofia, força e nutrição</h2>
+          <p className="text-sm font-semibold text-primaria-texto">Base científica</p>
+          <h2 className="mt-1 font-display text-3xl font-bold leading-tight">Guia científico de musculação: hipertrofia, força e nutrição</h2>
           <p className="mt-3 text-secundario">
             O que mais faz o corpo mudar é treinar com regularidade, progredir a carga, comer proteína suficiente e dormir bem. O resto
             é ajuste fino. Este guia reúne o que as melhores pesquisas dizem sobre treino, nutrição, suplementos e recuperação.

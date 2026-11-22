@@ -160,6 +160,9 @@ export default function Config() {
           <Link to="/exercicios" className="flex min-h-12 items-center justify-center rounded-xl bg-cartao-2 active:bg-borda">
             Biblioteca de exercícios
           </Link>
+          <Link to="/ajuda" className="flex min-h-12 items-center justify-center rounded-xl bg-cartao-2 active:bg-borda">
+            Como usar o app
+          </Link>
           <Link to="/sobre" className="flex min-h-12 items-center justify-center rounded-xl bg-cartao-2 active:bg-borda">
             Sobre: base científica dos treinos
           </Link>

@@ -2,6 +2,8 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo, useState } from 'react';
 import { db } from '../db';
 import { EQUIPAMENTOS, GRUPOS_MUSCULARES, type Equipamento, type Exercicio, type GrupoMuscular, type TipoExercicio } from '../db/tipos';
+import { Link } from 'react-router-dom';
+import { MapaMuscular } from './MapaMuscular';
 import { Botao, Painel } from './ui';
 
 const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -12,6 +14,7 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
   const [busca, setBusca] = useState('');
   const [grupo, setGrupo] = useState<GrupoMuscular | ''>('');
   const [criando, setCriando] = useState(false);
+  const [vendo, setVendo] = useState<Exercicio | null>(null);
 
   const filtrados = useMemo(() => {
     const q = semAcento(busca.trim());
@@ -56,21 +59,55 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
           return (
             <li key={ex.id}>
               {aoEscolher ? (
-                <button
-                  type="button"
-                  onClick={() => aoEscolher(ex)}
-                  className="flex min-h-14 w-full flex-col items-start justify-center py-2 text-left active:bg-cartao-2"
-                >
-                  {conteudo}
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => aoEscolher(ex)}
+                    className="flex min-h-14 min-w-0 flex-1 flex-col items-start justify-center py-2 text-left active:bg-cartao-2"
+                  >
+                    {conteudo}
+                  </button>
+                  <button
+                    type="button"
+                    aria-label={`Músculos trabalhados: ${ex.nome}`}
+                    onClick={() => setVendo(ex)}
+                    className="flex size-12 shrink-0 items-center justify-center rounded-full text-lg font-bold text-secundario active:bg-cartao-2"
+                  >
+                    <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full border-2 border-current text-sm">
+                      i
+                    </span>
+                  </button>
+                </div>
               ) : (
-                <div className="flex min-h-14 flex-col justify-center py-2">{conteudo}</div>
+                <Link to={`/exercicios/${ex.id}`} className="flex min-h-14 items-center gap-2 py-2 active:bg-cartao-2">
+                  <span className="flex min-w-0 flex-1 flex-col">{conteudo}</span>
+                  <span aria-hidden="true" className="text-secundario">
+                    ›
+                  </span>
+                </Link>
               )}
             </li>
           );
         })}
         {todos && filtrados.length === 0 && <li className="py-6 text-center text-secundario">Nenhum exercício encontrado.</li>}
       </ul>
+
+      <Painel aberto={!!vendo} aoFechar={() => setVendo(null)} titulo={vendo?.nome ?? ''}>
+        {vendo && (
+          <div className="flex flex-col gap-4">
+            <MapaMuscular exercicio={vendo} />
+            <Botao
+              variante="primario"
+              onClick={() => {
+                setVendo(null);
+                aoEscolher?.(vendo);
+              }}
+            >
+              Escolher este exercício
+            </Botao>
+          </div>
+        )}
+      </Painel>
 
       <NovoExercicio
         aberto={criando}

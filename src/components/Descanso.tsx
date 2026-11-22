@@ -145,7 +145,7 @@ export function BarraDescanso({
       <div className="mx-auto flex max-w-lg items-center gap-2 px-4 py-3">
         <div className="flex-1">
           <p className="text-xs text-secundario">Descanso</p>
-          <p className="text-3xl font-bold text-destaque-texto tabular-nums" aria-live="off">
+          <p className="font-display text-4xl leading-none font-bold text-destaque-texto tabular-nums" aria-live="off">
             {duracao(Math.max(0, restanteMs) + 999)}
           </p>
         </div>

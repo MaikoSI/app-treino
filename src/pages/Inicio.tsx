@@ -60,12 +60,12 @@ export default function Inicio() {
             <p className="text-sm text-secundario">Meta da semana</p>
             {sequencia > 0 && (
               <p className="flex items-center gap-1 text-sm font-semibold text-primaria-texto">
-                <IconeFogo width={18} height={18} /> {sequencia} {sequencia === 1 ? 'semana' : 'semanas'} seguidas
+                <IconeFogo width={18} height={18} /> {sequencia} {sequencia === 1 ? 'semana seguida' : 'semanas seguidas'}
               </p>
             )}
           </div>
-          <p className="mt-1 text-2xl font-bold">
-            {feitos}/{meta} <span className="text-base font-normal text-secundario">treinos esta semana</span>
+          <p className="mt-1 font-display text-3xl font-bold">
+            {feitos}/{meta} <span className="font-sans text-base font-normal text-secundario">treinos esta semana</span>
           </p>
           <div className="mt-3 flex gap-1.5" aria-hidden="true">
             {Array.from({ length: Math.max(meta, feitos) }, (_, i) => (
@@ -78,7 +78,7 @@ export default function Inicio() {
         {emAndamento ? (
           <Cartao className="ring-2 ring-primaria">
             <p className="text-sm text-secundario">Treino em andamento</p>
-            <p className="mt-1 text-xl font-bold">{emAndamento.nomeDia}</p>
+            <p className="mt-1 font-display text-3xl leading-tight font-bold">{emAndamento.nomeDia}</p>
             <p className="text-sm text-secundario tabular-nums">Começou há {duracao(Date.now() - emAndamento.inicio)}</p>
             <Botao variante="primario" grande className="mt-4 w-full" onClick={() => navigate('/treino')}>
               Continuar treino
@@ -98,7 +98,7 @@ export default function Inicio() {
         ) : proximo ? (
           <Cartao>
             <p className="text-sm text-secundario">Próximo treino · {programa.nome}</p>
-            <p className="mt-1 text-xl font-bold">{proximo.nome}</p>
+            <p className="mt-1 font-display text-3xl leading-tight font-bold">{proximo.nome}</p>
             <ul className="mt-3 flex flex-col gap-1 text-sm">
               {itens.map((it) => (
                 <li key={it.id} className="flex justify-between gap-2">
@@ -145,6 +145,28 @@ export default function Inicio() {
               </Botao>
             )
           ))}
+
+        {/* Guia de uso: em destaque enquanto a pessoa ainda não terminou nenhum treino */}
+        <Link
+          to="/ajuda"
+          className={`flex min-h-16 items-center gap-3 rounded-xl p-4 active:bg-cartao-2 ${
+            datas.length === 0 ? 'bg-cartao ring-1 ring-primaria/50' : 'bg-cartao'
+          }`}
+        >
+          <span
+            aria-hidden="true"
+            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cartao-2 text-lg font-bold text-primaria-texto"
+          >
+            ?
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block font-semibold">Como usar o app</span>
+            <span className="block text-sm text-secundario">O que cada tela faz, passo a passo</span>
+          </span>
+          <span aria-hidden="true" className="text-secundario">
+            ›
+          </span>
+        </Link>
 
         <footer className="mt-2 flex flex-col items-center gap-1 pb-4 text-center text-xs text-secundario">
           <p>Conteúdo informativo. Não substitui orientação de médico, nutricionista ou profissional de educação física.</p>
