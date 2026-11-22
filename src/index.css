@@ -198,20 +198,64 @@
   outline-offset: 2px;
 }
 
-/* Sheet: sobe de baixo com mola; o fundo escurece junto */
+/*
+ * Movimento. Regras: só transform e opacity; entrada com mola (~240–420 ms), saída
+ * mais curta e acelerando (180 ms, = SAIDA_MS em usePresenca.ts); nada anima em ações
+ * repetitivas (marcar série, digitar carga). "Reduzir movimento" zera tudo (regra abaixo).
+ */
 @keyframes sheet-sobe {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
+}
+@keyframes sheet-desce {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
 }
 @keyframes esmaecer {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+@keyframes sumir {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes descer-suave {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes barra-sobe {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Sheet: sobe de baixo com mola; o fundo escurece junto. Na saída, desce rápido. */
 .sheet-entra {
   animation: sheet-sobe 420ms var(--ease-mola);
 }
+.sheet-sai {
+  animation: sheet-desce 180ms var(--ease-saida) forwards;
+}
 .fundo-entra {
   animation: esmaecer 260ms ease-out;
+}
+.fundo-sai {
+  animation: sumir 180ms var(--ease-saida) forwards;
+}
+/*
+ * Troca de tela: só fade (sem transform: um pai com transform faria as barras "fixed"
+ * da página, como o cronômetro, se posicionarem errado durante a animação).
+ * Sem saída: a tela antiga some na hora, como ao trocar de aba no iOS.
+ */
+.pagina-entra {
+  animation: esmaecer 200ms ease-out;
+}
+/* Aviso no topo (nova versão / pronto para offline) */
+.aviso-entra {
+  animation: descer-suave 320ms var(--ease-mola);
+}
+/* Barra do cronômetro de descanso aparece de baixo */
+.barra-entra {
+  animation: barra-sobe 320ms var(--ease-mola);
 }
 
 /* Reduzir movimento: sem deslizar nem encolher, só o essencial */
