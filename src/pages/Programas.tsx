@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IconeMenu } from '../components/Icones';
-import { Botao, Cabecalho, Cartao, Painel, Vazio } from '../components/ui';
+import { Botao, Cabecalho, Cartao, Painel, Vazio, Esqueleto } from '../components/ui';
 import { db } from '../db';
 import { criarProgramaVazio, definirAtivo, duplicarPrograma, excluirPrograma } from '../db/programas';
 import type { Programa } from '../db/tipos';
@@ -31,12 +31,13 @@ export default function Programas() {
           <Botao onClick={() => navigate('/programas/modelos')}>Modelos prontos</Botao>
         </div>
 
+        {programas === undefined && <Esqueleto className="h-20 rounded-cartao" />}
         {programas?.length === 0 && <Vazio>Nenhum programa ainda.</Vazio>}
 
         {programas?.map((p) => (
           <Cartao key={p.id} className={`flex items-center gap-2 ${p.ativo ? 'ring-2 ring-primaria' : ''}`}>
             <Link to={`/programas/${p.id}`} className="flex min-h-12 flex-1 flex-col justify-center">
-              <span className="flex items-center gap-2 text-lg font-bold">
+              <span className="flex items-center gap-2 text-lg font-semibold">
                 {p.nome}
                 {p.ativo && <span className="rounded-full bg-primaria px-2 py-0.5 text-xs font-semibold text-sobre-primaria">Ativo</span>}
               </span>

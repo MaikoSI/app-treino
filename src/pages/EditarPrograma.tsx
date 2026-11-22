@@ -31,7 +31,7 @@ export default function EditarPrograma() {
   const programa = useLiveQuery(async () => (await db.programas.get(programaId)) ?? null, [programaId]);
   const dias = useLiveQuery(() => diasDoPrograma(programaId), [programaId]);
 
-  if (programa === undefined || dias === undefined) return <Carregando />;
+  if (programa === undefined || dias === undefined) return <Carregando titulo="Editar programa" voltar />;
   if (programa === null) return <Vazio>Programa não encontrado.</Vazio>;
 
   async function moverDia(i: number, delta: number) {
@@ -101,7 +101,7 @@ function AnalisePrograma({ programaId, diasPorSemana, totalDias }: { programaId:
   const raras = analise.filter((m) => m.frequenciaBaixa);
 
   return (
-    <details className="group rounded-xl bg-cartao">
+    <details className="group rounded-cartao bg-cartao shadow-cartao">
       <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
         <span className="flex-1">
           <span className="block font-semibold">Volume por semana</span>

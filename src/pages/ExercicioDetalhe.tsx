@@ -17,7 +17,7 @@ export default function ExercicioDetalhe() {
   const config = useConfig();
   const exercicio = useLiveQuery(async () => (await db.exercicios.get(id)) ?? null, [id]);
 
-  if (exercicio === undefined || !config) return <Carregando />;
+  if (exercicio === undefined || !config) return <Carregando titulo="Exercício" voltar />;
   if (exercicio === null)
     return (
       <>
@@ -50,13 +50,13 @@ export default function ExercicioDetalhe() {
           <h2 className="font-semibold">Meta sugerida</h2>
           <div className="grid grid-cols-2 gap-2 text-center">
             <div className="rounded-xl bg-cartao-2 p-3">
-              <p className="font-display text-3xl font-bold tabular-nums">
+              <p className="text-3xl font-semibold tabular-nums">
                 {meta.repsMin}–{meta.repsMax}
               </p>
               <p className="text-xs text-secundario">repetições</p>
             </div>
             <div className="rounded-xl bg-cartao-2 p-3">
-              <p className="font-display text-3xl font-bold tabular-nums">{duracao(meta.descansoSeg * 1000)}</p>
+              <p className="text-3xl font-semibold tabular-nums">{duracao(meta.descansoSeg * 1000)}</p>
               <p className="text-xs text-secundario">de descanso</p>
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function ExercicioDetalhe() {
 
         <Link
           to={`/progresso/${exercicio.id}`}
-          className="flex min-h-12 items-center justify-center rounded-xl bg-cartao font-semibold text-primaria-texto active:bg-cartao-2"
+          className="flex min-h-12 items-center justify-center rounded-cartao bg-cartao shadow-cartao font-semibold text-primaria-texto active:bg-cartao-2"
         >
           Ver minha evolução neste exercício
         </Link>

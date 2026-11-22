@@ -27,7 +27,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
   const dados = useDadosSessao(sessaoId);
   const exercicios = useExerciciosMap();
 
-  if (dados === undefined) return <Carregando />;
+  if (dados === undefined) return <Carregando formato="detalhe" />;
   if (dados === null) return <p className="p-6 text-center text-secundario">Treino não encontrado.</p>;
 
   const { sessao, series, recordes } = dados;
@@ -40,7 +40,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
     <div className="flex flex-col gap-4">
       <div>
         <p className="text-sm text-secundario">{dataLonga(sessao.inicio)}</p>
-        <p className="font-display text-3xl font-bold">{sessao.nomeDia}</p>
+        <p className="text-3xl font-semibold">{sessao.nomeDia}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-2">
@@ -51,7 +51,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
 
       {recordes.length > 0 && (
         <Cartao className="ring-2 ring-destaque">
-          <p className="flex items-center gap-2 font-bold text-destaque-texto">
+          <p className="flex items-center gap-2 font-semibold text-destaque-texto">
             <IconeTrofeu /> {recordes.length === 1 ? '1 recorde batido' : `${recordes.length} recordes batidos`}
           </p>
           <ul className="mt-2 flex flex-col gap-1 text-sm">
@@ -97,9 +97,9 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
 
 function Numero({ rotulo, valor }: { rotulo: string; valor: string }) {
   return (
-    <div className="rounded-xl bg-cartao p-3 text-center">
+    <div className="rounded-cartao bg-cartao shadow-cartao p-3 text-center">
       <p className="text-xs text-secundario">{rotulo}</p>
-      <p className="mt-1 font-display text-2xl leading-none font-bold tabular-nums">{valor}</p>
+      <p className="mt-1 text-2xl leading-none font-semibold tabular-nums">{valor}</p>
     </div>
   );
 }

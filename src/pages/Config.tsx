@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { CalculadoraAnilhas } from '../components/CalculadoraAnilhas';
-import { Botao, Cabecalho, Carregando, Cartao, Contador, Painel } from '../components/ui';
+import { Botao, Cabecalho, Carregando, Cartao, Contador, Girando, Interruptor, Painel, Segmentado } from '../components/ui';
 import { apagarTudo, gerarBackup, nomeArquivoBackup, restaurarBackup, validarBackup } from '../db/backup';
 import { salvarConfig, useConfig } from '../db/config';
 import { aplicarMetasPadrao, programaAtivo } from '../db/programas';
@@ -16,10 +16,11 @@ export default function Config() {
   const [anilhas, setAnilhas] = useState(false);
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'erro'; texto: string } | null>(null);
   const [msgMetas, setMsgMetas] = useState<string | null>(null);
+  const [restaurando, setRestaurando] = useState(false);
   const arquivo = useRef<HTMLInputElement>(null);
   const persistente = useArmazenamentoPersistente();
 
-  if (!config) return <Carregando />;
+  if (!config) return <Carregando titulo="Ajustes" />;
 
   async function exportar() {
     const backup = await gerarBackup();
@@ -45,10 +46,13 @@ export default function Config() {
           'Isso vai APAGAR todos os dados atuais deste aparelho e colocar os do backup no lugar. Continuar?',
       );
       if (!ok) return;
+      setRestaurando(true);
       await restaurarBackup(backup);
       setMsg({ tipo: 'ok', texto: `Backup restaurado: ${plural(resumo.sessoes, 'treino', 'treinos')}.` });
     } catch (e) {
       setMsg({ tipo: 'erro', texto: e instanceof Error ? e.message : 'Não foi possível ler o arquivo.' });
+    } finally {
+      setRestaurando(false);
     }
   }
 
@@ -56,7 +60,7 @@ export default function Config() {
     <>
       <Cabecalho titulo="Ajustes" />
       <div className="flex flex-col gap-4 px-4 pb-8">
-        <Cartao className="flex flex-col gap-4">
+        <Cartao className="flex flex-col divide-y divide-borda/70 py-1">
           <Linha rotulo="Meta de treinos por semana">
             <Contador rotulo="meta semanal" valor={config.metaSemanal} min={1} max={7} aoMudar={(metaSemanal) => salvarConfig({ metaSemanal })} />
           </Linha>
@@ -69,23 +73,20 @@ export default function Config() {
           <Linha rotulo="Perguntar sobre o sono" detalhe="Antes do treino; se dormiu mal, o treino fica um pouco mais leve">
             <Interruptor rotulo="Perguntar sobre o sono" ligado={config.checkinSono} aoMudar={(checkinSono) => salvarConfig({ checkinSono })} />
           </Linha>
-          <Linha rotulo="Tema">
-            <div className="grid grid-cols-2 gap-1 rounded-xl bg-cartao-2 p-1" role="group" aria-label="Tema">
-              {(['escuro', 'claro'] as const).map((t) => (
-                <button
-                  key={t}
-                  type="button"
-                  aria-pressed={config.tema === t}
-                  onClick={() => salvarConfig({ tema: t })}
-                  className={`min-h-12 rounded-lg px-4 font-semibold capitalize ${
-                    config.tema === t ? 'bg-primaria text-sobre-primaria' : 'text-secundario active:bg-borda'
-                  }`}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          </Linha>
+          <div className="flex flex-col gap-2 py-3">
+            <p>Aparência</p>
+            <Segmentado
+              rotulo="Aparência"
+              valor={config.tema}
+              aoMudar={(tema) => salvarConfig({ tema })}
+              opcoes={[
+                { valor: 'sistema', rotulo: 'Automático' },
+                { valor: 'claro', rotulo: 'Claro' },
+                { valor: 'escuro', rotulo: 'Escuro' },
+              ]}
+            />
+            <p className="text-xs text-secundario">Automático segue o modo claro ou escuro do aparelho.</p>
+          </div>
         </Cartao>
 
         <Cartao className="flex flex-col gap-4">
@@ -93,21 +94,12 @@ export default function Config() {
             <h2 className="font-semibold">Metas dos exercícios</h2>
             <p className="text-sm text-secundario">Usadas ao criar programas e adicionar exercícios.</p>
           </div>
-          <div className="grid grid-cols-2 gap-1 rounded-xl bg-cartao-2 p-1" role="group" aria-label="Objetivo">
-            {(['hipertrofia', 'forca'] as const).map((o) => (
-              <button
-                key={o}
-                type="button"
-                aria-pressed={config.objetivo === o}
-                onClick={() => salvarConfig({ objetivo: o })}
-                className={`min-h-12 rounded-lg px-3 font-semibold ${
-                  config.objetivo === o ? 'bg-primaria text-sobre-primaria' : 'text-secundario active:bg-borda'
-                }`}
-              >
-                {ROTULO_OBJETIVO[o]}
-              </button>
-            ))}
-          </div>
+          <Segmentado
+            rotulo="Objetivo"
+            valor={config.objetivo}
+            aoMudar={(objetivo) => salvarConfig({ objetivo })}
+            opcoes={(['hipertrofia', 'forca'] as const).map((o) => ({ valor: o, rotulo: ROTULO_OBJETIVO[o] }))}
+          />
           <p className="text-sm text-secundario">
             Compostos {FAIXAS[config.objetivo].composto.join('–')} reps · isolados {FAIXAS[config.objetivo].isolado.join('–')} reps
             {config.objetivo === 'forca' && ' · compostos descansam pelo menos 3:00'}
@@ -181,7 +173,10 @@ export default function Config() {
           <Botao variante="primario" onClick={exportar}>
             Exportar backup
           </Botao>
-          <Botao onClick={() => arquivo.current?.click()}>Importar backup</Botao>
+          <Botao onClick={() => arquivo.current?.click()} disabled={restaurando} aria-busy={restaurando || undefined}>
+            {restaurando && <Girando />}
+            {restaurando ? 'Restaurando backup…' : 'Importar backup'}
+          </Botao>
           <input
             ref={arquivo}
             type="file"
@@ -226,7 +221,7 @@ const ROTULO_OBJETIVO: Record<Objetivo, string> = { hipertrofia: 'Hipertrofia', 
 
 function Linha({ rotulo, detalhe, children }: { rotulo: string; detalhe?: string; children: ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3">
+    <div className="flex min-h-12 items-center justify-between gap-3 py-2">
       <div>
         <p>{rotulo}</p>
         {detalhe && <p className="text-xs text-secundario">{detalhe}</p>}
@@ -245,19 +240,3 @@ function useArmazenamentoPersistente() {
   return valor;
 }
 
-function Interruptor({ rotulo, ligado, aoMudar }: { rotulo: string; ligado: boolean; aoMudar: (v: boolean) => void }) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={ligado}
-      aria-label={rotulo}
-      onClick={() => aoMudar(!ligado)}
-      className="flex min-h-12 min-w-16 shrink-0 items-center justify-center"
-    >
-      <span className={`relative h-8 w-14 rounded-full transition-colors ${ligado ? 'bg-concluido' : 'bg-secundario'}`}>
-        <span className={`absolute top-1 size-6 rounded-full bg-white shadow transition-all ${ligado ? 'left-7' : 'left-1'}`} />
-      </span>
-    </button>
-  );
-}

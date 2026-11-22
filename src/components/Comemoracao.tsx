@@ -45,7 +45,7 @@ export function Comemoracao({ texto, aoAcabar }: { texto: string; aoAcabar: () =
       ))}
       <div className="absolute inset-x-0 top-24 flex justify-center">
         <div
-          className="flex items-center gap-2 rounded-full bg-destaque px-5 py-3 text-lg font-bold text-sobre-destaque shadow-lg"
+          className="flex items-center gap-2 rounded-full bg-destaque px-5 py-3 text-lg font-semibold text-sobre-destaque shadow-lg"
           style={{ animation: 'pulsar 0.6s ease-in-out 3' }}
         >
           <IconeTrofeu /> {texto}

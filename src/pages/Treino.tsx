@@ -84,19 +84,19 @@ export default function Treino() {
 
   if (finalizadoId) return <Navigate to={`/resumo/${finalizadoId}`} replace />;
   if (sessao === null) return <Navigate to="/" replace />;
-  if (!sessao || !series || !config || !exercicios) return <Carregando />;
+  if (!sessao || !series || !config || !exercicios) return <Carregando formato="treino" />;
 
   const grupos = agruparPorExercicio(series);
   const feitas = series.filter((s) => s.concluida).length;
 
   return (
     <div className={descanso.estado ? 'pb-36' : 'pb-10'}>
-      <header className="pt-seguro sticky top-0 z-20 bg-fundo/95 backdrop-blur">
+      <header className="pt-seguro sticky top-0 z-20 vidro">
         <div className="flex min-h-16 items-center gap-3 px-4">
           <div className="min-w-0 flex-1">
-            <p className="truncate font-display text-2xl leading-tight font-bold">{sessao.nomeDia}</p>
+            <p className="truncate text-2xl leading-tight font-semibold">{sessao.nomeDia}</p>
             <p className="text-sm text-secundario">
-              <span className="font-display text-base font-semibold text-destaque-texto tabular-nums">
+              <span className="text-base font-semibold text-destaque-texto tabular-nums">
                 <Relogio desde={sessao.inicio} />
               </span>
               <span className="mx-1.5" aria-hidden="true">
@@ -280,10 +280,10 @@ const CartaoExercicio = memo(function CartaoExercicio({
   const todasFeitas = pendentes.length === 0;
 
   return (
-    <section className={`rounded-xl bg-cartao p-4 ${todasFeitas ? 'ring-1 ring-concluido/40' : ''}`}>
+    <section className={`rounded-cartao bg-cartao p-4 shadow-cartao ${todasFeitas ? 'ring-1 ring-concluido/40' : ''}`}>
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
-          <h2 className="font-display text-xl leading-tight font-bold">{exercicio?.nome ?? 'Exercício removido'}</h2>
+          <h2 className="text-xl leading-tight font-semibold">{exercicio?.nome ?? 'Exercício removido'}</h2>
           <p className="text-sm text-secundario">
             Meta: {meta.repsMin === meta.repsMax ? meta.repsMax : `${meta.repsMin}–${meta.repsMax}`} reps · descanso {duracao(meta.descansoSeg * 1000)}
           </p>
@@ -381,7 +381,7 @@ const LinhaSerie = memo(function LinhaSerie({
         mostrarRir ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'
       }`}
     >
-      <span className={`text-center font-display text-xl font-semibold ${feita ? 'text-texto' : 'text-secundario'}`}>{indice}</span>
+      <span className={`text-center text-xl font-semibold ${feita ? 'text-texto' : 'text-secundario'}`}>{indice}</span>
       <CampoNumero valor={serie.carga} decimal rotulo={`Carga da série ${indice}`} aoMudar={(carga) => atualizarSerie(serie.id, { carga })} />
       <CampoNumero valor={serie.reps} rotulo={`Repetições da série ${indice}`} aoMudar={(reps) => atualizarSerie(serie.id, { reps: Math.round(reps) })} />
       {mostrarRir && (
@@ -389,7 +389,7 @@ const LinhaSerie = memo(function LinhaSerie({
           aria-label={`Repetições em reserva da série ${indice}`}
           value={serie.rir ?? ''}
           onChange={(e) => atualizarSerie(serie.id, { rir: e.target.value === '' ? null : Number(e.target.value) })}
-          className="h-12 w-full min-w-0 appearance-none rounded-xl bg-cartao-2 text-center font-display text-2xl font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
+          className="h-12 w-full min-w-0 appearance-none rounded-xl bg-cartao-2 text-center text-2xl font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
         >
           <option value="">–</option>
           {[0, 1, 2, 3, 4, 5].map((r) => (
@@ -405,7 +405,7 @@ const LinhaSerie = memo(function LinhaSerie({
         aria-checked={feita}
         aria-label={`Série ${indice} feita`}
         onClick={() => aoMarcar(serie)}
-        className={`flex h-12 w-full items-center justify-center rounded-xl ${feita ? 'bg-primaria text-sobre-primaria' : 'bg-cartao-2 text-secundario active:bg-borda'}`}
+        className={`pressionavel flex h-12 w-full items-center justify-center rounded-controle ${feita ? 'bg-concluido text-sobre-concluido' : 'bg-cartao-2 text-secundario'}`}
       >
         <IconeCheck />
       </button>
@@ -456,7 +456,7 @@ function CampoNumero({
         setTexto(t);
         aoMudar(Math.max(0, lerNumero(t)));
       }}
-      className="h-12 w-full min-w-0 rounded-xl bg-cartao-2 text-center font-display text-2xl font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
+      className="h-12 w-full min-w-0 rounded-xl bg-cartao-2 text-center text-2xl font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
     />
   );
 }

@@ -1,23 +1,55 @@
+import { useSyncExternalStore } from 'react';
 import type { Tema } from '../db/tipos';
 
+export type TemaEfetivo = 'claro' | 'escuro';
+
 /** Cor da barra do navegador/sistema em cada tema (= cor de fundo). */
-const COR_BARRA: Record<Tema, string> = { escuro: '#0A0A0A', claro: '#F4F6F5' };
+const COR_BARRA: Record<TemaEfetivo, string> = { claro: '#F2F2F7', escuro: '#000000' };
+
+const CONSULTA_ESCURO = '(prefers-color-scheme: dark)';
+
+function sistemaEscuro(): boolean {
+  return typeof matchMedia === 'function' && matchMedia(CONSULTA_ESCURO).matches;
+}
+
+/** O tema que está valendo: a escolha manual ou, em "sistema", o modo do aparelho. */
+export function temaEfetivo(tema: Tema, escuroNoSistema: boolean): TemaEfetivo {
+  if (tema === 'sistema') return escuroNoSistema ? 'escuro' : 'claro';
+  return tema;
+}
 
 /**
- * Aplica o tema na página. O escuro é o padrão do CSS; o claro usa data-theme="claro".
- * Também guarda uma cópia no aparelho para o index.html aplicar o tema antes do app
+ * Aplica o tema na página. Em "sistema" não há data-theme e o CSS segue
+ * prefers-color-scheme; nas escolhas manuais, data-theme força claro ou escuro.
+ * Guarda uma cópia no aparelho para o index.html aplicar o tema antes do app
  * carregar (evita piscar o tema errado).
  */
 export function aplicarTema(tema: Tema): void {
   const raiz = document.documentElement;
-  if (tema === 'claro') raiz.dataset.theme = 'claro';
-  else delete raiz.dataset.theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', COR_BARRA[tema]);
+  if (tema === 'sistema') delete raiz.dataset.theme;
+  else raiz.dataset.theme = tema;
+  // Há uma meta theme-color por modo (media=…). Em "sistema" cada uma volta à sua cor; na escolha manual, as duas usam a escolhida.
+  document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
+    const doModo: TemaEfetivo = meta.getAttribute('media')?.includes('dark') ? 'escuro' : 'claro';
+    meta.setAttribute('content', COR_BARRA[tema === 'sistema' ? doModo : tema]);
+  });
   try {
     localStorage.setItem('tema', tema);
   } catch {
-    /* sem armazenamento: só pisca o tema padrão ao abrir */
+    /* sem armazenamento: só pisca o tema do sistema ao abrir */
   }
+}
+
+function assinarSistema(avisar: () => void): () => void {
+  if (typeof matchMedia !== 'function') return () => {};
+  const mq = matchMedia(CONSULTA_ESCURO);
+  mq.addEventListener('change', avisar);
+  return () => mq.removeEventListener('change', avisar);
+}
+
+/** true quando o aparelho está no modo escuro; atualiza se o usuário trocar o modo com o app aberto. */
+export function useSistemaEscuro(): boolean {
+  return useSyncExternalStore(assinarSistema, sistemaEscuro, () => false);
 }
 
 /** Lê o valor atual de uma variável de cor do tema (ex.: "--destaque"). */

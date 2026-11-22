@@ -1,32 +1,51 @@
 @import 'tailwindcss';
-/* Fonte dos títulos e números (carga, reps, cronômetro). Vem do pacote, então funciona offline. */
-@import '@fontsource/barlow-condensed/latin-600.css';
-@import '@fontsource/barlow-condensed/latin-700.css';
 
 /*
- * Identidade visual. No Tailwind v4 os tokens ficam aqui (não há tailwind.config).
- * As cores vêm de variáveis CSS para trocar de tema (escuro padrão / claro) sem
- * recompilar: bg-cartao, text-secundario, bg-primaria, text-alerta-texto…
+ * Inter: fallback da fonte do sistema onde não há SF Pro (Android, Windows, Linux).
+ * Só o subconjunto latino (cobre o português), servido pelo app: funciona offline.
+ */
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2-variations');
+}
+
+/*
+ * Tema no estilo Apple (Human Interface Guidelines), todo em design tokens.
+ * No Tailwind v4 os tokens ficam aqui (não há tailwind.config). As cores vêm de
+ * variáveis CSS: os componentes usam classes semânticas (bg-cartao, text-secundario,
+ * bg-primaria, text-alerta-texto…), nunca hex.
  *
- * Papéis:  verde = ação principal e "concluído/ideal"
- *          azul  = recordes e cronômetro
- *          vermelho = só alertas (volume alto, excluir, erros)
- * Todos os pares de texto foram conferidos para WCAG AA (≥ 4,5:1).
+ * Papéis:  azul    = ação (botões, links, seleção)
+ *          verde   = feito / ideal (série marcada, meta, volume ideal, switch ligado)
+ *          laranja = recordes e cronômetro (como o Timer do iOS)
+ *          vermelho = alertas e ações destrutivas
+ *
+ * Contraste: todo par de texto passa WCAG AA (≥ 4,5:1). Os azuis/vermelhos/laranjas
+ * exatos da Apple (#007AFF, #0A84FF, #FF3B30, #FF9500) não passam como texto ou com
+ * texto branco por cima, então:
+ *   - botão principal usa #0071E3 (o azul de botão do apple.com): 4,7:1 com branco;
+ *   - textos usam as variantes acessíveis da Apple (*-texto);
+ *   - as cores exatas ficam para ícones, preenchimentos e indicadores (≥ 3:1).
  */
 @theme inline {
-  --color-fundo: var(--fundo);
-  --color-cartao: var(--cartao);
-  --color-cartao-2: var(--cartao-2); /* campos, botões secundários */
-  --color-borda: var(--borda);
+  --color-fundo: var(--fundo); /* fundo agrupado (atrás) */
+  --color-cartao: var(--cartao); /* superfície (na frente) */
+  --color-cartao-2: var(--cartao-2); /* preenchimento translúcido: campos, botão secundário, trilho do segmentado */
+  --color-borda: var(--borda); /* separadores e estado pressionado */
   --color-texto: var(--texto);
   --color-secundario: var(--secundario);
 
-  --color-primaria: var(--primaria); /* fundo de botão principal */
+  --color-primaria: var(--primaria); /* fundo do botão principal */
   --color-primaria-ativo: var(--primaria-ativo);
   --color-sobre-primaria: var(--sobre-primaria);
-  --color-primaria-texto: var(--primaria-texto); /* verde usado como texto */
-  --color-concluido: var(--concluido); /* preenchimento de "feito" (série, dia, meta) */
+  --color-primaria-texto: var(--primaria-texto); /* azul como texto/link */
+  --color-tinta: var(--tinta); /* azul exato da Apple: ícones e indicadores */
+  --color-concluido: var(--concluido); /* "feito": série, meta, switch */
   --color-sobre-concluido: var(--sobre-concluido);
+  --color-concluido-texto: var(--concluido-texto);
 
   --color-destaque: var(--destaque); /* recordes e cronômetro */
   --color-sobre-destaque: var(--sobre-destaque);
@@ -38,67 +57,220 @@
   --color-volume-baixo: var(--volume-baixo);
   --color-volume-ideal: var(--volume-ideal);
   --color-volume-alto: var(--volume-alto);
-  --color-trilho: var(--trilho); /* fundo das barras */
+  --color-trilho: var(--trilho); /* fundo das barras de progresso */
+  --color-polegar: var(--polegar); /* parte selecionada do controle segmentado */
 
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  /* Títulos e números: condensada, como a numeração de anilhas e placares de academia. */
-  --font-display: 'Barlow Condensed', system-ui, sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter Variable', Inter, system-ui, 'Segoe UI', Roboto,
+    sans-serif;
+
+  /* Raios: cartão 16px, controles 12px (botões pequenos usam rounded-full) */
+  --radius-cartao: 16px;
+  --radius-controle: 12px;
+
+  /* Sombras quase invisíveis, só para separar camadas no tema claro */
+  --shadow-cartao: var(--sombra-cartao);
+  --shadow-flutuante: var(--sombra-flutuante);
+
+  /* Movimento: curva de mola das sheets do iOS e uma saída mais rápida */
+  --ease-mola: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-saida: cubic-bezier(0.4, 0, 1, 1);
 }
 
-/* Tema escuro (padrão): a paleta da identidade, sem alterações. */
+/* Tema claro (padrão quando o sistema está no claro) */
 :root {
+  color-scheme: light;
+  --fundo: #f2f2f7;
+  --cartao: #ffffff;
+  --cartao-2: rgb(118 118 128 / 0.12);
+  --borda: #d1d1d6;
+  --texto: #000000;
+  --secundario: #6c6c70;
+  --primaria: #0071e3;
+  --primaria-ativo: #0062c4;
+  --sobre-primaria: #ffffff;
+  --primaria-texto: #0066cc;
+  --tinta: #007aff;
+  --concluido: #248a3d;
+  --sobre-concluido: #ffffff;
+  --concluido-texto: #1e7b34;
+  --destaque: #ff9500;
+  --sobre-destaque: #000000;
+  --destaque-texto: #c93400;
+  --alerta: #ff3b30;
+  --alerta-texto: #d70015;
+  --volume-baixo: #8e8e93;
+  --volume-ideal: #248a3d;
+  --volume-alto: #ff3b30;
+  --trilho: #e5e5ea;
+  --polegar: #ffffff;
+  --vidro: rgb(249 249 249 / 0.78);
+  --sombra-cartao: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 1px rgb(0 0 0 / 0.02);
+  --sombra-flutuante: 0 3px 8px rgb(0 0 0 / 0.12), 0 3px 1px rgb(0 0 0 / 0.04);
+}
+
+/* Tema escuro: segue o sistema (sem escolha manual) ou a escolha "escuro" em Ajustes */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='claro']) {
+    color-scheme: dark;
+    --fundo: #000000;
+    --cartao: #1c1c1e;
+    --cartao-2: rgb(118 118 128 / 0.24);
+    --borda: #38383a;
+    --texto: #ffffff;
+    --secundario: #98989f;
+    --primaria: #0071e3;
+    --primaria-ativo: #0a84ff;
+    --sobre-primaria: #ffffff;
+    --primaria-texto: #409cff;
+    --tinta: #0a84ff;
+    --concluido: #30d158;
+    --sobre-concluido: #000000;
+    --concluido-texto: #30d158;
+    --destaque: #ff9f0a;
+    --sobre-destaque: #000000;
+    --destaque-texto: #ff9f0a;
+    --alerta: #ff453a;
+    --alerta-texto: #ff6961;
+    --volume-baixo: #8e8e93;
+    --volume-ideal: #30d158;
+    --volume-alto: #ff453a;
+    --trilho: #3a3a3c;
+    --polegar: #636366;
+    --vidro: rgb(22 22 24 / 0.72);
+    --sombra-cartao: none;
+    --sombra-flutuante: 0 3px 8px rgb(0 0 0 / 0.4);
+  }
+}
+:root[data-theme='escuro'] {
   color-scheme: dark;
-  --fundo: #0a0a0a;
-  --cartao: #161818;
-  --cartao-2: #202423;
-  --borda: #262a29;
-  --texto: #f2f4f3;
-  --secundario: #8f9794;
-  --primaria: #22e06b;
-  --primaria-ativo: #1bc45c;
-  --sobre-primaria: #0a0a0a;
-  --primaria-texto: #22e06b;
-  --concluido: #22e06b;
-  --sobre-concluido: #0a0a0a;
-  --destaque: #3d8bff;
-  --sobre-destaque: #0a0a0a;
-  --destaque-texto: #3d8bff;
-  --alerta: #ff3b4a;
-  --alerta-texto: #ff3b4a;
-  --volume-baixo: #5c6662;
-  --volume-ideal: #22e06b;
-  --volume-alto: #ff3b4a;
-  --trilho: #0a0a0a;
+  --fundo: #000000;
+  --cartao: #1c1c1e;
+  --cartao-2: rgb(118 118 128 / 0.24);
+  --borda: #38383a;
+  --texto: #ffffff;
+  --secundario: #98989f;
+  --primaria: #0071e3;
+  --primaria-ativo: #0a84ff;
+  --sobre-primaria: #ffffff;
+  --primaria-texto: #409cff;
+  --tinta: #0a84ff;
+  --concluido: #30d158;
+  --sobre-concluido: #000000;
+  --concluido-texto: #30d158;
+  --destaque: #ff9f0a;
+  --sobre-destaque: #000000;
+  --destaque-texto: #ff9f0a;
+  --alerta: #ff453a;
+  --alerta-texto: #ff6961;
+  --volume-baixo: #8e8e93;
+  --volume-ideal: #30d158;
+  --volume-alto: #ff453a;
+  --trilho: #3a3a3c;
+  --polegar: #636366;
+  --vidro: rgb(22 22 24 / 0.72);
+  --sombra-cartao: none;
+  --sombra-flutuante: 0 3px 8px rgb(0 0 0 / 0.4);
+}
+
+/* Vidro: barras, tab bar, sheets e o cronômetro de descanso */
+@utility vidro {
+  background-color: var(--vidro);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* Toque no estilo iOS: encolhe um pouco e fica mais opaco, com transição suave */
+@utility pressionavel {
+  transition:
+    transform 160ms var(--ease-mola),
+    opacity 160ms var(--ease-mola),
+    background-color 160ms var(--ease-mola);
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+    opacity: 0.8;
+  }
+}
+
+/* Foco visível no teclado, em qualquer elemento interativo */
+:focus-visible {
+  outline: 2px solid var(--tinta);
+  outline-offset: 2px;
 }
 
 /*
- * Tema claro. Verde, azul e vermelho originais não chegam a 4,5:1 sobre branco,
- * então aqui viram tons mais escuros das mesmas cores quando usados como texto ou
- * indicador. O botão principal continua #22E06B com texto preto.
+ * Movimento. Regras: só transform e opacity; entrada com mola (~240–420 ms), saída
+ * mais curta e acelerando (180 ms, = SAIDA_MS em usePresenca.ts); nada anima em ações
+ * repetitivas (marcar série, digitar carga). "Reduzir movimento" zera tudo (regra abaixo).
  */
-:root[data-theme='claro'] {
-  color-scheme: light;
-  --fundo: #f4f6f5;
-  --cartao: #ffffff;
-  --cartao-2: #e9edeb;
-  --borda: #d3d9d6;
-  --texto: #0a0a0a;
-  --secundario: #56605c;
-  --primaria: #22e06b;
-  --primaria-ativo: #1bc45c;
-  --sobre-primaria: #0a0a0a;
-  --primaria-texto: #0b7a38;
-  --concluido: #0b7a38;
-  --sobre-concluido: #ffffff;
-  --destaque: #1f64d6;
-  --sobre-destaque: #ffffff;
-  --destaque-texto: #1f64d6;
-  --alerta: #c8142a;
-  --alerta-texto: #c8142a;
-  --volume-baixo: #5c6662;
-  --volume-ideal: #0b7a38;
-  --volume-alto: #c8142a;
-  --trilho: #e9edeb;
+@keyframes sheet-sobe {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes sheet-desce {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+@keyframes esmaecer {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes sumir {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes descer-suave {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes barra-sobe {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Sheet: sobe de baixo com mola; o fundo escurece junto. Na saída, desce rápido. */
+.sheet-entra {
+  animation: sheet-sobe 420ms var(--ease-mola);
+}
+.sheet-sai {
+  animation: sheet-desce 180ms var(--ease-saida) forwards;
+}
+.fundo-entra {
+  animation: esmaecer 260ms ease-out;
+}
+.fundo-sai {
+  animation: sumir 180ms var(--ease-saida) forwards;
+}
+/*
+ * Troca de tela: só fade (sem transform: um pai com transform faria as barras "fixed"
+ * da página, como o cronômetro, se posicionarem errado durante a animação).
+ * Sem saída: a tela antiga some na hora, como ao trocar de aba no iOS.
+ */
+.pagina-entra {
+  animation: esmaecer 200ms ease-out;
+}
+/* Aviso no topo (nova versão / pronto para offline) */
+.aviso-entra {
+  animation: descer-suave 320ms var(--ease-mola);
+}
+/* Barra do cronômetro de descanso aparece de baixo */
+.barra-entra {
+  animation: barra-sobe 320ms var(--ease-mola);
+}
+
+/* Reduzir movimento: sem deslizar nem encolher, só o essencial */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .pressionavel:active:not(:disabled) {
+    transform: none;
+  }
 }
 
 html,
@@ -107,6 +279,8 @@ body {
   color: var(--texto);
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {

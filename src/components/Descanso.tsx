@@ -135,27 +135,27 @@ export function BarraDescanso({
 
   if (!estado) return null;
   const progresso = Math.min(1, Math.max(0, 1 - restanteMs / (estado.total * 1000)));
-  const btn = 'min-h-12 rounded-xl bg-cartao-2 px-3 font-semibold active:bg-borda';
+  const btn = 'pressionavel min-h-11 rounded-full px-4 font-semibold';
 
   return (
-    <div className="pb-seguro fixed inset-x-0 bottom-0 z-40 border-t border-borda bg-cartao">
+    <div className="barra-entra pb-seguro vidro fixed inset-x-0 bottom-0 z-40 border-t border-borda/60">
       <div className="h-1.5 bg-trilho">
         <div className="h-full bg-destaque transition-[width] duration-200" style={{ width: `${progresso * 100}%` }} />
       </div>
       <div className="mx-auto flex max-w-lg items-center gap-2 px-4 py-3">
         <div className="flex-1">
           <p className="text-xs text-secundario">Descanso</p>
-          <p className="font-display text-4xl leading-none font-bold text-destaque-texto tabular-nums" aria-live="off">
+          <p className="text-4xl leading-none font-semibold text-destaque-texto tabular-nums" aria-live="off">
             {duracao(Math.max(0, restanteMs) + 999)}
           </p>
         </div>
-        <button type="button" className={btn} onClick={() => aoAjustar(-15)}>
+        <button type="button" className={`${btn} bg-cartao-2 text-primaria-texto`} onClick={() => aoAjustar(-15)}>
           −15s
         </button>
-        <button type="button" className={btn} onClick={() => aoAjustar(15)}>
+        <button type="button" className={`${btn} bg-cartao-2 text-primaria-texto`} onClick={() => aoAjustar(15)}>
           +15s
         </button>
-        <button type="button" className={`${btn} bg-primaria text-sobre-primaria active:bg-primaria-ativo`} onClick={aoPular}>
+        <button type="button" className={`${btn} bg-primaria text-sobre-primaria`} onClick={aoPular}>
           Pular
         </button>
       </div>

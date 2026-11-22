@@ -17,14 +17,14 @@ export default function Progresso() {
   const series = useLiveQuery(() => historicoDeSeries(), []);
   const [semanasAtras, setSemanasAtras] = useState(0);
 
-  if (!series || !exercicios) return <Carregando />;
+  if (!series || !exercicios) return <Carregando titulo="Progresso" />;
   if (series.length === 0)
     return (
       <>
         <Cabecalho titulo="Progresso" />
         <Vazio>Finalize seu primeiro treino para ver gráficos e recordes aqui.</Vazio>
         <div className="px-4">
-          <Link to="/corpo" className="flex min-h-14 items-center justify-between rounded-xl bg-cartao px-4 active:bg-cartao-2">
+          <Link to="/corpo" className="flex min-h-14 items-center justify-between rounded-cartao bg-cartao shadow-cartao px-4 active:bg-cartao-2">
             <span className="font-semibold">Peso corporal e nutrição</span>
             <IconeVoltar className="rotate-180 text-secundario" />
           </Link>
@@ -57,11 +57,11 @@ export default function Progresso() {
     <>
       <Cabecalho titulo="Progresso" />
       <div className="flex flex-col gap-6 px-4">
-        <Link to="/corpo" className="flex min-h-14 items-center justify-between rounded-xl bg-cartao px-4 active:bg-cartao-2">
+        <Link to="/corpo" className="flex min-h-14 items-center justify-between rounded-cartao bg-cartao shadow-cartao px-4 active:bg-cartao-2">
           <span className="font-semibold">Peso corporal e nutrição</span>
           <IconeVoltar className="rotate-180 text-secundario" />
         </Link>
-        <section className="rounded-xl bg-cartao p-4">
+        <section className="rounded-cartao bg-cartao p-4 shadow-cartao">
           <h2 className="font-semibold">Séries por grupo muscular</h2>
           <div className="mt-2 flex items-center justify-between">
             <button
@@ -100,7 +100,7 @@ export default function Progresso() {
               <li key={r.exercicioId}>
                 <Link
                   to={`/progresso/${r.exercicioId}`}
-                  className="flex min-h-16 items-center gap-3 rounded-xl bg-cartao p-4 active:bg-cartao-2"
+                  className="flex min-h-16 items-center gap-3 rounded-cartao bg-cartao p-4 shadow-cartao active:bg-cartao-2"
                 >
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{r.ex?.nome ?? 'Exercício removido'}</p>
@@ -109,13 +109,13 @@ export default function Progresso() {
                   <div className="text-right tabular-nums">
                     {r.cargaMax > 0 ? (
                       <>
-                        <p className="font-display text-xl leading-tight font-bold">
+                        <p className="text-xl leading-tight font-semibold">
                           {kg(r.cargaMax)} × {r.repsNaCargaMax}
                         </p>
                         <p className="text-sm text-secundario">1RM {num(r.umRm)} kg</p>
                       </>
                     ) : (
-                      <p className="font-display text-xl leading-tight font-bold">{r.maxReps} reps</p>
+                      <p className="text-xl leading-tight font-semibold">{r.maxReps} reps</p>
                     )}
                   </div>
                 </Link>

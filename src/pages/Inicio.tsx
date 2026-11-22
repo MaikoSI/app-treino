@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { IconeFogo } from '../components/Icones';
+import { IconeAjuda, IconeAvancar, IconeFogo } from '../components/Icones';
 import { Botao, Cabecalho, Carregando, Cartao, Painel } from '../components/ui';
 import { salvarConfig, useConfig } from '../db/config';
 import { useExerciciosMap } from '../db/hooks';
@@ -30,7 +30,7 @@ export default function Inicio() {
     return { programa, emAndamento, datas: concluidas.map((s) => s.inicio), dias, proximo, itens };
   }, []);
 
-  if (!dados || !config) return <Carregando />;
+  if (!dados || !config) return <Carregando titulo="Início" />;
   const { programa, emAndamento, datas, dias, proximo, itens } = dados;
   const meta = config.metaSemanal;
   const feitos = treinosNaSemana(datas);
@@ -64,7 +64,7 @@ export default function Inicio() {
               </p>
             )}
           </div>
-          <p className="mt-1 font-display text-3xl font-bold">
+          <p className="mt-1 text-3xl font-semibold">
             {feitos}/{meta} <span className="font-sans text-base font-normal text-secundario">treinos esta semana</span>
           </p>
           <div className="mt-3 flex gap-1.5" aria-hidden="true">
@@ -78,7 +78,7 @@ export default function Inicio() {
         {emAndamento ? (
           <Cartao className="ring-2 ring-primaria">
             <p className="text-sm text-secundario">Treino em andamento</p>
-            <p className="mt-1 font-display text-3xl leading-tight font-bold">{emAndamento.nomeDia}</p>
+            <p className="mt-1 text-3xl leading-tight font-semibold">{emAndamento.nomeDia}</p>
             <p className="text-sm text-secundario tabular-nums">Começou há {duracao(Date.now() - emAndamento.inicio)}</p>
             <Botao variante="primario" grande className="mt-4 w-full" onClick={() => navigate('/treino')}>
               Continuar treino
@@ -86,7 +86,7 @@ export default function Inicio() {
           </Cartao>
         ) : !programa ? (
           <Cartao>
-            <p className="text-lg font-bold">Nenhum programa ativo</p>
+            <p className="text-lg font-semibold">Nenhum programa ativo</p>
             <p className="mt-1 text-secundario">Escolha ou crie um programa para ver o próximo treino aqui.</p>
             <div className="mt-4 grid grid-cols-2 gap-2">
               <Botao onClick={() => navigate('/programas')}>Programas</Botao>
@@ -98,7 +98,7 @@ export default function Inicio() {
         ) : proximo ? (
           <Cartao>
             <p className="text-sm text-secundario">Próximo treino · {programa.nome}</p>
-            <p className="mt-1 font-display text-3xl leading-tight font-bold">{proximo.nome}</p>
+            <p className="mt-1 text-3xl leading-tight font-semibold">{proximo.nome}</p>
             <ul className="mt-3 flex flex-col gap-1 text-sm">
               {itens.map((it) => (
                 <li key={it.id} className="flex justify-between gap-2">
@@ -120,7 +120,7 @@ export default function Inicio() {
           </Cartao>
         ) : (
           <Cartao>
-            <p className="text-lg font-bold">{programa.nome}</p>
+            <p className="text-lg font-semibold">{programa.nome}</p>
             <p className="mt-1 text-secundario">Este programa ainda não tem dias de treino.</p>
             <Link to={`/programas/${programa.id}`} className="mt-2 inline-flex min-h-12 items-center text-primaria-texto">
               Editar programa
@@ -149,23 +149,18 @@ export default function Inicio() {
         {/* Guia de uso: em destaque enquanto a pessoa ainda não terminou nenhum treino */}
         <Link
           to="/ajuda"
-          className={`flex min-h-16 items-center gap-3 rounded-xl p-4 active:bg-cartao-2 ${
-            datas.length === 0 ? 'bg-cartao ring-1 ring-primaria/50' : 'bg-cartao'
+          className={`pressionavel flex min-h-16 items-center gap-3 rounded-cartao bg-cartao p-4 shadow-cartao ${
+            datas.length === 0 ? 'ring-1 ring-tinta/50' : ''
           }`}
         >
-          <span
-            aria-hidden="true"
-            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-cartao-2 text-lg font-bold text-primaria-texto"
-          >
-            ?
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-tinta/12 text-tinta">
+            <IconeAjuda />
           </span>
           <span className="min-w-0 flex-1">
             <span className="block font-semibold">Como usar o app</span>
             <span className="block text-sm text-secundario">O que cada tela faz, passo a passo</span>
           </span>
-          <span aria-hidden="true" className="text-secundario">
-            ›
-          </span>
+          <IconeAvancar width={20} height={20} className="shrink-0 text-secundario/70" />
         </Link>
 
         <footer className="mt-2 flex flex-col items-center gap-1 pb-4 text-center text-xs text-secundario">
