@@ -29,10 +29,13 @@ describe('treinosNaSemana', () => {
 
 describe('sequenciaSemanas', () => {
   const semanasAnteriores = [
-    d('2026-11-09'), d('2026-11-11'), // semana passada: 2
-    d('2026-11-03'), d('2026-11-05'), // retrasada: 2
+    d('2026-11-09'),
+    d('2026-11-11'), // semana passada: 2
+    d('2026-11-03'),
+    d('2026-11-05'), // retrasada: 2
     d('2026-10-27'), // 3 semanas atrás: só 1
-    d('2026-10-20'), d('2026-10-21'),
+    d('2026-10-20'),
+    d('2026-10-21'),
   ];
 
   it('conta semanas seguidas que bateram a meta', () => {

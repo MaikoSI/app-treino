@@ -14,7 +14,13 @@ const COR: Record<string, string> = {
   '1.25': 'bg-zinc-400',
 };
 const ALTURA: Record<string, string> = {
-  '25': 'h-28', '20': 'h-28', '15': 'h-24', '10': 'h-20', '5': 'h-14', '2.5': 'h-11', '1.25': 'h-9',
+  '25': 'h-28',
+  '20': 'h-28',
+  '15': 'h-24',
+  '10': 'h-20',
+  '5': 'h-14',
+  '2.5': 'h-11',
+  '1.25': 'h-9',
 };
 
 export function CalculadoraAnilhas({ cargaInicial = 60 }: { cargaInicial?: number }) {

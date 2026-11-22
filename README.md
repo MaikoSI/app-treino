@@ -36,16 +36,17 @@ Abra o endereço que aparecer (normalmente http://localhost:5173).
 
 Outros comandos:
 
-| Comando | O que faz |
-|---|---|
-| `npm test` | roda os testes (Vitest) |
-| `npm run build` | gera a versão final na pasta `dist/` |
+| Comando           | O que faz                                                      |
+| ----------------- | -------------------------------------------------------------- |
+| `npm test`        | roda os testes (Vitest)                                        |
+| `npm run build`   | gera a versão final na pasta `dist/`                           |
 | `npm run preview` | serve a pasta `dist/` para testar a versão final (com offline) |
 
 ## Testar no celular pela mesma rede Wi-Fi
 
 1. Deixe o computador e o celular **na mesma rede Wi-Fi**.
 2. Rode `npm run dev`. O terminal mostra duas linhas, por exemplo:
+
    ```
    ➜  Local:   http://localhost:5173/
    ➜  Network: http://192.168.0.15:5173/
@@ -65,6 +66,7 @@ O app é só um site estático (a pasta `dist/`), então qualquer hospedagem est
 O projeto já vem com o arquivo `.github/workflows/deploy.yml`, que publica sozinho a cada envio para o GitHub.
 
 1. Crie um repositório no [GitHub](https://github.com) e envie o projeto para a branch `main`:
+
    ```bash
    git remote add origin https://github.com/SEU-USUARIO/SEU-REPO.git
    git push -u origin main

@@ -81,21 +81,18 @@ export function useDescanso() {
     [definir],
   );
 
-  const ajustar = useCallback(
-    (delta: number) => {
-      setEstado((atual) => {
-        if (!atual) return atual;
-        const novo = { fim: atual.fim + delta * 1000, total: Math.max(1, atual.total + delta) };
-        if (novo.fim <= Date.now()) {
-          gravar(null);
-          return null;
-        }
-        gravar(novo);
-        return novo;
-      });
-    },
-    [],
-  );
+  const ajustar = useCallback((delta: number) => {
+    setEstado((atual) => {
+      if (!atual) return atual;
+      const novo = { fim: atual.fim + delta * 1000, total: Math.max(1, atual.total + delta) };
+      if (novo.fim <= Date.now()) {
+        gravar(null);
+        return null;
+      }
+      gravar(novo);
+      return novo;
+    });
+  }, []);
 
   const pular = useCallback(() => definir(null), [definir]);
 

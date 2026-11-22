@@ -14,17 +14,20 @@ npm test             # Vitest, all tests (npm run test:watch for watch mode)
 npx vitest run src/lib/forca.test.ts      # single file
 npx vitest run -t "sugestaoProgressao"    # tests matching a name
 npm run typecheck    # tsc --noEmit
+npm run lint         # Biome: lint + format check (CI fails on errors)
+npm run format       # Biome: apply formatting, import order and safe fixes
 npm run build        # typecheck + production build into dist/ (with service worker)
 npm run preview      # serve dist/ (needed to test offline/PWA; dev mode has no SW)
 ```
 
-Node ≥ 22.12. TypeScript is v7 (`tsc` only typechecks; `noEmit`). No ESLint/Prettier configured.
+Node ≥ 22.12. TypeScript is v7 (`tsc` only typechecks; `noEmit`). Lint and formatting: Biome (`biome.json`: 2 spaces, single quotes, width 140, recommended rules; `noNonNullAssertion` and `noArrayIndexKey` are off on purpose: Dexie ids and static lists). Suppress a rule only with `biome-ignore <rule>: <reason>`.
 
 ## Working standards (mandatory for every agent)
 
 These rules come from the project owner and apply to every task, whatever the model or tool.
 
 ### 1. GitHub workflow
+
 - **Issue first.** Every task (bug fix, improvement or new feature) starts with a GitHub Issue: clear title, description (problem, what will change, acceptance criteria) and one type label: `bug`, `enhancement` or `feature`.
 - **Never commit to `main`.** One branch per Issue (`feat/…`, `fix/…`, `chore/…`, `docs/…`), then a Pull Request.
 - **PR description:** reference the Issue (`Closes #12`), explain what changed and how to test it.
@@ -33,12 +36,15 @@ These rules come from the project owner and apply to every task, whatever the mo
 - **Privacy:** commits use the GitHub noreply e-mail already set in `git config user.email`. Never commit backups, `.env`, tokens, DSNs or personal data. Push, Issue and PR creation are outward-facing: do them only when the owner asked.
 
 ### 2. UI and UX
+
 - Follow the motion principles of github.com/kylezantos/design-principles.
 - Every screen/component that loads data has: a **skeleton** while loading; **lazy loading** of images, routes and heavy components; smooth **enter, exit and transition** animations; a loading/progress indicator for slow actions.
 - Respect `prefers-reduced-motion`: animations collapse to instant (or a plain fade) when it is set.
 
 ### 3. Visual theme (Apple Human Interface Guidelines)
+
 All styling goes through the design tokens in `src/index.css` (colors, type, spacing, radii, shadows, motion). No raw hex in components.
+
 - **Type:** system font (`-apple-system, BlinkMacSystemFont, "SF Pro Text"…`) with Inter as fallback. Titles semibold with slightly tight tracking.
 - **Buttons:** primary = solid blue, white text, 12px radius (pill for small buttons), no border; secondary = translucent gray fill, blue text; text/link = blue text only; destructive = red. Minimum 44px touch target. Pressed: `scale(0.97)` + slightly lower opacity with a smooth transition. Disabled: reduced opacity.
 - **Surfaces:** layered grouped backgrounds (light gray behind, white cards in front; black/dark gray in dark mode), cards with 12–16px radius and very subtle shadows.
@@ -51,6 +57,7 @@ All styling goes through the design tokens in `src/index.css` (colors, type, spa
 - **WCAG AA contrast and visible keyboard focus always win.** Where an exact Apple color fails AA as text or as a button fill with white text, use the darker accessible variant (the `*-texto` tokens and the button fill) and keep the Apple color for icons, tints and indicators.
 
 ### 4. Quality, tests and monitoring
+
 - **Observability:** Sentry for errors and OpenTelemetry for logs/metrics/traces, ready to export to Datadog or New Relic. This app has no backend and keeps personal training data on the device, so telemetry is **off unless configured** by environment variables at build time, and never sends workout data or personal fields.
 - **Code quality:** Biome (lint + format), commitlint (Conventional Commits), Knip (unused files/exports/deps), dependency-cruiser (layer rules: `lib/` is pure and imports nothing from `db/`, `pages/` or `components/`; `db/` doesn't import UI), Stryker (mutation testing on `src/lib`).
 - **Tests:** unit and integration tests for the core logic, Playwright end-to-end tests for critical user flows, coverage uploaded to Codecov.

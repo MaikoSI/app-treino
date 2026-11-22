@@ -16,14 +16,14 @@
     <script>
       // Aplica a escolha manual de tema antes do app carregar. Sem escolha ("sistema"), o CSS segue o aparelho.
       try {
-        var tema = localStorage.getItem('tema');
+        const tema = localStorage.getItem('tema');
         if (tema === 'claro' || tema === 'escuro') {
           document.documentElement.dataset.theme = tema;
-          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+          document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
             m.setAttribute('content', tema === 'claro' ? '#F2F2F7' : '#000000');
           });
         }
-      } catch (e) {}
+      } catch {}
     </script>
   </head>
   <body>

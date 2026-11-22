@@ -2,10 +2,7 @@
  * Próximo dia do programa: o que vem depois do último treinado, na ordem.
  * Sem histórico (ou se o último dia foi apagado), começa do primeiro.
  */
-export function proximoDia<T extends { id?: number; ordem: number }>(
-  dias: T[],
-  ultimoDiaId: number | null | undefined,
-): T | undefined {
+export function proximoDia<T extends { id?: number; ordem: number }>(dias: T[], ultimoDiaId: number | null | undefined): T | undefined {
   if (dias.length === 0) return undefined;
   const ordenados = [...dias].sort((a, b) => a.ordem - b.ordem);
   const idx = ordenados.findIndex((d) => d.id === ultimoDiaId);

@@ -20,10 +20,7 @@ export const DESCANSO_MIN_FORCA = 180;
  * compostos 6–10 reps (3–6 no modo força) e 2–3 min de descanso;
  * isolados 10–15 reps e ~1,5 min.
  */
-export function metaPadrao(
-  tipo: TipoExercicio,
-  config: Pick<Config, 'objetivo' | 'descansoCompostoSeg' | 'descansoIsoladoSeg'>,
-): Meta {
+export function metaPadrao(tipo: TipoExercicio, config: Pick<Config, 'objetivo' | 'descansoCompostoSeg' | 'descansoIsoladoSeg'>): Meta {
   const [repsMin, repsMax] = FAIXAS[config.objetivo][tipo];
   let descansoSeg = tipo === 'composto' ? config.descansoCompostoSeg : config.descansoIsoladoSeg;
   if (config.objetivo === 'forca' && tipo === 'composto') descansoSeg = Math.max(descansoSeg, DESCANSO_MIN_FORCA);

@@ -25,7 +25,14 @@ describe('médias semanais e ritmo', () => {
     expect(ritmoSemanal(m)).toBe(0.6);
   });
   it('semana sem registro no meio: divide pelo número de semanas', () => {
-    expect(ritmoSemanal(mediasSemanais([{ data: dia(2), kg: 100 }, { data: dia(16), kg: 99 }]))).toBe(-0.5);
+    expect(
+      ritmoSemanal(
+        mediasSemanais([
+          { data: dia(2), kg: 100 },
+          { data: dia(16), kg: 99 },
+        ]),
+      ),
+    ).toBe(-0.5);
   });
   it('menos de duas semanas: sem ritmo', () => {
     expect(ritmoSemanal(mediasSemanais([{ data: dia(2), kg: 100 }]))).toBeNull();

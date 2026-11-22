@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from 'react';
+import { type ButtonHTMLAttributes, type MouseEvent, type ReactNode, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconeCarregando, IconeVoltar, IconeX } from './Icones';
 import { usePresenca } from './usePresenca';
@@ -142,10 +142,13 @@ export function Painel({
   if (!montado) return null;
   const visivel = ultimo.current;
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: tocar fora da sheet fecha (atalho de mouse/toque); pelo teclado fecha com Esc ou o botão Fechar
+    // biome-ignore lint/a11y/useKeyWithClickEvents: idem, Esc é tratado no useEffect acima
     <div
       className={`fixed inset-0 z-50 flex items-end justify-center bg-black/40 ${saindo ? 'fundo-sai pointer-events-none' : 'fundo-entra'}`}
       onClick={aoFechar}
     >
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: só impede que o toque dentro da sheet a feche */}
       <div
         role="dialog"
         aria-modal="true"
@@ -191,16 +194,29 @@ export function Contador({
   rotulo: string;
   formatar?: (v: number) => string;
 }) {
-  const btn = 'pressionavel flex size-11 items-center justify-center rounded-full bg-cartao-2 text-2xl text-primaria-texto disabled:opacity-30';
+  const btn =
+    'pressionavel flex size-11 items-center justify-center rounded-full bg-cartao-2 text-2xl text-primaria-texto disabled:opacity-30';
   return (
     <div className="flex items-center gap-2">
-      <button type="button" aria-label={`Diminuir ${rotulo}`} className={btn} disabled={valor <= min} onClick={() => aoMudar(Math.max(min, valor - passo))}>
+      <button
+        type="button"
+        aria-label={`Diminuir ${rotulo}`}
+        className={btn}
+        disabled={valor <= min}
+        onClick={() => aoMudar(Math.max(min, valor - passo))}
+      >
         −
       </button>
-      <span className="min-w-14 text-center text-xl font-semibold tabular-nums" aria-label={rotulo}>
+      <output className="min-w-14 text-center text-xl font-semibold tabular-nums" aria-label={rotulo}>
         {formatar(valor)}
-      </span>
-      <button type="button" aria-label={`Aumentar ${rotulo}`} className={btn} disabled={valor >= max} onClick={() => aoMudar(Math.min(max, valor + passo))}>
+      </output>
+      <button
+        type="button"
+        aria-label={`Aumentar ${rotulo}`}
+        className={btn}
+        disabled={valor >= max}
+        onClick={() => aoMudar(Math.min(max, valor + passo))}
+      >
         +
       </button>
     </div>
@@ -246,13 +262,19 @@ export function Segmentado<T extends string | number>({
     opcoes.findIndex((o) => o.valor === valor),
   );
   return (
-    <div role="radiogroup" aria-label={rotulo} className="relative grid rounded-[10px] bg-cartao-2 p-0.5" style={{ gridTemplateColumns: `repeat(${opcoes.length}, 1fr)` }}>
+    <div
+      role="radiogroup"
+      aria-label={rotulo}
+      className="relative grid rounded-[10px] bg-cartao-2 p-0.5"
+      style={{ gridTemplateColumns: `repeat(${opcoes.length}, 1fr)` }}
+    >
       <span
         aria-hidden="true"
         className="absolute inset-y-0.5 left-0.5 rounded-[8px] bg-polegar shadow-flutuante transition-transform duration-300 ease-mola"
         style={{ width: `calc((100% - 4px) / ${opcoes.length})`, transform: `translateX(${i * 100}%)` }}
       />
       {opcoes.map((o) => (
+        // biome-ignore lint/a11y/useSemanticElements: controle segmentado no padrão ARIA radiogroup (botões estilizados, não inputs nativos)
         <button
           key={String(o.valor)}
           type="button"

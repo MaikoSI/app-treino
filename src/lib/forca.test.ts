@@ -17,7 +17,12 @@ describe('umRmEpley', () => {
 
 describe('volumeTotal', () => {
   it('soma carga × reps', () => {
-    expect(volumeTotal([{ carga: 50, reps: 10 }, { carga: 52.5, reps: 8 }])).toBe(920);
+    expect(
+      volumeTotal([
+        { carga: 50, reps: 10 },
+        { carga: 52.5, reps: 8 },
+      ]),
+    ).toBe(920);
   });
 });
 

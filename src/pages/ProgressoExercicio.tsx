@@ -66,7 +66,9 @@ export default function ProgressoExercicio() {
             <div className="grid grid-cols-2 gap-2">
               <Cartao>
                 <p className="text-xs text-secundario">Carga máxima</p>
-                <p className="mt-1 text-2xl font-semibold tabular-nums">{rec.cargaMax > 0 ? `${kg(rec.cargaMax)} × ${rec.repsNaCargaMax}` : '—'}</p>
+                <p className="mt-1 text-2xl font-semibold tabular-nums">
+                  {rec.cargaMax > 0 ? `${kg(rec.cargaMax)} × ${rec.repsNaCargaMax}` : '—'}
+                </p>
                 <p className="text-xs text-secundario">{dataCurta(rec.dataCarga)}</p>
               </Cartao>
               <Cartao>
@@ -77,7 +79,7 @@ export default function ProgressoExercicio() {
             </div>
 
             <Cartao>
-              <div className="-mx-1 mb-3 flex gap-1" role="group" aria-label="Período">
+              <fieldset className="-mx-1 mb-3 flex gap-1" aria-label="Período">
                 {PERIODOS.map((p, i) => (
                   <button
                     key={p.rotulo}
@@ -89,7 +91,7 @@ export default function ProgressoExercicio() {
                     {p.rotulo}
                   </button>
                 ))}
-              </div>
+              </fieldset>
 
               {pontos.length < 2 ? (
                 <p className="py-10 text-center text-sm text-secundario">
@@ -127,10 +129,7 @@ export default function ProgressoExercicio() {
                         labelFormatter={(v) => dataLonga(Number(v))}
                         formatter={(v, nome) => [kg(Number(v)), nome]}
                       />
-                      <Legend
-                        wrapperStyle={{ fontSize: 13 }}
-                        formatter={(nome) => <span style={{ color: cor.texto }}>{nome}</span>}
-                      />
+                      <Legend wrapperStyle={{ fontSize: 13 }} formatter={(nome) => <span style={{ color: cor.texto }}>{nome}</span>} />
                       <Line
                         name="Carga máxima"
                         type="linear"

@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useState, type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IconeLixo } from '../components/Icones';
 import { Botao, Cabecalho, Carregando, Cartao, Segmentado } from '../components/ui';
@@ -143,11 +143,7 @@ export default function Corpo() {
         {/* Proteína */}
         <Cartao className="flex flex-col gap-2">
           <h2 className="font-semibold">Proteína por dia</h2>
-          {pesoRef ? (
-            <Proteina peso={pesoRef} />
-          ) : (
-            <p className="text-sm text-secundario">Registre seu peso para calcular.</p>
-          )}
+          {pesoRef ? <Proteina peso={pesoRef} /> : <p className="text-sm text-secundario">Registre seu peso para calcular.</p>}
           <p className="text-sm text-secundario">
             1,6 g/kg já cobre a maioria das pessoas (Morton 2018); até 2,2 g/kg em dieta ou acima dos 40–50 anos. O total do dia importa
             mais que o horário.
@@ -195,7 +191,7 @@ const DICA_OBJETIVO: Record<ObjetivoPeso, string> = {
 const faixaTexto = (a: number, b: number) => `${sinal(a)}${num(a)}% a ${sinal(b)}${num(b)}%`;
 const sinal = (n: number) => (n > 0 ? '+' : '');
 function faixaKg(a: number, b: number, peso: number) {
-  const k = (p: number) => Math.round(((p / 100) * peso) * 10) / 10;
+  const k = (p: number) => Math.round((p / 100) * peso * 10) / 10;
   return `${sinal(k(a))}${num(k(a))} a ${sinal(k(b))}${num(k(b))} kg`;
 }
 

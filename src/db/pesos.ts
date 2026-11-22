@@ -1,6 +1,6 @@
+import { diaDoRegistro } from '../lib/nutricao';
 import { db } from './index';
 import type { RegistroPeso } from './tipos';
-import { diaDoRegistro } from '../lib/nutricao';
 
 export async function registrosDePeso(): Promise<RegistroPeso[]> {
   return db.pesos.orderBy('data').toArray();

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { GrupoMuscular } from '../db/tipos';
-import { analisarPrograma, faixaVolume, volumePorMusculo, type InfoMusculo } from './volume';
+import { analisarPrograma, faixaVolume, type InfoMusculo, volumePorMusculo } from './volume';
 
 const EX: Record<number, InfoMusculo> = {
   1: { grupoMuscular: 'Peito', secundarios: ['Tríceps', 'Ombros'] }, // supino

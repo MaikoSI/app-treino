@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { num } from '../lib/formato';
-import { faixaVolume, FREQUENCIA_MIN, VOLUME_IDEAL_MAX, VOLUME_IDEAL_MIN, type FaixaVolume } from '../lib/volume';
+import { type FaixaVolume, FREQUENCIA_MIN, faixaVolume, VOLUME_IDEAL_MAX, VOLUME_IDEAL_MIN } from '../lib/volume';
 
 export interface LinhaVolume {
   grupo: string;
@@ -54,8 +54,7 @@ export function BarrasVolume({ linhas }: { linhas: LinhaVolume[] }) {
                 ))}
               </span>
               <span className="text-right tabular-nums">
-                <strong>{num(l.series)}</strong>{' '}
-                {!l.complementar && <span className={`text-xs ${TEXTO[faixa]}`}>{ROTULO[faixa]}</span>}
+                <strong>{num(l.series)}</strong> {!l.complementar && <span className={`text-xs ${TEXTO[faixa]}`}>{ROTULO[faixa]}</span>}
               </span>
             </li>
           );
@@ -69,8 +68,8 @@ export function BarrasVolume({ linhas }: { linhas: LinhaVolume[] }) {
         <Legenda cor="bg-volume-alto">alto, acima de {VOLUME_IDEAL_MAX}</Legenda>
       </p>
       <p className="mt-1 text-xs text-secundario">
-        As marcas na barra indicam 10 e 20. Compostos contam meia série para os músculos auxiliares (o supino conta para tríceps e
-        ombros).{temComplementar && ' Panturrilha, abdômen e antebraço são complementares, sem meta.'}
+        As marcas na barra indicam 10 e 20. Compostos contam meia série para os músculos auxiliares (o supino conta para tríceps e ombros).
+        {temComplementar && ' Panturrilha, abdômen e antebraço são complementares, sem meta.'}
       </p>
     </>
   );

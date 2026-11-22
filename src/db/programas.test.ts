@@ -1,8 +1,8 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { db } from './index';
-import { DIVISOES } from './divisoes';
 import { salvarConfig } from './config';
+import { DIVISOES } from './divisoes';
+import { db } from './index';
 import {
   aplicarMetasPadrao,
   criarProgramaDeDivisao,
@@ -141,7 +141,10 @@ describe('iniciar treino', () => {
     const [dia] = await diasDoPrograma(a);
     const s1 = await iniciarTreino(dia.id);
     const [item] = await exerciciosDoDia(dia.id);
-    const doSupino = await db.sessaoSeries.where({ sessaoId: s1 }).filter((s) => s.exercicioId === item.exercicioId).sortBy('numero');
+    const doSupino = await db.sessaoSeries
+      .where({ sessaoId: s1 })
+      .filter((s) => s.exercicioId === item.exercicioId)
+      .sortBy('numero');
     // sem histórico: carga 0, reps = repsMin
     expect(doSupino[0]).toMatchObject({ carga: 0, reps: 6 });
     await db.sessaoSeries.update(doSupino[0].id, { carga: 80, reps: 8, concluida: true });
@@ -151,7 +154,10 @@ describe('iniciar treino', () => {
     expect((await ultimasSeries(item.exercicioId)).map((s) => s.carga).slice(0, 2)).toEqual([80, 82.5]);
 
     const s2 = await iniciarTreino(dia.id);
-    const novas = await db.sessaoSeries.where({ sessaoId: s2 }).filter((s) => s.exercicioId === item.exercicioId).sortBy('numero');
+    const novas = await db.sessaoSeries
+      .where({ sessaoId: s2 })
+      .filter((s) => s.exercicioId === item.exercicioId)
+      .sortBy('numero');
     expect(novas.slice(0, 2).map((s) => [s.carga, s.reps])).toEqual([
       [80, 8],
       [82.5, 6],

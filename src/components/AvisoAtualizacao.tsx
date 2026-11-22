@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import { useEffect } from 'react';
 import { Botao } from './ui';
 
 /**
@@ -30,9 +30,7 @@ export function AvisoAtualizacao() {
   return (
     <div className="pt-seguro fixed inset-x-0 top-0 z-[70] flex justify-center px-4 pt-2" role="status">
       <div className="aviso-entra vidro flex w-full max-w-lg items-center gap-3 rounded-cartao p-3 shadow-flutuante">
-        <p className="flex-1 text-sm">
-          {temNovaVersao ? 'Nova versão disponível.' : 'Pronto! O app agora funciona sem internet.'}
-        </p>
+        <p className="flex-1 text-sm">{temNovaVersao ? 'Nova versão disponível.' : 'Pronto! O app agora funciona sem internet.'}</p>
         {temNovaVersao && (
           <>
             <Botao variante="fantasma" onClick={() => setTemNovaVersao(false)}>

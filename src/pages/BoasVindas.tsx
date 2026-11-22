@@ -22,8 +22,7 @@ export default function BoasVindas() {
   // senão o App redirecionaria de volta para cá.
   if (destino && config?.onboardingConcluido) return <Navigate to={destino} replace />;
 
-  const usar = (d: Divisao, editar: boolean) =>
-    concluir(() => criarProgramaDeDivisao(d, true), d.diasPorSemana, editar);
+  const usar = (d: Divisao, editar: boolean) => concluir(() => criarProgramaDeDivisao(d, true), d.diasPorSemana, editar);
 
   return (
     <div className="pt-seguro px-4 pb-10">

@@ -13,11 +13,7 @@ export interface ResultadoAnilhas {
  * Calcula as anilhas de cada lado para chegar na carga total.
  * Algoritmo guloso: funciona para os pesos comerciais padrão.
  */
-export function calcularAnilhas(
-  total: number,
-  barra = 20,
-  disponiveis: number[] = ANILHAS_PADRAO,
-): ResultadoAnilhas {
+export function calcularAnilhas(total: number, barra = 20, disponiveis: number[] = ANILHAS_PADRAO): ResultadoAnilhas {
   if (!Number.isFinite(total) || total < barra) {
     return { porLado: [], resto: 0, valido: false };
   }

@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IconeMenu } from '../components/Icones';
-import { Botao, Cabecalho, Cartao, Painel, Vazio, Esqueleto } from '../components/ui';
+import { Botao, Cabecalho, Cartao, Esqueleto, Painel, Vazio } from '../components/ui';
 import { db } from '../db';
 import { criarProgramaVazio, definirAtivo, duplicarPrograma, excluirPrograma } from '../db/programas';
 import type { Programa } from '../db/tipos';

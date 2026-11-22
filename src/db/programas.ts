@@ -1,9 +1,9 @@
-import { db } from './index';
-import { lerConfig } from './config';
-import type { Divisao } from './divisoes';
-import type { Programa, ProgramaDia, ProgramaExercicio } from './tipos';
 import { metaPadrao } from '../lib/metas';
 import type { DiaPlanejado } from '../lib/volume';
+import { lerConfig } from './config';
+import type { Divisao } from './divisoes';
+import { db } from './index';
+import type { Programa, ProgramaDia, ProgramaExercicio } from './tipos';
 
 /** Cria um programa a partir de uma divisão pronta. Devolve o id. */
 export async function criarProgramaDeDivisao(divisao: Divisao, ativar = true): Promise<number> {
@@ -87,7 +87,10 @@ export async function duplicarPrograma(programaId: number): Promise<number> {
 export async function excluirPrograma(programaId: number): Promise<void> {
   await db.transaction('rw', [db.programas, db.programaDias, db.programaExercicios], async () => {
     const dias = await diasDoPrograma(programaId);
-    await db.programaExercicios.where('diaId').anyOf(dias.map((d) => d.id!)).delete();
+    await db.programaExercicios
+      .where('diaId')
+      .anyOf(dias.map((d) => d.id!))
+      .delete();
     await db.programaDias.where('programaId').equals(programaId).delete();
     await db.programas.delete(programaId);
   });
@@ -127,7 +130,10 @@ export async function aplicarMetasPadrao(programaId: number): Promise<number> {
   const config = await lerConfig();
   return db.transaction('rw', [db.programaDias, db.programaExercicios, db.exercicios], async () => {
     const dias = await diasDoPrograma(programaId);
-    const itens = await db.programaExercicios.where('diaId').anyOf(dias.map((d) => d.id)).toArray();
+    const itens = await db.programaExercicios
+      .where('diaId')
+      .anyOf(dias.map((d) => d.id))
+      .toArray();
     const exercicios = new Map((await db.exercicios.toArray()).map((e) => [e.id, e]));
     let mudou = 0;
     for (const it of itens) {

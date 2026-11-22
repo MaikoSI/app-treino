@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, type ComponentProps, type ReactNode } from 'react';
+import { type ComponentProps, lazy, type ReactNode, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Navegacao } from './components/Navegacao';
 import { Carregando } from './components/ui';
@@ -51,26 +51,29 @@ export default function App() {
     <div className={`mx-auto min-h-dvh max-w-lg ${semNavegacao ? '' : 'pb-24'}`}>
       {/* key = rota: cada troca de tela reinicia a animação de entrada */}
       <div key={pathname} className="pagina-entra">
-      <Routes>
-        <Route path="/" element={<Inicio />} />
-        <Route path="/boas-vindas" element={adiado(<BoasVindas />, {})} />
-        <Route path="/programas" element={<Programas />} />
-        <Route path="/programas/modelos" element={adiado(<Modelos />, { titulo: 'Modelos prontos', voltar: true })} />
-        <Route path="/programas/:id" element={adiado(<EditarPrograma />, { titulo: 'Editar programa', voltar: true })} />
-        <Route path="/treino" element={<Treino />} />
-        <Route path="/resumo/:id" element={adiado(<Resumo />, { formato: 'detalhe' })} />
-        <Route path="/exercicios" element={adiado(<Exercicios />, { titulo: 'Exercícios', voltar: true, formato: 'lista' })} />
-        <Route path="/exercicios/:id" element={adiado(<ExercicioDetalhe />, { titulo: 'Exercício', voltar: true })} />
-        <Route path="/historico" element={<Historico />} />
-        <Route path="/historico/:id" element={adiado(<SessaoDetalhe />, { titulo: 'Treino', voltar: true, formato: 'detalhe' })} />
-        <Route path="/progresso" element={<Progresso />} />
-        <Route path="/progresso/:id" element={adiado(<ProgressoExercicio />, { titulo: 'Exercício', voltar: true, formato: 'grafico' })} />
-        <Route path="/config" element={<Config />} />
-        <Route path="/corpo" element={adiado(<Corpo />, { titulo: 'Peso e nutrição', voltar: true })} />
-        <Route path="/sobre" element={adiado(<Sobre />, { titulo: 'Sobre', voltar: true })} />
-        <Route path="/ajuda" element={adiado(<Ajuda />, { titulo: 'Como usar o app', voltar: true })} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/boas-vindas" element={adiado(<BoasVindas />, {})} />
+          <Route path="/programas" element={<Programas />} />
+          <Route path="/programas/modelos" element={adiado(<Modelos />, { titulo: 'Modelos prontos', voltar: true })} />
+          <Route path="/programas/:id" element={adiado(<EditarPrograma />, { titulo: 'Editar programa', voltar: true })} />
+          <Route path="/treino" element={<Treino />} />
+          <Route path="/resumo/:id" element={adiado(<Resumo />, { formato: 'detalhe' })} />
+          <Route path="/exercicios" element={adiado(<Exercicios />, { titulo: 'Exercícios', voltar: true, formato: 'lista' })} />
+          <Route path="/exercicios/:id" element={adiado(<ExercicioDetalhe />, { titulo: 'Exercício', voltar: true })} />
+          <Route path="/historico" element={<Historico />} />
+          <Route path="/historico/:id" element={adiado(<SessaoDetalhe />, { titulo: 'Treino', voltar: true, formato: 'detalhe' })} />
+          <Route path="/progresso" element={<Progresso />} />
+          <Route
+            path="/progresso/:id"
+            element={adiado(<ProgressoExercicio />, { titulo: 'Exercício', voltar: true, formato: 'grafico' })}
+          />
+          <Route path="/config" element={<Config />} />
+          <Route path="/corpo" element={adiado(<Corpo />, { titulo: 'Peso e nutrição', voltar: true })} />
+          <Route path="/sobre" element={adiado(<Sobre />, { titulo: 'Sobre', voltar: true })} />
+          <Route path="/ajuda" element={adiado(<Ajuda />, { titulo: 'Como usar o app', voltar: true })} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </div>
       {!semNavegacao && <Navegacao />}
     </div>
