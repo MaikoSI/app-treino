@@ -25,7 +25,7 @@ export default function Resumo() {
     <div className="pt-seguro px-4 pb-10">
       <header className="py-6">
         <p className="text-sm font-semibold uppercase tracking-widest text-primaria-texto">Treino concluído</p>
-        <h1 className="mt-1 font-display text-4xl font-bold">Mandou bem!</h1>
+        <h1 className="mt-1 text-4xl font-semibold">Mandou bem!</h1>
       </header>
       <DetalheSessao sessaoId={sessaoId} />
       <Botao variante="primario" grande className="mt-6 w-full" onClick={() => navigate('/', { replace: true })}>

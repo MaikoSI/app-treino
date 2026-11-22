@@ -8,17 +8,17 @@ import { useConfig } from '../db/config';
 import { historicoDeSeries } from '../db/sessoes';
 import { dataCurta, dataLonga, kg, num } from '../lib/formato';
 import { recordesPessoais, serieTemporal } from '../lib/progresso';
-import { corDoTema } from '../lib/tema';
+import { corDoTema, temaEfetivo, useSistemaEscuro } from '../lib/tema';
 
 /**
  * Cores do gráfico, lidas do tema ativo:
- * - carga máxima: azul de destaque (recordes), linha sólida;
+ * - carga máxima: laranja de destaque (recordes), linha sólida;
  * - 1RM estimado: cinza secundário, linha TRACEJADA (estimativa). O tracejado e a
  *   legenda garantem que as linhas não se distinguem só pela cor.
  */
 function useCoresGrafico() {
-  const tema = useConfig()?.tema;
-  // useMemo com [tema]: as cores são relidas quando o tema muda.
+  const tema = temaEfetivo(useConfig()?.tema ?? 'sistema', useSistemaEscuro());
+  // useMemo com [tema]: as cores são relidas quando o tema muda (inclusive quando o aparelho troca de modo).
   return useMemo(
     () => ({
       tema,
@@ -28,7 +28,7 @@ function useCoresGrafico() {
       grade: corDoTema('--borda'),
       textoSec: corDoTema('--secundario'),
       texto: corDoTema('--texto'),
-      tooltip: corDoTema('--cartao-2'),
+      tooltip: corDoTema('--cartao'),
     }),
     [tema],
   );
@@ -66,12 +66,12 @@ export default function ProgressoExercicio() {
             <div className="grid grid-cols-2 gap-2">
               <Cartao>
                 <p className="text-xs text-secundario">Carga máxima</p>
-                <p className="mt-1 font-display text-2xl font-bold tabular-nums">{rec.cargaMax > 0 ? `${kg(rec.cargaMax)} × ${rec.repsNaCargaMax}` : '—'}</p>
+                <p className="mt-1 text-2xl font-semibold tabular-nums">{rec.cargaMax > 0 ? `${kg(rec.cargaMax)} × ${rec.repsNaCargaMax}` : '—'}</p>
                 <p className="text-xs text-secundario">{dataCurta(rec.dataCarga)}</p>
               </Cartao>
               <Cartao>
                 <p className="text-xs text-secundario">1RM estimado</p>
-                <p className="mt-1 font-display text-2xl font-bold tabular-nums">{rec.umRm > 0 ? kg(rec.umRm) : '—'}</p>
+                <p className="mt-1 text-2xl font-semibold tabular-nums">{rec.umRm > 0 ? kg(rec.umRm) : '—'}</p>
                 <p className="text-xs text-secundario">{dataCurta(rec.data1rm)}</p>
               </Cartao>
             </div>

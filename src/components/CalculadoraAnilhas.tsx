@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { calcularAnilhas } from '../lib/anilhas';
 import { kg, lerNumero, num } from '../lib/formato';
+import { Segmentado } from './ui';
 
 // Cores no padrão olímpico, para reconhecer de relance.
 const COR: Record<string, string> = {
@@ -31,23 +32,13 @@ export function CalculadoraAnilhas({ cargaInicial = 60 }: { cargaInicial?: numbe
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           onFocus={(e) => e.target.select()}
-          className="min-h-14 rounded-xl bg-cartao-2 px-4 font-display text-3xl font-bold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
+          className="min-h-14 rounded-xl bg-cartao-2 px-4 text-3xl font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
         />
       </label>
       <div>
         <span className="text-sm text-secundario">Barra</span>
-        <div className="mt-1 grid grid-cols-3 gap-2">
-          {[20, 15, 10].map((b) => (
-            <button
-              key={b}
-              type="button"
-              aria-pressed={barra === b}
-              onClick={() => setBarra(b)}
-              className={`min-h-12 rounded-xl ${barra === b ? 'bg-primaria font-semibold text-sobre-primaria' : 'bg-cartao-2'}`}
-            >
-              {b} kg
-            </button>
-          ))}
+        <div className="mt-1">
+          <Segmentado rotulo="Barra" valor={barra} aoMudar={setBarra} opcoes={[20, 15, 10].map((b) => ({ valor: b, rotulo: `${b} kg` }))} />
         </div>
       </div>
 
@@ -60,7 +51,7 @@ export function CalculadoraAnilhas({ cargaInicial = 60 }: { cargaInicial?: numbe
             {r.porLado.map((a, i) => (
               <div
                 key={i}
-                className={`${COR[String(a)]} ${ALTURA[String(a)]} mx-px flex w-5 items-center justify-center rounded-sm text-[10px] font-bold text-black`}
+                className={`${COR[String(a)]} ${ALTURA[String(a)]} mx-px flex w-5 items-center justify-center rounded-sm text-[10px] font-semibold text-black`}
               >
                 <span className="-rotate-90">{num(a)}</span>
               </div>

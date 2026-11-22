@@ -129,7 +129,8 @@ export interface RegistroPeso {
 
 export type Objetivo = 'hipertrofia' | 'forca';
 export type ObjetivoPeso = 'ganhar' | 'manter' | 'perder';
-export type Tema = 'escuro' | 'claro';
+/** 'sistema' segue o modo claro/escuro do aparelho. */
+export type Tema = 'sistema' | 'claro' | 'escuro';
 
 export interface Config {
   chave: 'app';
@@ -162,6 +163,6 @@ export const CONFIG_PADRAO: Config = {
   checkinSono: true,
   semanaLeveAte: null,
   objetivoPeso: 'manter',
-  tema: 'escuro',
+  tema: 'sistema',
   onboardingConcluido: false,
 };

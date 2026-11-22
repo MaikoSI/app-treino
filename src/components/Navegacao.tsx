@@ -11,7 +11,7 @@ const itens = [
 
 export function Navegacao() {
   return (
-    <nav className="pb-seguro fixed inset-x-0 bottom-0 z-30 border-t border-borda bg-fundo/95 backdrop-blur">
+    <nav className="pb-seguro fixed inset-x-0 bottom-0 z-30 vidro border-t border-borda/60">
       <ul className="mx-auto flex max-w-lg">
         {itens.map(({ para, rotulo, Icone }) => (
           <li key={para} className="flex-1">
@@ -19,7 +19,7 @@ export function Navegacao() {
               to={para}
               end={para === '/'}
               className={({ isActive }) =>
-                `flex min-h-16 flex-col items-center justify-center gap-1 text-xs ${isActive ? 'text-primaria-texto' : 'text-secundario'}`
+                `flex min-h-14 flex-col items-center justify-center gap-0.5 text-[0.6875rem] font-medium ${isActive ? 'text-primaria-texto' : 'text-secundario'}`
               }
             >
               <Icone />
