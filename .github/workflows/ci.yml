@@ -38,5 +38,15 @@ jobs:
         run: npm run typecheck
       - name: Testes
         run: npm test
+      - name: Navegador dos testes end-to-end
+        run: npx playwright install --with-deps chromium
+      - name: Testes end-to-end (Playwright)
+        run: npm run e2e
+      - name: Relatório dos testes end-to-end
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-playwright
+          path: playwright-report/
       - name: Build
         run: npm run build
