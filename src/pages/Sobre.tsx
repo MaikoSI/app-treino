@@ -79,6 +79,11 @@ export default function Sobre() {
               Antes do treino, o app pergunta como você dormiu. Se dormiu mal, tira uma série dos exercícios com 3 ou mais. Dá para desligar
               em Ajustes.
             </Item>
+            <Item titulo="Como fazer cada exercício">
+              Todos os exercícios prontos têm um boneco 3D animado com o movimento completo, no ritmo do guia (ida em cerca de 1 segundo,
+              volta controlada em cerca de 2), e o passo a passo por escrito: posição, direção do movimento, respiração e erros comuns. Nos
+              exercícios criados por você, esse espaço guarda suas próprias anotações.
+            </Item>
             <Item titulo="1RM e recordes">1RM estimado pela fórmula de Epley; o app comemora quando você bate um recorde.</Item>
             <Item titulo="Peso e nutrição">
               Registro de peso com média semanal e ritmo comparado à meta (ganhar +0,25 a +0,5%, perder −0,5 a −1% por semana), proteína de

@@ -96,6 +96,11 @@ export default function Ajuda() {
             Em Ajustes → <strong>Biblioteca de exercícios</strong>, toque num exercício. O desenho do corpo mostra o músculo principal em
             verde forte e os que ajudam em verde claro, de frente e de costas.
           </Item>
+          <Item titulo="Como fazer o exercício?">
+            A página do exercício tem o cartão <strong>Como fazer</strong>: um boneco 3D repete o movimento (arraste para girar e ver de
+            outro ângulo) e, embaixo, o passo a passo com a posição, a direção do movimento, a respiração e os erros comuns. Nos exercícios
+            que você criou, o espaço serve para escrever suas próprias anotações.
+          </Item>
           <Item titulo="Na hora de escolher">
             Ao adicionar ou trocar um exercício, toque no <strong>ⓘ</strong> ao lado do nome para ver os músculos antes de escolher.
           </Item>
@@ -120,9 +125,13 @@ export default function Ajuda() {
             Use <strong>+ Série</strong> e <strong>− Série</strong> embaixo de cada exercício. Séries não marcadas são descartadas ao
             finalizar.
           </Item>
+          <Item titulo="Esqueceu como faz?">
+            Toque no <strong>nome do exercício</strong> para ver o boneco 3D fazendo o movimento e o passo a passo, sem perder as séries que
+            você já marcou.
+          </Item>
           <Item titulo="Menu ⋮ do exercício">
-            Ver os músculos trabalhados, calculadora de anilhas (quanto colocar de cada lado da barra), trocar por outro exercício ou
-            remover.
+            Ver como fazer, os músculos trabalhados, calculadora de anilhas (quanto colocar de cada lado da barra), trocar por outro
+            exercício ou remover.
           </Item>
           <Item titulo="Adicionar exercício">Botão no fim da lista, para incluir algo que não estava no programa.</Item>
           <Item titulo="Recordes">

@@ -20,6 +20,25 @@ test('treino completo: inicia, registra uma série, finaliza e conta na meta da 
   await expect(page.getByText('Full Body A').first()).toBeVisible();
 });
 
+test('como fazer: tocar no nome do exercício no treino mostra a explicação sem perder as séries', async ({ page }) => {
+  await concluirOnboarding(page);
+  await iniciarTreino(page);
+  await registrarPrimeiraSerie(page, '40', '10');
+
+  await page
+    .getByRole('button', { name: /^Como fazer / })
+    .first()
+    .click();
+  const painel = page.getByRole('dialog');
+  await expect(painel.getByRole('heading', { name: 'Execução' })).toBeVisible();
+  await expect(painel.getByRole('heading', { name: 'Erros comuns' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(painel).toBeHidden();
+
+  await expect(page.getByRole('checkbox', { name: 'Série 1 feita' }).first()).toBeChecked();
+  await expect(page.getByRole('textbox', { name: 'Carga da série 1' }).first()).toHaveValue('40');
+});
+
 test('retomar treino: fechar e abrir o app mantém o treino e as séries registradas', async ({ page }) => {
   await concluirOnboarding(page);
   await iniciarTreino(page);

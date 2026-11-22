@@ -3,6 +3,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { CalculadoraAnilhas } from '../components/CalculadoraAnilhas';
 import { Comemoracao } from '../components/Comemoracao';
+import { ComoFazer } from '../components/ComoFazer';
 import { BarraDescanso, useDescanso } from '../components/Descanso';
 import { IconeCheck, IconeMais, IconeMenu } from '../components/Icones';
 import { MapaMuscular } from '../components/MapaMuscular';
@@ -31,7 +32,7 @@ import { duracao, kg, lerNumero, num, rotuloRir } from '../lib/formato';
 import { ROTULO_AJUSTE } from '../lib/metas';
 import { agruparPorExercicio, type GrupoExercicio } from '../lib/treino';
 
-type Acao = { tipo: 'menu' | 'trocar' | 'anilhas' | 'musculos'; grupo: GrupoExercicio<SessaoSerie> };
+type Acao = { tipo: 'menu' | 'trocar' | 'anilhas' | 'musculos' | 'comoFazer'; grupo: GrupoExercicio<SessaoSerie> };
 
 export default function Treino() {
   const config = useConfig();
@@ -132,6 +133,7 @@ export default function Treino() {
             estagnado={historico?.estagnados.has(g.exercicioId) ?? false}
             aoMarcar={marcar}
             aoMenu={() => setAcao({ tipo: 'menu', grupo: g })}
+            aoComoFazer={() => setAcao({ tipo: 'comoFazer', grupo: g })}
             aoTrocar={() => setAcao({ tipo: 'trocar', grupo: g })}
             aoAddSerie={() => adicionarSerie(sessao.id, g.ordem)}
             aoRemoverSerie={() => removerUltimaSerie(sessao.id, g.ordem)}
@@ -153,6 +155,7 @@ export default function Treino() {
       >
         {acao && (
           <div className="flex flex-col gap-2">
+            <Botao onClick={() => setAcao({ ...acao, tipo: 'comoFazer' })}>Como fazer</Botao>
             <Botao onClick={() => setAcao({ ...acao, tipo: 'musculos' })}>Músculos trabalhados</Botao>
             <Botao onClick={() => setAcao({ ...acao, tipo: 'anilhas' })}>Calculadora de anilhas</Botao>
             <Botao onClick={() => setAcao({ ...acao, tipo: 'trocar' })}>Trocar exercício</Botao>
@@ -176,6 +179,14 @@ export default function Treino() {
         titulo={acao ? (exercicios.get(acao.grupo.exercicioId)?.nome ?? '') : ''}
       >
         {acao && exercicios.get(acao.grupo.exercicioId) && <MapaMuscular exercicio={exercicios.get(acao.grupo.exercicioId)!} />}
+      </Painel>
+
+      <Painel
+        aberto={acao?.tipo === 'comoFazer'}
+        aoFechar={() => setAcao(null)}
+        titulo={acao ? (exercicios.get(acao.grupo.exercicioId)?.nome ?? '') : ''}
+      >
+        {acao && exercicios.get(acao.grupo.exercicioId) && <ComoFazer exercicio={exercicios.get(acao.grupo.exercicioId)!} />}
       </Painel>
 
       <Painel aberto={acao?.tipo === 'anilhas'} aoFechar={() => setAcao(null)} titulo="Calculadora de anilhas">
@@ -264,6 +275,7 @@ const CartaoExercicio = memo(function CartaoExercicio({
   estagnado,
   aoMarcar,
   aoMenu,
+  aoComoFazer,
   aoTrocar,
   aoAddSerie,
   aoRemoverSerie,
@@ -275,6 +287,7 @@ const CartaoExercicio = memo(function CartaoExercicio({
   estagnado: boolean;
   aoMarcar: (s: SessaoSerie) => void;
   aoMenu: () => void;
+  aoComoFazer: () => void;
   aoTrocar: () => void;
   aoAddSerie: () => void;
   aoRemoverSerie: () => void;
@@ -290,7 +303,20 @@ const CartaoExercicio = memo(function CartaoExercicio({
     <section className={`rounded-cartao vidro-fino p-4 ${todasFeitas ? 'ring-1 ring-concluido/40' : ''}`}>
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
-          <h2 className="text-xl leading-tight font-semibold">{exercicio?.nome ?? 'Exercício removido'}</h2>
+          {exercicio ? (
+            <h2 className="text-xl leading-tight font-semibold">
+              <button
+                type="button"
+                aria-label={`Como fazer ${exercicio.nome}`}
+                onClick={aoComoFazer}
+                className="-my-1 min-h-11 rounded-md text-left underline decoration-secundario/50 decoration-dotted underline-offset-4 active:opacity-70"
+              >
+                {exercicio.nome}
+              </button>
+            </h2>
+          ) : (
+            <h2 className="text-xl leading-tight font-semibold">Exercício removido</h2>
+          )}
           <p className="text-sm text-secundario">
             Meta: {meta.repsMin === meta.repsMax ? meta.repsMax : `${meta.repsMin}–${meta.repsMax}`} reps · descanso{' '}
             {duracao(meta.descansoSeg * 1000)}
