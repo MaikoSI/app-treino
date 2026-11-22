@@ -29,7 +29,7 @@ export default function BoasVindas() {
     <div className="pt-seguro px-4 pb-10">
       <header className="py-8">
         <p className="text-sm font-semibold uppercase tracking-widest text-primaria-texto">Bem-vindo</p>
-        <h1 className="mt-2 text-3xl font-bold leading-tight">Vamos montar seu treino</h1>
+        <h1 className="mt-2 font-display text-4xl font-bold leading-tight">Vamos montar seu treino</h1>
         <p className="mt-2 text-secundario">
           Escolha quantos dias você treina e a gente sugere uma divisão pronta. Dá para mudar tudo depois.
         </p>

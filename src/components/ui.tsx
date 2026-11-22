@@ -48,7 +48,7 @@ export function Cabecalho({ titulo, voltar, acao }: { titulo: string; voltar?: b
             <IconeVoltar />
           </button>
         )}
-        <h1 className="flex-1 truncate text-xl font-bold">{titulo}</h1>
+        <h1 className="flex-1 truncate font-display text-[1.75rem] leading-none font-bold">{titulo}</h1>
         {acao}
       </div>
     </header>
@@ -85,7 +85,7 @@ export function Painel({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 border-b border-borda px-4 py-2">
-          <h2 className="flex-1 text-lg font-bold">{titulo}</h2>
+          <h2 className="flex-1 font-display text-xl font-bold">{titulo}</h2>
           <button
             type="button"
             aria-label="Fechar"
@@ -125,7 +125,7 @@ export function Contador({
       <button type="button" aria-label={`Diminuir ${rotulo}`} className={btn} disabled={valor <= min} onClick={() => aoMudar(Math.max(min, valor - passo))}>
         −
       </button>
-      <span className="min-w-14 text-center text-lg font-semibold tabular-nums" aria-label={rotulo}>
+      <span className="min-w-14 text-center font-display text-2xl font-semibold tabular-nums" aria-label={rotulo}>
         {formatar(valor)}
       </span>
       <button type="button" aria-label={`Aumentar ${rotulo}`} className={btn} disabled={valor >= max} onClick={() => aoMudar(Math.min(max, valor + passo))}>

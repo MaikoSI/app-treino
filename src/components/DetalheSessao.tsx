@@ -40,7 +40,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
     <div className="flex flex-col gap-4">
       <div>
         <p className="text-sm text-secundario">{dataLonga(sessao.inicio)}</p>
-        <p className="text-2xl font-bold">{sessao.nomeDia}</p>
+        <p className="font-display text-3xl font-bold">{sessao.nomeDia}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-2">
@@ -99,7 +99,7 @@ function Numero({ rotulo, valor }: { rotulo: string; valor: string }) {
   return (
     <div className="rounded-xl bg-cartao p-3 text-center">
       <p className="text-xs text-secundario">{rotulo}</p>
-      <p className="mt-1 text-lg font-bold tabular-nums">{valor}</p>
+      <p className="mt-1 font-display text-2xl leading-none font-bold tabular-nums">{valor}</p>
     </div>
   );
 }

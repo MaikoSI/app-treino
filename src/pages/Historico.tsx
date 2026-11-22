@@ -95,7 +95,7 @@ export default function Historico() {
               <li key={s.id}>
                 <Link to={`/historico/${s.id}`} className="flex min-h-16 items-center gap-3 rounded-xl bg-cartao p-4 active:bg-cartao-2">
                   <div className="w-12 shrink-0 text-center">
-                    <p className="text-xl font-bold leading-none">{new Date(s.inicio).getDate()}</p>
+                    <p className="font-display text-2xl font-bold leading-none">{new Date(s.inicio).getDate()}</p>
                     <p className="text-xs text-secundario">{new Date(s.inicio).toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</p>
                   </div>
                   <div className="min-w-0 flex-1">

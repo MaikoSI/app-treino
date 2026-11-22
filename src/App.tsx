@@ -4,10 +4,12 @@ import { Navegacao } from './components/Navegacao';
 import { Carregando } from './components/ui';
 import { useConfig } from './db/config';
 import { aplicarTema } from './lib/tema';
+import Ajuda from './pages/Ajuda';
 import BoasVindas from './pages/BoasVindas';
 import Config from './pages/Config';
 import Corpo from './pages/Corpo';
 import EditarPrograma from './pages/EditarPrograma';
+import ExercicioDetalhe from './pages/ExercicioDetalhe';
 import Exercicios from './pages/Exercicios';
 import Historico from './pages/Historico';
 import Inicio from './pages/Inicio';
@@ -47,6 +49,7 @@ export default function App() {
         <Route path="/treino" element={<Treino />} />
         <Route path="/resumo/:id" element={<Resumo />} />
         <Route path="/exercicios" element={<Exercicios />} />
+        <Route path="/exercicios/:id" element={<ExercicioDetalhe />} />
         <Route path="/historico" element={<Historico />} />
         <Route path="/historico/:id" element={<SessaoDetalhe />} />
         <Route path="/progresso" element={<Progresso />} />
@@ -61,6 +64,7 @@ export default function App() {
         <Route path="/config" element={<Config />} />
         <Route path="/corpo" element={<Corpo />} />
         <Route path="/sobre" element={<Sobre />} />
+        <Route path="/ajuda" element={<Ajuda />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       {!semNavegacao && <Navegacao />}

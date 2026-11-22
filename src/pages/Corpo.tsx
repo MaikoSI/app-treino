@@ -91,7 +91,7 @@ export default function Corpo() {
             ) : (
               <>
                 <p className="text-sm text-secundario">Ritmo atual (média desta semana com registro × a anterior)</p>
-                <p className="mt-1 text-2xl font-bold tabular-nums">
+                <p className="mt-1 font-display text-3xl font-bold tabular-nums">
                   {ritmo > 0 ? '+' : ''}
                   {num(ritmo)}% <span className="text-base font-normal text-secundario">por semana</span>
                 </p>
@@ -223,7 +223,7 @@ function Proteina({ peso }: { peso: number }) {
   const p = proteinaDiaria(peso);
   return (
     <>
-      <p className="text-2xl font-bold tabular-nums">
+      <p className="font-display text-3xl font-bold tabular-nums">
         {p.minG}–{p.maxG} g <span className="text-base font-normal text-secundario">para {kg(peso)}</span>
       </p>
       <p className="text-sm">

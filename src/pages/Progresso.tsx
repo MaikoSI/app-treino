@@ -109,13 +109,13 @@ export default function Progresso() {
                   <div className="text-right tabular-nums">
                     {r.cargaMax > 0 ? (
                       <>
-                        <p className="font-semibold">
+                        <p className="font-display text-xl leading-tight font-bold">
                           {kg(r.cargaMax)} × {r.repsNaCargaMax}
                         </p>
                         <p className="text-sm text-secundario">1RM {num(r.umRm)} kg</p>
                       </>
                     ) : (
-                      <p className="font-semibold">{r.maxReps} reps</p>
+                      <p className="font-display text-xl leading-tight font-bold">{r.maxReps} reps</p>
                     )}
                   </div>
                 </Link>

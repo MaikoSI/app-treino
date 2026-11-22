@@ -31,7 +31,7 @@ export function CalculadoraAnilhas({ cargaInicial = 60 }: { cargaInicial?: numbe
           value={texto}
           onChange={(e) => setTexto(e.target.value)}
           onFocus={(e) => e.target.select()}
-          className="min-h-14 rounded-xl bg-cartao-2 px-4 text-2xl font-bold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
+          className="min-h-14 rounded-xl bg-cartao-2 px-4 font-display text-3xl font-bold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
         />
       </label>
       <div>

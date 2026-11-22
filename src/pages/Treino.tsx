@@ -3,6 +3,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { CalculadoraAnilhas } from '../components/CalculadoraAnilhas';
 import { Comemoracao } from '../components/Comemoracao';
+import { MapaMuscular } from '../components/MapaMuscular';
 import { BarraDescanso, useDescanso } from '../components/Descanso';
 import { IconeCheck, IconeMais, IconeMenu } from '../components/Icones';
 import { SeletorExercicio } from '../components/SeletorExercicio';
@@ -30,7 +31,7 @@ import { duracao, kg, lerNumero, num, rotuloRir } from '../lib/formato';
 import { ROTULO_AJUSTE } from '../lib/metas';
 import { agruparPorExercicio, type GrupoExercicio } from '../lib/treino';
 
-type Acao = { tipo: 'menu' | 'trocar' | 'anilhas'; grupo: GrupoExercicio<SessaoSerie> };
+type Acao = { tipo: 'menu' | 'trocar' | 'anilhas' | 'musculos'; grupo: GrupoExercicio<SessaoSerie> };
 
 export default function Treino() {
   const config = useConfig();
@@ -90,21 +91,30 @@ export default function Treino() {
 
   return (
     <div className={descanso.estado ? 'pb-36' : 'pb-10'}>
-      <header className="pt-seguro sticky top-0 z-20 border-b border-borda bg-fundo/95 backdrop-blur">
+      <header className="pt-seguro sticky top-0 z-20 bg-fundo/95 backdrop-blur">
         <div className="flex min-h-16 items-center gap-3 px-4">
           <div className="min-w-0 flex-1">
-            <p className="truncate font-bold">{sessao.nomeDia}</p>
-            <p className="text-sm text-secundario tabular-nums">
-              <span className="font-semibold text-destaque-texto">
+            <p className="truncate font-display text-2xl leading-tight font-bold">{sessao.nomeDia}</p>
+            <p className="text-sm text-secundario">
+              <span className="font-display text-base font-semibold text-destaque-texto tabular-nums">
                 <Relogio desde={sessao.inicio} />
-              </span>{' '}
-              · {feitas}/{series.length} séries
+              </span>
+              <span className="mx-1.5" aria-hidden="true">
+                ·
+              </span>
+              <span className="tabular-nums">
+                {feitas} de {series.length} séries
+              </span>
             </p>
             {sessao.ajuste && sessao.ajuste !== 'normal' && <p className="text-sm text-secundario">{ROTULO_AJUSTE[sessao.ajuste]}</p>}
           </div>
           <Botao variante="primario" onClick={() => setFinalizando(true)}>
             Finalizar
           </Botao>
+        </div>
+        {/* Progresso do treino: séries feitas / total */}
+        <div className="h-1 bg-trilho" aria-hidden="true">
+          <div className="h-full bg-concluido transition-[width] duration-300" style={{ width: `${series.length ? (feitas / series.length) * 100 : 0}%` }} />
         </div>
       </header>
 
@@ -136,6 +146,7 @@ export default function Treino() {
       <Painel aberto={acao?.tipo === 'menu'} aoFechar={() => setAcao(null)} titulo={acao ? exercicios.get(acao.grupo.exercicioId)?.nome ?? '' : ''}>
         {acao && (
           <div className="flex flex-col gap-2">
+            <Botao onClick={() => setAcao({ ...acao, tipo: 'musculos' })}>Músculos trabalhados</Botao>
             <Botao onClick={() => setAcao({ ...acao, tipo: 'anilhas' })}>Calculadora de anilhas</Botao>
             <Botao onClick={() => setAcao({ ...acao, tipo: 'trocar' })}>Trocar exercício</Botao>
             <Botao
@@ -150,6 +161,14 @@ export default function Treino() {
             </Botao>
           </div>
         )}
+      </Painel>
+
+      <Painel
+        aberto={acao?.tipo === 'musculos'}
+        aoFechar={() => setAcao(null)}
+        titulo={acao ? exercicios.get(acao.grupo.exercicioId)?.nome ?? '' : ''}
+      >
+        {acao && exercicios.get(acao.grupo.exercicioId) && <MapaMuscular exercicio={exercicios.get(acao.grupo.exercicioId)!} />}
       </Painel>
 
       <Painel aberto={acao?.tipo === 'anilhas'} aoFechar={() => setAcao(null)} titulo="Calculadora de anilhas">
@@ -264,9 +283,9 @@ const CartaoExercicio = memo(function CartaoExercicio({
     <section className={`rounded-xl bg-cartao p-4 ${todasFeitas ? 'ring-1 ring-concluido/40' : ''}`}>
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
-          <h2 className="text-lg font-bold leading-tight">{exercicio?.nome ?? 'Exercício removido'}</h2>
+          <h2 className="font-display text-xl leading-tight font-bold">{exercicio?.nome ?? 'Exercício removido'}</h2>
           <p className="text-sm text-secundario">
-            Meta: {meta.repsMin === meta.repsMax ? meta.repsMax : `${meta.repsMin}–${meta.repsMax}`} reps · descanso {meta.descansoSeg}s
+            Meta: {meta.repsMin === meta.repsMax ? meta.repsMax : `${meta.repsMin}–${meta.repsMax}`} reps · descanso {duracao(meta.descansoSeg * 1000)}
           </p>
           {ultimas.length > 0 && (
             <p className="mt-0.5 text-sm text-secundario tabular-nums">
@@ -362,7 +381,7 @@ const LinhaSerie = memo(function LinhaSerie({
         mostrarRir ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'
       }`}
     >
-      <span className={`text-center font-semibold ${feita ? 'text-texto' : 'text-secundario'}`}>{indice}</span>
+      <span className={`text-center font-display text-xl font-semibold ${feita ? 'text-texto' : 'text-secundario'}`}>{indice}</span>
       <CampoNumero valor={serie.carga} decimal rotulo={`Carga da série ${indice}`} aoMudar={(carga) => atualizarSerie(serie.id, { carga })} />
       <CampoNumero valor={serie.reps} rotulo={`Repetições da série ${indice}`} aoMudar={(reps) => atualizarSerie(serie.id, { reps: Math.round(reps) })} />
       {mostrarRir && (
@@ -370,7 +389,7 @@ const LinhaSerie = memo(function LinhaSerie({
           aria-label={`Repetições em reserva da série ${indice}`}
           value={serie.rir ?? ''}
           onChange={(e) => atualizarSerie(serie.id, { rir: e.target.value === '' ? null : Number(e.target.value) })}
-          className="h-12 w-full min-w-0 appearance-none rounded-xl bg-cartao-2 text-center text-lg font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
+          className="h-12 w-full min-w-0 appearance-none rounded-xl bg-cartao-2 text-center font-display text-2xl font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
         >
           <option value="">–</option>
           {[0, 1, 2, 3, 4, 5].map((r) => (
@@ -437,7 +456,7 @@ function CampoNumero({
         setTexto(t);
         aoMudar(Math.max(0, lerNumero(t)));
       }}
-      className="h-12 w-full min-w-0 rounded-xl bg-cartao-2 text-center text-lg font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
+      className="h-12 w-full min-w-0 rounded-xl bg-cartao-2 text-center font-display text-2xl font-semibold tabular-nums outline-none focus:ring-2 focus:ring-primaria"
     />
   );
 }

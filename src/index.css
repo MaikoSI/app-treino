@@ -1,4 +1,7 @@
 @import 'tailwindcss';
+/* Fonte dos títulos e números (carga, reps, cronômetro). Vem do pacote, então funciona offline. */
+@import '@fontsource/barlow-condensed/latin-600.css';
+@import '@fontsource/barlow-condensed/latin-700.css';
 
 /*
  * Identidade visual. No Tailwind v4 os tokens ficam aqui (não há tailwind.config).
@@ -38,6 +41,8 @@
   --color-trilho: var(--trilho); /* fundo das barras */
 
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Títulos e números: condensada, como a numeração de anilhas e placares de academia. */
+  --font-display: 'Barlow Condensed', system-ui, sans-serif;
 }
 
 /* Tema escuro (padrão): a paleta da identidade, sem alterações. */
