@@ -131,7 +131,6 @@ All styling goes through the design tokens in `src/index.css` (colors, type, spa
 
 Unit-test coverage is uploaded to Codecov with OIDC (`id-token: write`, no token stored); `codecov.yml` keeps it informational and the upload never fails CI. The owner activates it once by signing in at codecov.io with GitHub. Screens are covered by the Playwright tests, so unit coverage of `pages/` is expected to be low.
 
-
 `.github/workflows/ci.yml` runs on every PR (and pushes to other branches) in one job named `verificar`. Every new quality tool adds its step there. `scripts/proteger-main.sh` (needs `gh` with admin rights) makes `main` PR-only with `verificar` required, also for admins. Reviews required = 0 because a solo owner can't approve their own PR on GitHub; the PR + green CI is the gate.
 
 ## Deploy
