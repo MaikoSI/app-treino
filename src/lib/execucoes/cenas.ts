@@ -3,14 +3,14 @@ import type { Vec3 } from '../esqueleto';
 import type { Equipamento3D } from '../execucao';
 
 /** Banco reto com o estofado de `zIni` a `zFim` e o topo na altura `topo`. */
-export function bancoReto(zIni: number, zFim: number, topo = 0.45, largura = 0.3): Equipamento3D[] {
+export function bancoReto(zIni: number, zFim: number, topo = 0.45, largura = 0.3, x = 0): Equipamento3D[] {
   const zc = (zIni + zFim) / 2;
   const comp = Math.abs(zFim - zIni);
   return [
-    { tipo: 'caixa', pos: [0, topo - 0.04, zc], tam: [largura, 0.08, comp], material: 'estofado' },
-    { tipo: 'caixa', pos: [0, (topo - 0.08) / 2, zc], tam: [0.08, topo - 0.08, comp * 0.8], material: 'metal' },
-    { tipo: 'caixa', pos: [0, 0.02, zIni + Math.sign(zFim - zIni) * 0.1], tam: [0.45, 0.04, 0.06], material: 'metal' },
-    { tipo: 'caixa', pos: [0, 0.02, zFim - Math.sign(zFim - zIni) * 0.1], tam: [0.45, 0.04, 0.06], material: 'metal' },
+    { tipo: 'caixa', pos: [x, topo - 0.04, zc], tam: [largura, 0.08, comp], material: 'estofado' },
+    { tipo: 'caixa', pos: [x, (topo - 0.08) / 2, zc], tam: [0.08, topo - 0.08, comp * 0.8], material: 'metal' },
+    { tipo: 'caixa', pos: [x, 0.02, zIni + Math.sign(zFim - zIni) * 0.1], tam: [0.45, 0.04, 0.06], material: 'metal' },
+    { tipo: 'caixa', pos: [x, 0.02, zFim - Math.sign(zFim - zIni) * 0.1], tam: [0.45, 0.04, 0.06], material: 'metal' },
   ];
 }
 

@@ -1,5 +1,4 @@
-import { emPeFirme } from './bracos';
-import { ciclo, lerp } from './construir';
+import { ciclo, emPeFirme, lerp } from './construir';
 import type { Catalogo } from './tipos';
 
 export const OMBROS: Catalogo = {

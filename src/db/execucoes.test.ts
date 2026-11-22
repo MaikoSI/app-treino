@@ -5,16 +5,6 @@ import { EXERCICIOS_INICIAIS } from './exerciciosIniciais';
 
 /** Exercícios prontos que ainda não têm demonstração. Encolhe a cada lote; no fim, vazio. */
 const PENDENTES: string[] = [
-  'Puxada alta com triângulo',
-  'Barra fixa',
-  'Remada curvada',
-  'Remada unilateral (serrote)',
-  'Remada baixa',
-  'Remada cavalinho',
-  'Remada articulada',
-  'Pulldown na polia',
-  'Levantamento terra',
-  'Encolhimento com halteres',
   'Desenvolvimento com halteres',
   'Desenvolvimento com barra',
   'Desenvolvimento na máquina',

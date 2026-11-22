@@ -1,12 +1,5 @@
-import type { Pose } from '../esqueleto';
-import { ciclo, emPe, IK_PERNAS, ik, lerp, pesNoChao } from './construir';
+import { ciclo, emPeFirme, lerp } from './construir';
 import type { Catalogo } from './tipos';
-
-/** Em pé com os pés na largura do quadril, pernas resolvidas para os pés ficarem no chão. */
-export function emPeFirme(rot: Pose['rot'] = {}, largura = 0.13): Pose {
-  const semente = emPe({ quadrilE: [0, 0, 3], quadrilD: [0, 0, -3], ...rot });
-  return ik(semente, pesNoChao(largura, 0, 8), IK_PERNAS);
-}
 
 export const BRACOS: Catalogo = {
   'Rosca direta': () => {

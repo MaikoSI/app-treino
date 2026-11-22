@@ -14,6 +14,8 @@ export type Articulacao =
   | 'quadril'
   | 'coluna'
   | 'pescoco'
+  | 'claviculaE'
+  | 'claviculaD'
   | 'ombroE'
   | 'ombroD'
   | 'cotoveloE'
@@ -44,8 +46,10 @@ type Filha = Exclude<Articulacao, 'quadril'>;
 export const PAI: Record<Filha, Articulacao> = {
   coluna: 'quadril',
   pescoco: 'coluna',
-  ombroE: 'coluna',
-  ombroD: 'coluna',
+  claviculaE: 'coluna',
+  claviculaD: 'coluna',
+  ombroE: 'claviculaE',
+  ombroD: 'claviculaD',
   cotoveloE: 'ombroE',
   cotoveloD: 'ombroD',
   punhoE: 'cotoveloE',
@@ -62,8 +66,10 @@ export const PAI: Record<Filha, Articulacao> = {
 export const OSSO: Record<Filha, Vec3> = {
   coluna: [0, 0.1, 0],
   pescoco: [0, 0.4, 0],
-  ombroE: [0.19, 0.36, 0],
-  ombroD: [-0.19, 0.36, 0],
+  claviculaE: [0.03, 0.36, 0],
+  claviculaD: [-0.03, 0.36, 0],
+  ombroE: [0.16, 0, 0],
+  ombroD: [-0.16, 0, 0],
   cotoveloE: [0, -0.29, 0],
   cotoveloD: [0, -0.29, 0],
   punhoE: [0, -0.26, 0],
@@ -95,6 +101,8 @@ export const ORDEM: Articulacao[] = [
   'quadril',
   'coluna',
   'pescoco',
+  'claviculaE',
+  'claviculaD',
   'ombroE',
   'ombroD',
   'cotoveloE',
@@ -115,14 +123,17 @@ type Limite = { min: Vec3; max: Vec3 };
 export const LIMITES: Record<Filha, Limite> = {
   coluna: { min: [-30, -45, -35], max: [90, 45, 35] },
   pescoco: { min: [-50, -70, -35], max: [60, 70, 35] },
+  // Clavícula/escápula: Z eleva o ombro (encolher), Y leva o ombro para a frente ou para trás.
+  claviculaE: { min: [0, -20, -10], max: [0, 20, 25] },
+  claviculaD: { min: [0, -20, -25], max: [0, 20, 10] },
   ombroE: { min: [-180, -90, -30], max: [60, 90, 180] },
   ombroD: { min: [-180, -90, -180], max: [60, 90, 30] },
   cotoveloE: { min: [-150, -90, -5], max: [0, 90, 5] },
   cotoveloD: { min: [-150, -90, -5], max: [0, 90, 5] },
   punhoE: { min: [-80, -30, -40], max: [80, 30, 40] },
   punhoD: { min: [-80, -30, -40], max: [80, 30, 40] },
-  quadrilE: { min: [-130, -50, -30], max: [40, 50, 60] },
-  quadrilD: { min: [-130, -50, -60], max: [40, 50, 30] },
+  quadrilE: { min: [-140, -50, -30], max: [40, 50, 60] },
+  quadrilD: { min: [-140, -50, -60], max: [40, 50, 30] },
   joelhoE: { min: [0, -10, -5], max: [150, 10, 5] },
   joelhoD: { min: [0, -10, -5], max: [150, 10, 5] },
   tornozeloE: { min: [-40, -20, -20], max: [50, 20, 20] },

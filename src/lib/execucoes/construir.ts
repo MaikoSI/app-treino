@@ -159,3 +159,9 @@ export function deitadoNoBanco(inclinacao = 0, assento = 0.45): Pose {
   };
   return ik(semente, pesNoChao(0.3, inclinacao > 20 ? 0.6 : 0.5, 15), IK_PERNAS);
 }
+
+/** Em pé com os pés na largura do quadril, pernas resolvidas para os pés ficarem no chão. */
+export function emPeFirme(rot: Pose['rot'] = {}, largura = 0.13): Pose {
+  const semente = emPe({ quadrilE: [0, 0, 3], quadrilD: [0, 0, -3], ...rot });
+  return ik(semente, pesNoChao(largura, 0, 8), IK_PERNAS);
+}

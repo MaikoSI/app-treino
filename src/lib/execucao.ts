@@ -22,6 +22,8 @@ export type Equipamento3D =
   | { tipo: 'halter'; em: 'maoE' | 'maoD'; pegada?: 'neutra' | 'pronada' }
   /** Cabo da polia: da roldana até o ponto preso, com o acessório na ponta. */
   | { tipo: 'cabo'; de: Vec3; ate: Fixacao; acessorio: Acessorio }
+  /** Alavanca rígida presa num pivô (barra T, landmine): vai do pivô até o ponto preso e passa `alem` m dele, com anilha na ponta. */
+  | { tipo: 'alavanca'; de: Vec3; ate: Fixacao; alem?: number; anilha?: boolean }
   /** Peça móvel de máquina (plataforma, rolo, pegador) que acompanha um ponto do corpo. */
   | { tipo: 'placa'; em: Fixacao; tam: Vec3; rot?: Vec3; desloc?: Vec3; material?: 'estofado' | 'metal' };
 

@@ -164,6 +164,22 @@ export function montarEquipamento(e: Equipamento3D, m: Manequim, cores?: CoresCe
       };
       break;
     }
+    case 'alavanca': {
+      const haste = malha(new CylinderGeometry(0.022, 0.022, 1, 10), 'metal');
+      const anilha = e.anilha === false ? null : malha(new CylinderGeometry(0.17, 0.17, 0.05, 28), 'peso');
+      const de = new Vector3(...e.de);
+      atualizar = (pose) => {
+        const alvo = resolver(e.ate, m, pose);
+        const dir = alvo.clone().sub(de).normalize();
+        const ponta = alvo.clone().add(dir.clone().multiplyScalar(e.alem ?? 0.25));
+        esticar(haste, de, ponta);
+        if (anilha) {
+          anilha.position.copy(ponta).sub(dir.clone().multiplyScalar(0.05));
+          anilha.quaternion.setFromUnitVectors(CIMA, dir);
+        }
+      };
+      break;
+    }
     case 'placa': {
       const p = malha(new BoxGeometry(...e.tam), e.material ?? 'metal');
       const rot = euler(e.rot);
