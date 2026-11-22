@@ -102,6 +102,10 @@ All styling goes through the design tokens in `src/index.css` (colors, type, spa
 - DB tests use `import 'fake-indexeddb/auto'` and reset with `await db.delete(); await db.open();` in `beforeEach`.
 - In dev builds, `window.db` exposes the Dexie instance (`main.tsx`), which is handy for seeding data from the browser console.
 
+## CI
+
+`.github/workflows/ci.yml` runs on every PR (and pushes to other branches) in one job named `verificar`. Every new quality tool adds its step there. `scripts/proteger-main.sh` (needs `gh` with admin rights) makes `main` PR-only with `verificar` required, also for admins. Reviews required = 0 because a solo owner can't approve their own PR on GitHub; the PR + green CI is the gate.
+
 ## Deploy
 
 `.github/workflows/deploy.yml` builds, tests and deploys to GitHub Pages on push to `main` (Pages source must be "GitHub Actions"). `netlify.toml` covers Netlify. Install/offline only work over HTTPS (or localhost).
