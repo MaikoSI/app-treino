@@ -39,12 +39,12 @@ export function suporte(z: number, altura: number, largura = 0.55): Equipamento3
   ];
 }
 
-/** Coluna de polia: torre vertical com a roldana em `roldana`. */
-export function torrePolia(roldana: Vec3): Equipamento3D[] {
-  const base: Vec3 = [roldana[0], 0, roldana[2] + Math.sign(roldana[2] || -1) * 0.12];
+/** Coluna de polia: torre vertical em `base` (x, z) com um braço até a roldana. */
+export function torrePolia(roldana: Vec3, base: [number, number] = [roldana[0], roldana[2]]): Equipamento3D[] {
+  const topo = Math.max(roldana[1] + 0.1, 2.2);
   return [
-    { tipo: 'caixa', pos: [base[0], 1.1, base[2]], tam: [0.16, 2.2, 0.16], material: 'metal' },
-    { tipo: 'tubo', de: [roldana[0], roldana[1], base[2]], ate: roldana, raio: 0.02 },
+    { tipo: 'caixa', pos: [base[0], topo / 2, base[1]], tam: [0.16, topo, 0.16], material: 'metal' },
+    { tipo: 'tubo', de: [base[0], roldana[1], base[1]], ate: roldana, raio: 0.025 },
     { tipo: 'caixa', pos: roldana, tam: [0.05, 0.1, 0.1], material: 'metal' },
   ];
 }

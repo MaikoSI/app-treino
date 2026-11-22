@@ -30,7 +30,7 @@ export const COSTAS: Catalogo = {
           { tipo: 'caixa', pos: [0, 0.46, 0.05], tam: [0.4, 0.08, 0.4], material: 'estofado' },
           { tipo: 'caixa', pos: [0, 0.22, 0.05], tam: [0.08, 0.44, 0.3], material: 'metal' },
           { tipo: 'caixa', pos: [0, 0.74, 0.36], tam: [0.4, 0.08, 0.1], material: 'estofado' },
-          ...torrePolia([0, 2.3, 0.1]),
+          ...torrePolia([0, 2.3, 0.1], [0, 0.75]),
           { tipo: 'cabo', de: [0, 2.3, 0.1], ate: 'maos', acessorio: 'barra' },
         ],
         quadros: ciclo({
@@ -47,7 +47,7 @@ export const COSTAS: Catalogo = {
             );
           },
         }),
-        camera: { azimute: 35, elevacao: 12, distancia: 3 },
+        camera: { azimute: 75, elevacao: 12 },
         contatos: [
           { tipo: 'apoio', ponto: 'quadril', eixo: 'xyz' },
           { tipo: 'apoio', ponto: 'peE', eixo: 'xyz' },
@@ -55,7 +55,6 @@ export const COSTAS: Catalogo = {
           { tipo: 'distanciaFixa', a: 'maoE', b: 'maoD' },
           { tipo: 'simetria' },
         ],
-        musculoDestaque: ['ombroE', 'ombroD'],
       },
       descricao: 'Sentado na máquina, a barra desce da altura dos braços esticados até a parte de cima do peito e volta devagar.',
       explicacao: {

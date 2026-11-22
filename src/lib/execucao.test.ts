@@ -16,14 +16,13 @@ const quadros = (a: Pose, b: Pose): Quadro[] => [
 const rosca = (q: Quadro[] = quadros(embaixo, emCima)): ReceitaExecucao => ({
   cena: [{ tipo: 'barra', em: 'maos' }],
   quadros: q,
-  camera: { azimute: 60, elevacao: 10, distancia: 3 },
+  camera: { azimute: 60, elevacao: 10 },
   contatos: [
     { tipo: 'apoio', ponto: 'peE', eixo: 'y' },
     { tipo: 'apoio', ponto: 'peD', eixo: 'y' },
     { tipo: 'distanciaFixa', a: 'maoE', b: 'maoD' },
     { tipo: 'simetria' },
   ],
-  musculoDestaque: ['cotoveloE', 'cotoveloD'],
 });
 
 describe('poseNoTempo', () => {

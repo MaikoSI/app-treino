@@ -15,7 +15,10 @@ import {
   LoaderCircle,
   type LucideIcon,
   type LucideProps,
+  Pause,
+  Play,
   Plus,
+  RotateCcw,
   Settings,
   Timer,
   Trash2,
@@ -53,3 +56,6 @@ export const IconeMenu = icone(EllipsisVertical);
 export const IconeInfo = icone(Info);
 export const IconeAjuda = icone(CircleHelp);
 export const IconeCarregando = icone(LoaderCircle);
+export const IconePlay = icone(Play);
+export const IconePausa = icone(Pause);
+export const IconeRecomecar = icone(RotateCcw);

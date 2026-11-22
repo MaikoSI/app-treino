@@ -58,7 +58,7 @@ export const PERNAS: Catalogo = {
         primeira: 'excentrica',
         pose: (t) => agachar(t, { fundo: 0.5, recuo: 0.2, inclinacao: 35, largura: 0.22, abertura: 20, maosNaBarraDasCostas: true }),
       }),
-      camera: { azimute: 60, elevacao: 10, distancia: 3 },
+      camera: { azimute: 60, elevacao: 10 },
       contatos: [
         { tipo: 'apoio', ponto: 'peE', eixo: 'xyz' },
         { tipo: 'apoio', ponto: 'peD', eixo: 'xyz' },
@@ -66,7 +66,6 @@ export const PERNAS: Catalogo = {
         { tipo: 'distanciaFixa', a: 'maoE', b: 'maoD' },
         { tipo: 'simetria' },
       ],
-      musculoDestaque: ['joelhoE', 'joelhoD'],
     },
     descricao: 'Em pé com a barra nas costas, o quadril desce para trás até as coxas ficarem paralelas ao chão e o corpo sobe de volta.',
     explicacao: {

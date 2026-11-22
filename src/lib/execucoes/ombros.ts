@@ -21,9 +21,8 @@ export const OMBROS: Catalogo = {
             };
           },
         }),
-        camera: { azimute: 15, elevacao: 8, distancia: 2.8 },
+        camera: { azimute: 15, elevacao: 8 },
         contatos: [{ tipo: 'apoio', ponto: 'peE', eixo: 'xyz' }, { tipo: 'apoio', ponto: 'peD', eixo: 'xyz' }, { tipo: 'simetria' }],
-        musculoDestaque: ['ombroE', 'ombroD'],
       },
       descricao: 'Em pé com um halter em cada mão, os braços sobem pelos lados até a altura dos ombros e descem devagar.',
       explicacao: {

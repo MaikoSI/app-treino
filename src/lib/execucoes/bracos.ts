@@ -13,7 +13,7 @@ export const BRACOS: Catalogo = {
     const base = emPeFirme();
     return {
       receita: {
-        cena: [{ tipo: 'barra', em: 'maos', comprimento: 1.2 }],
+        cena: [{ tipo: 'barra', em: 'maos', comprimento: 1.2, anilhas: true }],
         quadros: ciclo({
           primeira: 'concentrica',
           pose: (t) => {
@@ -22,7 +22,7 @@ export const BRACOS: Catalogo = {
             return { ...base, rot: { ...base.rot, ombroE: [o, 0, 0], ombroD: [o, 0, 0], cotoveloE: [c, 0, 0], cotoveloD: [c, 0, 0] } };
           },
         }),
-        camera: { azimute: 75, elevacao: 8, distancia: 2.6 },
+        camera: { azimute: 75, elevacao: 8 },
         contatos: [
           { tipo: 'apoio', ponto: 'peE', eixo: 'xyz' },
           { tipo: 'apoio', ponto: 'peD', eixo: 'xyz' },
@@ -30,7 +30,6 @@ export const BRACOS: Catalogo = {
           { tipo: 'distanciaFixa', a: 'maoE', b: 'maoD' },
           { tipo: 'simetria' },
         ],
-        musculoDestaque: ['ombroE', 'ombroD'],
       },
       descricao: 'Em pé, a barra sobe dobrando só os cotovelos até perto dos ombros e desce devagar até esticar os braços.',
       explicacao: {

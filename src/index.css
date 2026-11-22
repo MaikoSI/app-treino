@@ -114,6 +114,12 @@
   --mancha-4: rgb(255 149 0 / 0.22);
   --sombra-cartao: var(--vidro-sombra);
   --sombra-flutuante: 0 12px 40px rgb(0 0 0 / 0.14), 0 2px 6px rgb(0 0 0 / 0.06);
+  /* Demonstração 3D (lidas em tempo de execução por components/Boneco3D) */
+  --boneco-corpo: #d8d2cc;
+  --boneco-estofado: #3a3a3c;
+  --boneco-metal: #aeaeb2;
+  --boneco-peso: #2c2c2e;
+  --boneco-chao: #e5e5ea;
 }
 
 /* Tema escuro: segue o sistema (sem escolha manual) ou a escolha "escuro" em Ajustes */
@@ -155,6 +161,11 @@
     --mancha-4: rgb(255 159 10 / 0.24);
     --sombra-cartao: var(--vidro-sombra);
     --sombra-flutuante: 0 12px 40px rgb(0 0 0 / 0.6);
+    --boneco-corpo: #c7c2bc;
+    --boneco-estofado: #2c2c2e;
+    --boneco-metal: #8e8e93;
+    --boneco-peso: #48484a;
+    --boneco-chao: #1c1c1e;
   }
 }
 :root[data-theme="escuro"] {
@@ -194,6 +205,11 @@
   --mancha-4: rgb(255 159 10 / 0.24);
   --sombra-cartao: var(--vidro-sombra);
   --sombra-flutuante: 0 12px 40px rgb(0 0 0 / 0.6);
+  --boneco-corpo: #c7c2bc;
+  --boneco-estofado: #2c2c2e;
+  --boneco-metal: #8e8e93;
+  --boneco-peso: #48484a;
+  --boneco-chao: #1c1c1e;
 }
 
 /*

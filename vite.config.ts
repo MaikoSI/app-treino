@@ -7,7 +7,8 @@ export default defineConfig({
   // Caminhos relativos: funciona em GitHub Pages (subpasta) e Netlify sem ajustes.
   base: './',
   // Sem source maps no build publicado: o site não expõe o código-fonte original.
-  build: { sourcemap: false },
+  // three.js (demonstração 3D, ~550 kB) fica num pedaço próprio carregado sob demanda; o aviso passa a valer acima disso.
+  build: { sourcemap: false, chunkSizeWarningLimit: 600 },
   define: {
     __VERSAO__: JSON.stringify(process.env.npm_package_version ?? '0.0.0'),
   },

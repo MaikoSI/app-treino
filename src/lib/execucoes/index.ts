@@ -7,7 +7,7 @@ import { PEITO } from './peito';
 import { PERNAS } from './pernas';
 import type { Catalogo, Execucao } from './tipos';
 
-export type { Execucao, Explicacao } from './tipos';
+export type { Execucao } from './tipos';
 
 const CATALOGO: Catalogo = { ...PEITO, ...COSTAS, ...OMBROS, ...BRACOS, ...PERNAS, ...ABDOMEN };
 

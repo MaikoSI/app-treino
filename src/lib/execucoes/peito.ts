@@ -36,7 +36,7 @@ export const PEITO: Catalogo = {
             );
           },
         }),
-        camera: { azimute: 70, elevacao: 20, distancia: 2.6 },
+        camera: { azimute: 70, elevacao: 20 },
         contatos: [
           { tipo: 'apoio', ponto: 'quadril', eixo: 'xyz' },
           { tipo: 'apoio', ponto: 'peE', eixo: 'xyz' },
@@ -44,7 +44,6 @@ export const PEITO: Catalogo = {
           { tipo: 'distanciaFixa', a: 'maoE', b: 'maoD' },
           { tipo: 'simetria' },
         ],
-        musculoDestaque: ['ombroE', 'ombroD'],
       },
       descricao: 'Deitado no banco reto, a barra desce devagar até o meio do peito e sobe até esticar os braços.',
       explicacao: {

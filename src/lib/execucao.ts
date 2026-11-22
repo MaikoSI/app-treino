@@ -18,7 +18,8 @@ export type Equipamento3D =
   | { tipo: 'tubo'; de: Vec3; ate: Vec3; raio?: number }
   /** Barra olímpica com anilhas; com 'maos' fica alinhada às duas mãos. */
   | { tipo: 'barra'; em: Fixacao; comprimento?: number; anilhas?: boolean; desloc?: Vec3 }
-  | { tipo: 'halter'; em: 'maoE' | 'maoD' }
+  /** Halter na mão; pegada neutra = cabo apontando para a frente da mão (palma virada para o corpo). */
+  | { tipo: 'halter'; em: 'maoE' | 'maoD'; pegada?: 'neutra' | 'pronada' }
   /** Cabo da polia: da roldana até o ponto preso, com o acessório na ponta. */
   | { tipo: 'cabo'; de: Vec3; ate: Fixacao; acessorio: Acessorio }
   /** Peça móvel de máquina (plataforma, rolo, pegador) que acompanha um ponto do corpo. */
@@ -43,11 +44,9 @@ export type Contato =
 export interface ReceitaExecucao {
   cena: Equipamento3D[];
   quadros: Quadro[];
-  /** Câmera inicial: azimute 0 = de frente para o boneco em pé, 90 = pela esquerda dele. Graus e metros. */
-  camera: { azimute: number; elevacao: number; distancia: number };
+  /** Câmera inicial (graus): azimute 0 = de frente para o boneco em pé, 90 = pela esquerda dele. A distância se ajusta à cena. */
+  camera: { azimute: number; elevacao: number };
   contatos: Contato[];
-  /** Articulações cujos segmentos ganham a cor de destaque (músculo-alvo). */
-  musculoDestaque: Articulacao[];
   /** Exercício parado (ex.: prancha): dispensa a regra de ritmo. */
   isometrica?: boolean;
 }
