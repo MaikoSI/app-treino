@@ -13,6 +13,7 @@ npm run dev          # dev server on all interfaces (phone on same Wi-Fi via the
 npm test             # Vitest, all tests (npm run test:watch for watch mode)
 npx vitest run src/lib/forca.test.ts      # single file
 npx vitest run -t "sugestaoProgressao"    # tests matching a name
+npm run e2e          # Playwright end-to-end (builds and serves dist/ on :4173; first run: npx playwright install chromium)
 npm run typecheck    # tsc --noEmit
 npm run lint         # Biome: lint + format check (CI fails on errors)
 npm run knip         # Knip: unused files, exports and dependencies (CI fails on findings)
@@ -111,6 +112,10 @@ All styling goes through the design tokens in `src/index.css` (colors, type, spa
 
 - DB tests use `import 'fake-indexeddb/auto'` and reset with `await db.delete(); await db.open();` in `beforeEach`.
 - In dev builds, `window.db` exposes the Dexie instance (`main.tsx`), which is handy for seeding data from the browser console.
+
+## End-to-end tests
+
+`e2e/` (Playwright, emulated Pixel 7, production build with service worker): onboarding, full workout, resume after closing the app, backup export → restore on a fresh device. Each test starts with an empty IndexedDB. Use role/label locators (the app's aria-labels), helpers in `e2e/ajudantes.ts`. When a flow's labels change, update these tests.
 
 ## CI
 
