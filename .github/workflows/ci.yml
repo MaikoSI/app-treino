@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write # só para o Codecov confirmar a identidade do repositório (OIDC)
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -36,8 +37,16 @@ jobs:
         run: npm run knip
       - name: Tipos
         run: npm run typecheck
-      - name: Testes
-        run: npm test
+      - name: Testes (com cobertura)
+        run: npm run test:cobertura
+      - name: Enviar cobertura ao Codecov
+        # OIDC: o GitHub prova a identidade do repositório; nenhum token guardado.
+        # Não derruba o CI se o Codecov estiver fora do ar ou ainda não ativado.
+        uses: codecov/codecov-action@v5
+        with:
+          use_oidc: true
+          files: coverage/lcov.info
+          fail_ci_if_error: false
       - name: Navegador dos testes end-to-end
         run: npx playwright install --with-deps chromium
       - name: Testes end-to-end (Playwright)
