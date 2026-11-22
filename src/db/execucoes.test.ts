@@ -4,29 +4,7 @@ import { execucaoDe, NOMES_COM_EXECUCAO } from '../lib/execucoes';
 import { EXERCICIOS_INICIAIS } from './exerciciosIniciais';
 
 /** Exercícios prontos que ainda não têm demonstração. Encolhe a cada lote; no fim, vazio. */
-const PENDENTES: string[] = [
-  'Agachamento no Smith',
-  'Leg press 45°',
-  'Hack machine',
-  'Cadeira extensora',
-  'Agachamento búlgaro',
-  'Afundo',
-  'Mesa flexora',
-  'Cadeira flexora',
-  'Flexora em pé',
-  'Stiff',
-  'Elevação pélvica',
-  'Cadeira abdutora',
-  'Glúteo na polia',
-  'Agachamento sumô',
-  'Panturrilha em pé',
-  'Panturrilha sentado',
-  'Panturrilha no leg press',
-  'Abdominal supra',
-  'Abdominal na polia',
-  'Elevação de pernas',
-  'Prancha (segundos)',
-];
+const PENDENTES: string[] = ['Abdominal supra', 'Abdominal na polia', 'Elevação de pernas', 'Prancha (segundos)'];
 
 const DIRECAO = /sobe|suba|desce|desça|empurre|puxe|estenda|estique|flexione|dobre|leve|abra|feche|levante|abaixe|eleve|segure|mantenha/i;
 
