@@ -109,6 +109,14 @@ All styling goes through the design tokens in `src/index.css` (colors, type, spa
 
 `components/MapaMuscular.tsx` draws front/back SVG figures from `grupoMuscular` + `secundarios` (via `lib/volume.ts:creditos`), so it works for user-created exercises too. Left-side shapes are mirrored; colors are opaque `color-mix` of theme tokens so overlapping shapes don't show seams. `MapaMuscular.test.ts` asserts every `GRUPOS_MUSCULARES` entry is drawn: add a shape when adding a group. Shown on `/exercicios/:id` (`ExercicioDetalhe`), in the selector's ⓘ button and in the workout's exercise menu.
 
+## Demonstração 3D ("Como fazer")
+
+Every seed exercise has an animated 3D mannequin plus a written explanation, shown on `/exercicios/:id` and in the workout (tap the exercise name or "Como fazer" in its menu). User-created exercises get a free-text note instead (`Exercicio.comoFazer`, `db/exercicios.ts:salvarComoFazer`).
+
+- **Pure part (`src/lib/`)**: `esqueleto.ts` (skeleton, joint limits, forward kinematics; Euler XYZ in degrees, y up, z forward, x = mannequin's left; shoulder/hip/elbow flexion = X negative, knee flexion = X positive, spine forward = X positive, lying supine = root X −90), `ik.ts` (damped least squares, used to put hands and feet where they belong), `execucao.ts` (recipe types, `poseNoTempo`, `validarReceita`). Recipes live in `lib/execucoes/<grupo>.ts`, built with the helpers in `construir.ts` (`ciclo`, `maosEm`, `bracosEm`, `pesNoChao`, `emPeFirme`, `sentado`, `deitadoNoBanco`…) and scenes from `cenas.ts`.
+- **Authoring rules**: each recipe declares its `contatos` (feet/hips/hands that must not slide, bars whose hands keep their distance, symmetry) and `validarReceita` checks them plus joint limits and pace (eccentric ≥1.5 s, concentric ≥0.7 s unless `isometrica`). `src/db/execucoes.test.ts` requires every seed exercise to have a valid recipe and a complete pt-BR explanation (`posicao`, `execucao` with a direction verb, `respiracao`, `erros`). Adding or renaming a seed exercise means adding its recipe. Look at the result in the real renderer (reduced-motion shows the start/end poses) before committing: valid numbers can still look wrong.
+- **Rendering (`src/components/`)**: three.js is only imported by `Boneco3D.tsx` and `cena3d/*`, which load lazily (`ComoFazer` → lazy `ComoFazerConteudo` → `Demonstracao` → lazy `Boneco3D`), so the initial bundle doesn't carry it. The working muscle is highlighted with `--destaque`; mannequin and equipment colors are the `--boneco-*` tokens. Animation pauses off-screen and in background tabs; `prefers-reduced-motion` shows still start/end poses (one pose for isometric exercises); no WebGL shows a text notice.
+
 ## Testing notes
 
 - DB tests use `import 'fake-indexeddb/auto'` and reset with `await db.delete(); await db.open();` in `beforeEach`.
