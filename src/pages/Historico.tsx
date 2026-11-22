@@ -47,7 +47,7 @@ export default function Historico() {
     <>
       <Cabecalho titulo="Histórico" />
       <div className="flex flex-col gap-4 px-4">
-        <section className="rounded-cartao bg-cartao p-4 shadow-cartao" aria-label="Calendário de treinos">
+        <section className="rounded-cartao vidro-fino p-4" aria-label="Calendário de treinos">
           <div className="mb-3 flex items-center justify-between">
             <button
               type="button"
@@ -107,7 +107,7 @@ export default function Historico() {
               <li key={s.id}>
                 <Link
                   to={`/historico/${s.id}`}
-                  className="flex min-h-16 items-center gap-3 rounded-cartao bg-cartao p-4 shadow-cartao active:bg-cartao-2"
+                  className="flex min-h-16 items-center gap-3 rounded-cartao vidro-fino p-4 active:bg-cartao-2"
                 >
                   <div className="w-12 shrink-0 text-center">
                     <p className="text-2xl font-semibold leading-none">{new Date(s.inicio).getDate()}</p>

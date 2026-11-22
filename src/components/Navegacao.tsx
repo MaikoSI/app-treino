@@ -11,15 +11,16 @@ const itens = [
 
 export function Navegacao() {
   return (
-    <nav className="pb-seguro fixed inset-x-0 bottom-0 z-30 vidro border-t border-borda/60">
-      <ul className="mx-auto flex max-w-lg">
+    // Barra de abas flutuante, em pílula de vidro
+    <nav className="pb-flutuante pointer-events-none fixed inset-x-0 bottom-0 z-30 px-4">
+      <ul className="vidro-flutuante pointer-events-auto mx-auto flex max-w-md rounded-full p-1">
         {itens.map(({ para, rotulo, Icone }) => (
           <li key={para} className="flex-1">
             <NavLink
               to={para}
               end={para === '/'}
               className={({ isActive }) =>
-                `flex min-h-14 flex-col items-center justify-center gap-0.5 text-[0.6875rem] font-medium ${isActive ? 'text-primaria-texto' : 'text-secundario'}`
+                `pressionavel flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-full text-[0.6875rem] font-medium ${isActive ? 'bg-cartao-2 text-primaria-texto' : 'text-secundario'}`
               }
             >
               <Icone />

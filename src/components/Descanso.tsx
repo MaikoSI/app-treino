@@ -135,26 +135,28 @@ export function BarraDescanso({
   const btn = 'pressionavel min-h-11 rounded-full px-4 font-semibold';
 
   return (
-    <div className="barra-entra pb-seguro vidro fixed inset-x-0 bottom-0 z-40 border-t border-borda/60">
-      <div className="h-1.5 bg-trilho">
-        <div className="h-full bg-destaque transition-[width] duration-200" style={{ width: `${progresso * 100}%` }} />
-      </div>
-      <div className="mx-auto flex max-w-lg items-center gap-2 px-4 py-3">
-        <div className="flex-1">
-          <p className="text-xs text-secundario">Descanso</p>
-          <p className="text-4xl leading-none font-semibold text-destaque-texto tabular-nums" aria-live="off">
-            {duracao(Math.max(0, restanteMs) + 999)}
-          </p>
+    <div className="barra-entra pb-flutuante fixed inset-x-0 bottom-0 z-40 px-3">
+      <div className="vidro-flutuante mx-auto max-w-lg overflow-hidden rounded-[28px]">
+        <div className="h-1.5 bg-trilho">
+          <div className="h-full bg-destaque transition-[width] duration-200" style={{ width: `${progresso * 100}%` }} />
         </div>
-        <button type="button" className={`${btn} bg-cartao-2 text-primaria-texto`} onClick={() => aoAjustar(-15)}>
-          −15s
-        </button>
-        <button type="button" className={`${btn} bg-cartao-2 text-primaria-texto`} onClick={() => aoAjustar(15)}>
-          +15s
-        </button>
-        <button type="button" className={`${btn} bg-primaria text-sobre-primaria`} onClick={aoPular}>
-          Pular
-        </button>
+        <div className="flex items-center gap-2 px-4 py-3">
+          <div className="flex-1">
+            <p className="text-xs text-secundario">Descanso</p>
+            <p className="text-4xl leading-none font-semibold text-destaque-texto tabular-nums" aria-live="off">
+              {duracao(Math.max(0, restanteMs) + 999)}
+            </p>
+          </div>
+          <button type="button" className={`${btn} bg-cartao-2 text-primaria-texto`} onClick={() => aoAjustar(-15)}>
+            −15s
+          </button>
+          <button type="button" className={`${btn} bg-cartao-2 text-primaria-texto`} onClick={() => aoAjustar(15)}>
+            +15s
+          </button>
+          <button type="button" className={`${btn} bg-primaria text-sobre-primaria`} onClick={aoPular}>
+            Pular
+          </button>
+        </div>
       </div>
     </div>
   );

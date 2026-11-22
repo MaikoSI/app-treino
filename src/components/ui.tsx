@@ -11,14 +11,14 @@ import { usePresenca } from './usePresenca';
 type Variante = 'primario' | 'secundario' | 'fantasma' | 'perigo';
 
 const estilos: Record<Variante, string> = {
-  /** Ação principal: azul sólido, texto branco. */
-  primario: 'bg-primaria text-sobre-primaria font-semibold',
-  /** Secundária: cinza translúcido, texto azul. */
-  secundario: 'bg-cartao-2 text-primaria-texto font-medium',
+  /** Ação principal: azul sólido, texto branco (sólido para manter 4,7:1), com brilho na borda de cima. */
+  primario: 'bg-primaria text-sobre-primaria font-semibold shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_4px_14px_rgb(0_113_227/0.3)]',
+  /** Secundária: pílula de vidro, texto azul. */
+  secundario: 'vidro-fino text-primaria-texto font-medium',
   /** Texto/link: só o texto azul, sem fundo. */
   fantasma: 'bg-transparent text-primaria-texto',
-  /** Destrutiva: vermelho. */
-  perigo: 'bg-cartao-2 text-alerta-texto font-medium',
+  /** Destrutiva: pílula de vidro, texto vermelho. */
+  perigo: 'vidro-fino text-alerta-texto font-medium',
 };
 
 /** Indicador de atividade (gira; parado com "reduzir movimento"). */
@@ -67,15 +67,12 @@ export function Botao({
     });
   }
 
-  const tamanho = grande
-    ? 'min-h-14 rounded-controle px-5 text-[1.0625rem]'
-    : pequeno
-      ? 'min-h-11 rounded-full px-4 text-[0.9375rem]'
-      : 'min-h-12 rounded-controle px-4 text-[1.0625rem]';
+  // Botões em pílula (liquid glass)
+  const tamanho = grande ? 'min-h-14 px-6 text-[1.0625rem]' : pequeno ? 'min-h-11 px-4 text-[0.9375rem]' : 'min-h-12 px-5 text-[1.0625rem]';
   return (
     <button
       type="button"
-      className={`pressionavel inline-flex items-center justify-center gap-2 select-none disabled:opacity-40 ${tamanho} ${estilos[variante]} ${className}`}
+      className={`pressionavel inline-flex items-center justify-center gap-2 rounded-full select-none disabled:opacity-40 ${tamanho} ${estilos[variante]} ${className}`}
       onClick={clicar}
       disabled={disabled || ocupado}
       aria-busy={ocupado || undefined}
@@ -89,14 +86,14 @@ export function Botao({
 
 /** Superfície em camada: branca sobre o fundo cinza (no escuro, cinza sobre preto). */
 export function Cartao({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-cartao bg-cartao p-4 shadow-cartao ${className}`}>{children}</div>;
+  return <div className={`rounded-cartao vidro-fino p-4 ${className}`}>{children}</div>;
 }
 
 /** Cabeçalho de página com vidro. Com `voltar`, mostra a seta de voltar. */
 export function Cabecalho({ titulo, voltar, acao }: { titulo: string; voltar?: boolean; acao?: ReactNode }) {
   const navigate = useNavigate();
   return (
-    <header className="pt-seguro vidro sticky top-0 z-20">
+    <header className="pt-seguro vidro sticky top-0 z-20 border-b border-(--vidro-borda)">
       <div className="flex min-h-14 items-center gap-1 px-4">
         {voltar && (
           <button
@@ -153,7 +150,7 @@ export function Painel({
         role="dialog"
         aria-modal="true"
         aria-label={visivel.titulo}
-        className={`pb-seguro vidro flex max-h-[90dvh] w-full max-w-lg flex-col rounded-t-[20px] shadow-flutuante ${saindo ? 'sheet-sai' : 'sheet-entra'}`}
+        className={`pb-seguro vidro-flutuante flex max-h-[90dvh] w-full max-w-lg flex-col rounded-t-[28px] border-b-0 ${saindo ? 'sheet-sai' : 'sheet-entra'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div aria-hidden="true" className="mx-auto mt-2 h-1.5 w-9 rounded-full bg-secundario/40" />
@@ -302,7 +299,7 @@ export function Esqueleto({ className = '' }: { className?: string }) {
 /** Linhas de lista em skeleton (ex.: exercícios, histórico). */
 export function EsqueletoLista({ linhas = 6 }: { linhas?: number }) {
   return (
-    <div aria-hidden="true" className="divide-y divide-borda/70 rounded-cartao bg-cartao px-4 shadow-cartao">
+    <div aria-hidden="true" className="divide-y divide-borda/70 rounded-cartao vidro-fino px-4">
       {Array.from({ length: linhas }, (_, i) => (
         <div key={i} className="flex min-h-14 flex-col justify-center gap-1.5 py-3">
           <Esqueleto className={`h-4 ${LARGURAS[i % LARGURAS.length]}`} />
@@ -344,7 +341,7 @@ export function Carregando({ titulo, voltar, formato = 'cartoes' }: { titulo?: s
           <>
             <Esqueleto className="h-14" />
             {[0, 1].map((i) => (
-              <div key={i} aria-hidden="true" className="flex flex-col gap-2 rounded-cartao bg-cartao p-4 shadow-cartao">
+              <div key={i} aria-hidden="true" className="flex flex-col gap-2 rounded-cartao vidro-fino p-4">
                 <Esqueleto className="h-6 w-1/2" />
                 <Esqueleto className="h-4 w-2/3" />
                 {[0, 1, 2].map((j) => (

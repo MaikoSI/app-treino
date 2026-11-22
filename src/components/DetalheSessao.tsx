@@ -97,7 +97,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
 
 function Numero({ rotulo, valor }: { rotulo: string; valor: string }) {
   return (
-    <div className="rounded-cartao bg-cartao shadow-cartao p-3 text-center">
+    <div className="rounded-cartao vidro-fino p-3 text-center">
       <p className="text-xs text-secundario">{rotulo}</p>
       <p className="mt-1 text-2xl leading-none font-semibold tabular-nums">{valor}</p>
     </div>

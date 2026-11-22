@@ -24,10 +24,7 @@ export default function Progresso() {
         <Cabecalho titulo="Progresso" />
         <Vazio>Finalize seu primeiro treino para ver gráficos e recordes aqui.</Vazio>
         <div className="px-4">
-          <Link
-            to="/corpo"
-            className="flex min-h-14 items-center justify-between rounded-cartao bg-cartao shadow-cartao px-4 active:bg-cartao-2"
-          >
+          <Link to="/corpo" className="flex min-h-14 items-center justify-between rounded-cartao vidro-fino px-4 active:bg-cartao-2">
             <span className="font-semibold">Peso corporal e nutrição</span>
             <IconeVoltar className="rotate-180 text-secundario" />
           </Link>
@@ -64,14 +61,11 @@ export default function Progresso() {
     <>
       <Cabecalho titulo="Progresso" />
       <div className="flex flex-col gap-6 px-4">
-        <Link
-          to="/corpo"
-          className="flex min-h-14 items-center justify-between rounded-cartao bg-cartao shadow-cartao px-4 active:bg-cartao-2"
-        >
+        <Link to="/corpo" className="flex min-h-14 items-center justify-between rounded-cartao vidro-fino px-4 active:bg-cartao-2">
           <span className="font-semibold">Peso corporal e nutrição</span>
           <IconeVoltar className="rotate-180 text-secundario" />
         </Link>
-        <section className="rounded-cartao bg-cartao p-4 shadow-cartao">
+        <section className="rounded-cartao vidro-fino p-4">
           <h2 className="font-semibold">Séries por grupo muscular</h2>
           <div className="mt-2 flex items-center justify-between">
             <button
@@ -110,7 +104,7 @@ export default function Progresso() {
               <li key={r.exercicioId}>
                 <Link
                   to={`/progresso/${r.exercicioId}`}
-                  className="flex min-h-16 items-center gap-3 rounded-cartao bg-cartao p-4 shadow-cartao active:bg-cartao-2"
+                  className="flex min-h-16 items-center gap-3 rounded-cartao vidro-fino p-4 active:bg-cartao-2"
                 >
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-semibold">{r.ex?.nome ?? 'Exercício removido'}</p>

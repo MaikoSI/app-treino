@@ -227,7 +227,7 @@ export default function Ajuda() {
 
         <Link
           to="/sobre"
-          className="flex min-h-12 items-center justify-center rounded-cartao bg-cartao shadow-cartao px-4 text-center font-semibold text-primaria-texto"
+          className="flex min-h-12 items-center justify-center rounded-cartao vidro-fino px-4 text-center font-semibold text-primaria-texto"
         >
           Por que o app sugere isso? Veja a base científica
         </Link>
@@ -260,7 +260,7 @@ function abrirSecao(id: string) {
 
 function Passo({ n, titulo, link, children }: { n: number; titulo: string; link?: { para: string; rotulo: string }; children: ReactNode }) {
   return (
-    <li className="flex gap-3 rounded-cartao bg-cartao p-4 shadow-cartao">
+    <li className="flex gap-3 rounded-cartao vidro-fino p-4">
       <span
         aria-hidden="true"
         className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primaria font-semibold text-sobre-primaria"
@@ -285,7 +285,7 @@ function Passo({ n, titulo, link, children }: { n: number; titulo: string; link?
 
 function Secao({ id, titulo, Icone, children }: { id: string; titulo: string; Icone: Icone; children: ReactNode }) {
   return (
-    <details id={`ajuda-${id}`} className="group scroll-mt-20 rounded-cartao bg-cartao shadow-cartao">
+    <details id={`ajuda-${id}`} className="group scroll-mt-20 rounded-cartao vidro-fino">
       <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3 font-semibold [&::-webkit-details-marker]:hidden">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-cartao-2 text-primaria-texto">
           <Icone width={20} height={20} />

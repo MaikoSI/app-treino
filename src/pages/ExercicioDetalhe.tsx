@@ -68,7 +68,7 @@ export default function ExercicioDetalhe() {
 
         <Link
           to={`/progresso/${exercicio.id}`}
-          className="flex min-h-12 items-center justify-center rounded-cartao bg-cartao shadow-cartao font-semibold text-primaria-texto active:bg-cartao-2"
+          className="flex min-h-12 items-center justify-center rounded-cartao vidro-fino font-semibold text-primaria-texto active:bg-cartao-2"
         >
           Ver minha evolução neste exercício
         </Link>
