@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Link, useParams } from 'react-router-dom';
+import { ComoFazer } from '../components/ComoFazer';
 import { MapaMuscular } from '../components/MapaMuscular';
 import { Cabecalho, Carregando, Cartao, Vazio } from '../components/ui';
 import { db } from '../db';
@@ -40,6 +41,11 @@ export default function ExercicioDetalhe() {
           ))}
           {exercicio.personalizado && <span className="rounded-full bg-cartao-2 px-3 py-1 text-secundario">Criado por você</span>}
         </div>
+
+        <Cartao>
+          <h2 className="mb-3 font-semibold">Como fazer</h2>
+          <ComoFazer exercicio={exercicio} />
+        </Cartao>
 
         <Cartao>
           <h2 className="mb-3 font-semibold">Músculos trabalhados</h2>

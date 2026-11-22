@@ -46,6 +46,8 @@ export interface Exercicio {
   tipo: TipoExercicio;
   equipamento: Equipamento;
   personalizado: boolean;
+  /** Anotações de execução escritas pelo usuário (exercícios criados por ele). */
+  comoFazer?: string;
 }
 
 export interface Programa {
