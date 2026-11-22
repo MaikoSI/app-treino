@@ -1,5 +1,4 @@
 import {
-  ArrowLeftRight,
   Calendar,
   ChartLine,
   Check,
@@ -47,7 +46,6 @@ export const IconeMais = icone(Plus);
 export const IconeCima = icone(ChevronUp);
 export const IconeBaixo = icone(ChevronDown);
 export const IconeLixo = icone(Trash2);
-export const IconeTrocar = icone(ArrowLeftRight);
 export const IconeFogo = icone(Flame);
 export const IconeTrofeu = icone(Trophy);
 export const IconeRelogio = icone(Timer);
