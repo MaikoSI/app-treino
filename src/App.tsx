@@ -40,6 +40,8 @@ export default function App() {
 
   return (
     <div className={`mx-auto min-h-dvh max-w-lg ${semNavegacao ? '' : 'pb-24'}`}>
+      {/* key = rota: cada troca de tela reinicia a animação de entrada */}
+      <div key={pathname} className="pagina-entra">
       <Routes>
         <Route path="/" element={<Inicio />} />
         <Route path="/boas-vindas" element={<BoasVindas />} />
@@ -67,6 +69,7 @@ export default function App() {
         <Route path="/ajuda" element={<Ajuda />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </div>
       {!semNavegacao && <Navegacao />}
     </div>
   );

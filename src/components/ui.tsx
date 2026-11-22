@@ -1,6 +1,7 @@
-import { useEffect, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { useEffect, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconeVoltar, IconeX } from './Icones';
+import { usePresenca } from './usePresenca';
 
 /**
  * Componentes base no estilo iOS (Human Interface Guidelines). Cores, raios, sombras e
@@ -81,6 +82,11 @@ export function Painel({
   titulo: string;
   children: ReactNode;
 }) {
+  const { montado, saindo } = usePresenca(aberto);
+  // Durante a saída, mostra o último conteúdo (quem chama costuma limpar o estado ao fechar).
+  const ultimo = useRef({ titulo, children });
+  if (aberto) ultimo.current = { titulo, children };
+
   useEffect(() => {
     if (!aberto) return;
     const esc = (e: KeyboardEvent) => e.key === 'Escape' && aoFechar();
@@ -88,19 +94,23 @@ export function Painel({
     return () => window.removeEventListener('keydown', esc);
   }, [aberto, aoFechar]);
 
-  if (!aberto) return null;
+  if (!montado) return null;
+  const visivel = ultimo.current;
   return (
-    <div className="fundo-entra fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={aoFechar}>
+    <div
+      className={`fixed inset-0 z-50 flex items-end justify-center bg-black/40 ${saindo ? 'fundo-sai pointer-events-none' : 'fundo-entra'}`}
+      onClick={aoFechar}
+    >
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={titulo}
-        className="sheet-entra pb-seguro vidro flex max-h-[90dvh] w-full max-w-lg flex-col rounded-t-[20px] shadow-flutuante"
+        aria-label={visivel.titulo}
+        className={`pb-seguro vidro flex max-h-[90dvh] w-full max-w-lg flex-col rounded-t-[20px] shadow-flutuante ${saindo ? 'sheet-sai' : 'sheet-entra'}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div aria-hidden="true" className="mx-auto mt-2 h-1.5 w-9 rounded-full bg-secundario/40" />
         <div className="flex items-center gap-2 px-4 pt-1 pb-2">
-          <h2 className="flex-1 text-lg font-semibold tracking-tight">{titulo}</h2>
+          <h2 className="flex-1 text-lg font-semibold tracking-tight">{visivel.titulo}</h2>
           <button
             type="button"
             aria-label="Fechar"
@@ -112,7 +122,7 @@ export function Painel({
             </span>
           </button>
         </div>
-        <div className="overflow-y-auto px-4 pb-4">{children}</div>
+        <div className="overflow-y-auto px-4 pb-4">{visivel.children}</div>
       </div>
     </div>
   );

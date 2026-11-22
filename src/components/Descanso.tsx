@@ -138,7 +138,7 @@ export function BarraDescanso({
   const btn = 'pressionavel min-h-11 rounded-full px-4 font-semibold';
 
   return (
-    <div className="pb-seguro vidro fixed inset-x-0 bottom-0 z-40 border-t border-borda/60">
+    <div className="barra-entra pb-seguro vidro fixed inset-x-0 bottom-0 z-40 border-t border-borda/60">
       <div className="h-1.5 bg-trilho">
         <div className="h-full bg-destaque transition-[width] duration-200" style={{ width: `${progresso * 100}%` }} />
       </div>
