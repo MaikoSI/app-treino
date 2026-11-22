@@ -22,7 +22,8 @@
         "noNonNullAssertion": "off"
       },
       "suspicious": {
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noImportCycles": "error"
       }
     }
   },
@@ -54,6 +55,92 @@
         "rules": {
           "complexity": {
             "noImportantStyles": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/lib/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["../db/*", "!../db/tipos", "../pages/*", "../components/*", "../App", "../main"],
+                    "message": "src/lib guarda regras puras: do banco, só ../db/tipos (tipos e constantes); sem React, Dexie, telas ou componentes. Hooks ficam em components/ ou db/."
+                  }
+                ],
+                "paths": {
+                  "react": "src/lib guarda regras puras: do banco, só ../db/tipos (tipos e constantes); sem React, Dexie, telas ou componentes. Hooks ficam em components/ ou db/.",
+                  "react-dom": "src/lib guarda regras puras: do banco, só ../db/tipos (tipos e constantes); sem React, Dexie, telas ou componentes. Hooks ficam em components/ ou db/.",
+                  "dexie": "src/lib guarda regras puras: do banco, só ../db/tipos (tipos e constantes); sem React, Dexie, telas ou componentes. Hooks ficam em components/ ou db/.",
+                  "dexie-react-hooks": "src/lib guarda regras puras: do banco, só ../db/tipos (tipos e constantes); sem React, Dexie, telas ou componentes. Hooks ficam em components/ ou db/."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/db/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["../pages/*", "../components/*", "../App", "../main"],
+                    "message": "A camada de dados não conhece telas nem componentes."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["../pages/*", "../App", "../main"],
+                    "message": "Componentes são reutilizáveis: não importam telas."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/pages/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": ["./*"],
+                    "message": "Uma tela não importa outra; o que for compartilhado vai para components/."
+                  }
+                ]
+              }
+            }
           }
         }
       }

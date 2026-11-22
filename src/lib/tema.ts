@@ -1,4 +1,3 @@
-import { useSyncExternalStore } from 'react';
 import type { Tema } from '../db/tipos';
 
 export type TemaEfetivo = 'claro' | 'escuro';
@@ -6,9 +5,10 @@ export type TemaEfetivo = 'claro' | 'escuro';
 /** Cor da barra do navegador/sistema em cada tema (= cor de fundo). */
 const COR_BARRA: Record<TemaEfetivo, string> = { claro: '#F2F2F7', escuro: '#000000' };
 
-const CONSULTA_ESCURO = '(prefers-color-scheme: dark)';
+export const CONSULTA_ESCURO = '(prefers-color-scheme: dark)';
 
-function sistemaEscuro(): boolean {
+/** true quando o aparelho está no modo escuro agora. */
+export function sistemaEscuro(): boolean {
   return typeof matchMedia === 'function' && matchMedia(CONSULTA_ESCURO).matches;
 }
 
@@ -38,18 +38,6 @@ export function aplicarTema(tema: Tema): void {
   } catch {
     /* sem armazenamento: só pisca o tema do sistema ao abrir */
   }
-}
-
-function assinarSistema(avisar: () => void): () => void {
-  if (typeof matchMedia !== 'function') return () => {};
-  const mq = matchMedia(CONSULTA_ESCURO);
-  mq.addEventListener('change', avisar);
-  return () => mq.removeEventListener('change', avisar);
-}
-
-/** true quando o aparelho está no modo escuro; atualiza se o usuário trocar o modo com o app aberto. */
-export function useSistemaEscuro(): boolean {
-  return useSyncExternalStore(assinarSistema, sistemaEscuro, () => false);
 }
 
 /** Lê o valor atual de uma variável de cor do tema (ex.: "--destaque"). */
