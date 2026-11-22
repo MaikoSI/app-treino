@@ -17,7 +17,7 @@ export default function ExercicioDetalhe() {
   const config = useConfig();
   const exercicio = useLiveQuery(async () => (await db.exercicios.get(id)) ?? null, [id]);
 
-  if (exercicio === undefined || !config) return <Carregando />;
+  if (exercicio === undefined || !config) return <Carregando titulo="Exercício" voltar />;
   if (exercicio === null)
     return (
       <>

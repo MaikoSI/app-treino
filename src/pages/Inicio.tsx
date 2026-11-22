@@ -30,7 +30,7 @@ export default function Inicio() {
     return { programa, emAndamento, datas: concluidas.map((s) => s.inicio), dias, proximo, itens };
   }, []);
 
-  if (!dados || !config) return <Carregando />;
+  if (!dados || !config) return <Carregando titulo="Início" />;
   const { programa, emAndamento, datas, dias, proximo, itens } = dados;
   const meta = config.metaSemanal;
   const feitos = treinosNaSemana(datas);

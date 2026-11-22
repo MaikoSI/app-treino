@@ -18,7 +18,7 @@ export default function Corpo() {
   const [texto, setTexto] = useState('');
   const [verTodos, setVerTodos] = useState(false);
 
-  if (!config || !registros) return <Carregando />;
+  if (!config || !registros) return <Carregando titulo="Peso e nutrição" voltar />;
 
   const ultimo = registros.at(-1);
   const hoje = registros.find((r) => r.data === diaDoRegistro());

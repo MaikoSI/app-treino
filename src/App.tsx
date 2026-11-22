@@ -56,7 +56,7 @@ export default function App() {
         <Route
           path="/progresso/:id"
           element={
-            <Suspense fallback={<Carregando />}>
+            <Suspense fallback={<Carregando titulo="Exercício" voltar formato="grafico" />}>
               <ProgressoExercicio />
             </Suspense>
           }

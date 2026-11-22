@@ -5,7 +5,7 @@ import { EQUIPAMENTOS, GRUPOS_MUSCULARES, type Equipamento, type Exercicio, type
 import { Link } from 'react-router-dom';
 import { IconeAvancar, IconeInfo } from './Icones';
 import { MapaMuscular } from './MapaMuscular';
-import { Botao, Painel, Segmentado } from './ui';
+import { Botao, EsqueletoLista, Painel, Segmentado } from './ui';
 
 const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
@@ -46,7 +46,8 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
 
       <Botao onClick={() => setCriando(true)}>+ Criar exercício próprio</Botao>
 
-      <ul className="divide-y divide-borda/70 rounded-cartao bg-cartao px-4 shadow-cartao">
+      {todos === undefined && <EsqueletoLista />}
+      <ul className={`divide-y divide-borda/70 rounded-cartao bg-cartao px-4 shadow-cartao ${todos === undefined ? 'hidden' : ''}`}>
         {filtrados.map((ex) => {
           const conteudo = (
             <>

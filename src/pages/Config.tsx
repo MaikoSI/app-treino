@@ -19,7 +19,7 @@ export default function Config() {
   const arquivo = useRef<HTMLInputElement>(null);
   const persistente = useArmazenamentoPersistente();
 
-  if (!config) return <Carregando />;
+  if (!config) return <Carregando titulo="Ajustes" />;
 
   async function exportar() {
     const backup = await gerarBackup();

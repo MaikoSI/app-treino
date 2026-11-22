@@ -24,7 +24,7 @@ export default function Historico() {
     });
   }, []);
 
-  if (!dados) return <Carregando />;
+  if (!dados) return <Carregando titulo="Histórico" formato="lista" />;
 
   const doMes = dados.filter((s) => {
     const d = new Date(s.inicio);

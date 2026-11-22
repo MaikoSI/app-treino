@@ -17,7 +17,7 @@ export default function Progresso() {
   const series = useLiveQuery(() => historicoDeSeries(), []);
   const [semanasAtras, setSemanasAtras] = useState(0);
 
-  if (!series || !exercicios) return <Carregando />;
+  if (!series || !exercicios) return <Carregando titulo="Progresso" />;
   if (series.length === 0)
     return (
       <>

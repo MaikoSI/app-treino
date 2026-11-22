@@ -217,6 +217,89 @@ export function Vazio({ children }: { children: ReactNode }) {
   return <p className="px-4 py-10 text-center text-secundario">{children}</p>;
 }
 
-export function Carregando() {
-  return <div className="p-10 text-center text-secundario">Carregando…</div>;
+/** Bloco de skeleton: um retângulo que pulsa no lugar do conteúdo (parado com "reduzir movimento"). */
+export function Esqueleto({ className = '' }: { className?: string }) {
+  return <div aria-hidden="true" className={`animate-pulse rounded-controle bg-cartao-2 ${className}`} />;
+}
+
+/** Linhas de lista em skeleton (ex.: exercícios, histórico). */
+export function EsqueletoLista({ linhas = 6 }: { linhas?: number }) {
+  return (
+    <div aria-hidden="true" className="divide-y divide-borda/70 rounded-cartao bg-cartao px-4 shadow-cartao">
+      {Array.from({ length: linhas }, (_, i) => (
+        <div key={i} className="flex min-h-14 flex-col justify-center gap-1.5 py-3">
+          <Esqueleto className={`h-4 ${LARGURAS[i % LARGURAS.length]}`} />
+          <Esqueleto className="h-3 w-1/3" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const LARGURAS = ['w-3/5', 'w-1/2', 'w-2/3', 'w-2/5'];
+
+export type FormatoCarregando = 'cartoes' | 'lista' | 'treino' | 'grafico' | 'detalhe';
+
+/**
+ * Tela carregando: o cabeçalho real (se houver título) e um skeleton com o formato do
+ * conteúdo, para a página não "pular" quando os dados chegam. Leitores de tela ouvem "Carregando".
+ */
+export function Carregando({ titulo, voltar, formato = 'cartoes' }: { titulo?: string; voltar?: boolean; formato?: FormatoCarregando }) {
+  return (
+    <>
+      {titulo && <Cabecalho titulo={titulo} voltar={voltar} />}
+      <div role="status" aria-busy="true" className="flex flex-col gap-4 px-4 pt-2 pb-8">
+        <span className="sr-only">Carregando…</span>
+        {formato === 'cartoes' && (
+          <>
+            <Esqueleto className="h-28 rounded-cartao" />
+            <Esqueleto className="h-64 rounded-cartao" />
+            <Esqueleto className="h-16 rounded-cartao" />
+          </>
+        )}
+        {formato === 'lista' && (
+          <>
+            <Esqueleto className="h-12" />
+            <EsqueletoLista />
+          </>
+        )}
+        {formato === 'treino' && (
+          <>
+            <Esqueleto className="h-14" />
+            {[0, 1].map((i) => (
+              <div key={i} aria-hidden="true" className="flex flex-col gap-2 rounded-cartao bg-cartao p-4 shadow-cartao">
+                <Esqueleto className="h-6 w-1/2" />
+                <Esqueleto className="h-4 w-2/3" />
+                {[0, 1, 2].map((j) => (
+                  <Esqueleto key={j} className="h-12" />
+                ))}
+              </div>
+            ))}
+          </>
+        )}
+        {formato === 'grafico' && (
+          <>
+            <Esqueleto className="h-11" />
+            <Esqueleto className="h-64 rounded-cartao" />
+            <div className="grid grid-cols-2 gap-2">
+              <Esqueleto className="h-20 rounded-cartao" />
+              <Esqueleto className="h-20 rounded-cartao" />
+            </div>
+          </>
+        )}
+        {formato === 'detalhe' && (
+          <>
+            <Esqueleto className="h-5 w-1/3" />
+            <Esqueleto className="h-8 w-2/3" />
+            <div className="grid grid-cols-3 gap-2">
+              <Esqueleto className="h-16 rounded-cartao" />
+              <Esqueleto className="h-16 rounded-cartao" />
+              <Esqueleto className="h-16 rounded-cartao" />
+            </div>
+            <Esqueleto className="h-40 rounded-cartao" />
+          </>
+        )}
+      </div>
+    </>
+  );
 }

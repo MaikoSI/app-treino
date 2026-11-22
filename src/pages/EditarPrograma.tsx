@@ -31,7 +31,7 @@ export default function EditarPrograma() {
   const programa = useLiveQuery(async () => (await db.programas.get(programaId)) ?? null, [programaId]);
   const dias = useLiveQuery(() => diasDoPrograma(programaId), [programaId]);
 
-  if (programa === undefined || dias === undefined) return <Carregando />;
+  if (programa === undefined || dias === undefined) return <Carregando titulo="Editar programa" voltar />;
   if (programa === null) return <Vazio>Programa não encontrado.</Vazio>;
 
   async function moverDia(i: number, delta: number) {

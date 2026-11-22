@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IconeMenu } from '../components/Icones';
-import { Botao, Cabecalho, Cartao, Painel, Vazio } from '../components/ui';
+import { Botao, Cabecalho, Cartao, Painel, Vazio, Esqueleto } from '../components/ui';
 import { db } from '../db';
 import { criarProgramaVazio, definirAtivo, duplicarPrograma, excluirPrograma } from '../db/programas';
 import type { Programa } from '../db/tipos';
@@ -31,6 +31,7 @@ export default function Programas() {
           <Botao onClick={() => navigate('/programas/modelos')}>Modelos prontos</Botao>
         </div>
 
+        {programas === undefined && <Esqueleto className="h-20 rounded-cartao" />}
         {programas?.length === 0 && <Vazio>Nenhum programa ainda.</Vazio>}
 
         {programas?.map((p) => (

@@ -84,7 +84,7 @@ export default function Treino() {
 
   if (finalizadoId) return <Navigate to={`/resumo/${finalizadoId}`} replace />;
   if (sessao === null) return <Navigate to="/" replace />;
-  if (!sessao || !series || !config || !exercicios) return <Carregando />;
+  if (!sessao || !series || !config || !exercicios) return <Carregando formato="treino" />;
 
   const grupos = agruparPorExercicio(series);
   const feitas = series.filter((s) => s.concluida).length;

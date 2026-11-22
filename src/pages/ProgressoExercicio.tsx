@@ -49,7 +49,7 @@ export default function ProgressoExercicio() {
   const [periodo, setPeriodo] = useState(0);
   const cor = useCoresGrafico();
 
-  if (exercicio === undefined || !series) return <Carregando />;
+  if (exercicio === undefined || !series) return <Carregando titulo="Exercício" voltar formato="grafico" />;
 
   const desde = PERIODOS[periodo].dias ? Date.now() - PERIODOS[periodo].dias * 86_400_000 : 0;
   const pontos = serieTemporal(series).filter((p) => p.data >= desde);

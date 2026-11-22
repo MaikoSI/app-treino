@@ -27,7 +27,7 @@ export function DetalheSessao({ sessaoId }: { sessaoId: number }) {
   const dados = useDadosSessao(sessaoId);
   const exercicios = useExerciciosMap();
 
-  if (dados === undefined) return <Carregando />;
+  if (dados === undefined) return <Carregando formato="detalhe" />;
   if (dados === null) return <p className="p-6 text-center text-secundario">Treino não encontrado.</p>;
 
   const { sessao, series, recordes } = dados;
