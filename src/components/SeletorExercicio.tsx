@@ -3,8 +3,9 @@ import { useMemo, useState } from 'react';
 import { db } from '../db';
 import { EQUIPAMENTOS, GRUPOS_MUSCULARES, type Equipamento, type Exercicio, type GrupoMuscular, type TipoExercicio } from '../db/tipos';
 import { Link } from 'react-router-dom';
+import { IconeAvancar, IconeInfo } from './Icones';
 import { MapaMuscular } from './MapaMuscular';
-import { Botao, Painel } from './ui';
+import { Botao, Painel, Segmentado } from './ui';
 
 const semAcento = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
@@ -45,7 +46,7 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
 
       <Botao onClick={() => setCriando(true)}>+ Criar exercício próprio</Botao>
 
-      <ul className="divide-y divide-borda">
+      <ul className="divide-y divide-borda/70 rounded-cartao bg-cartao px-4 shadow-cartao">
         {filtrados.map((ex) => {
           const conteudo = (
             <>
@@ -71,19 +72,15 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
                     type="button"
                     aria-label={`Músculos trabalhados: ${ex.nome}`}
                     onClick={() => setVendo(ex)}
-                    className="flex size-12 shrink-0 items-center justify-center rounded-full text-lg font-bold text-secundario active:bg-cartao-2"
+                    className="pressionavel -mr-2 flex size-12 shrink-0 items-center justify-center rounded-full text-tinta"
                   >
-                    <span aria-hidden="true" className="flex size-7 items-center justify-center rounded-full border-2 border-current text-sm">
-                      i
-                    </span>
+                    <IconeInfo />
                   </button>
                 </div>
               ) : (
                 <Link to={`/exercicios/${ex.id}`} className="flex min-h-14 items-center gap-2 py-2 active:bg-cartao-2">
                   <span className="flex min-w-0 flex-1 flex-col">{conteudo}</span>
-                  <span aria-hidden="true" className="text-secundario">
-                    ›
-                  </span>
+                  <IconeAvancar width={20} height={20} className="shrink-0 text-secundario/70" />
                 </Link>
               )}
             </li>
@@ -212,19 +209,15 @@ function FormNovoExercicio({
       </label>
       <fieldset className="flex flex-col gap-1">
         <legend className="mb-1 text-sm text-secundario">Tipo</legend>
-        <div className="grid grid-cols-2 gap-1 rounded-xl bg-cartao-2 p-1">
-          {(['composto', 'isolado'] as const).map((t) => (
-            <button
-              key={t}
-              type="button"
-              aria-pressed={tipo === t}
-              onClick={() => setTipo(t)}
-              className={`min-h-12 rounded-lg px-3 font-semibold capitalize ${tipo === t ? 'bg-primaria text-sobre-primaria' : 'text-secundario active:bg-borda'}`}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
+        <Segmentado
+          rotulo="Tipo"
+          valor={tipo}
+          aoMudar={setTipo}
+          opcoes={[
+            { valor: 'composto', rotulo: 'Composto' },
+            { valor: 'isolado', rotulo: 'Isolado' },
+          ]}
+        />
         <span className="text-xs text-secundario">
           Composto: vários músculos e cargas altas (6–10 reps, 2–3 min de descanso). Isolado: um músculo (10–15 reps, ~1,5 min).
         </span>

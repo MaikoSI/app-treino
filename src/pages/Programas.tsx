@@ -36,7 +36,7 @@ export default function Programas() {
         {programas?.map((p) => (
           <Cartao key={p.id} className={`flex items-center gap-2 ${p.ativo ? 'ring-2 ring-primaria' : ''}`}>
             <Link to={`/programas/${p.id}`} className="flex min-h-12 flex-1 flex-col justify-center">
-              <span className="flex items-center gap-2 text-lg font-bold">
+              <span className="flex items-center gap-2 text-lg font-semibold">
                 {p.nome}
                 {p.ativo && <span className="rounded-full bg-primaria px-2 py-0.5 text-xs font-semibold text-sobre-primaria">Ativo</span>}
               </span>

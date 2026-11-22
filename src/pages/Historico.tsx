@@ -44,7 +44,7 @@ export default function Historico() {
     <>
       <Cabecalho titulo="Histórico" />
       <div className="flex flex-col gap-4 px-4">
-        <section className="rounded-xl bg-cartao p-4" aria-label="Calendário de treinos">
+        <section className="rounded-cartao bg-cartao p-4 shadow-cartao" aria-label="Calendário de treinos">
           <div className="mb-3 flex items-center justify-between">
             <button type="button" aria-label="Mês anterior" onClick={() => mudarMes(-1)} className="flex size-12 items-center justify-center rounded-xl active:bg-cartao-2">
               <IconeVoltar />
@@ -74,7 +74,7 @@ export default function Historico() {
                   key={i}
                   aria-label={diasTreinados.has(dia) ? `Dia ${dia}: treinou` : undefined}
                   className={`mx-auto flex size-10 items-center justify-center rounded-full text-sm tabular-nums ${
-                    diasTreinados.has(dia) ? 'bg-concluido font-bold text-sobre-concluido' : ehHoje(dia) ? 'ring-1 ring-secundario' : 'text-secundario'
+                    diasTreinados.has(dia) ? 'bg-concluido font-semibold text-sobre-concluido' : ehHoje(dia) ? 'ring-1 ring-secundario' : 'text-secundario'
                   }`}
                 >
                   {dia}
@@ -93,9 +93,9 @@ export default function Historico() {
           <ul className="flex flex-col gap-2">
             {(doMes.length ? doMes : dados).map((s) => (
               <li key={s.id}>
-                <Link to={`/historico/${s.id}`} className="flex min-h-16 items-center gap-3 rounded-xl bg-cartao p-4 active:bg-cartao-2">
+                <Link to={`/historico/${s.id}`} className="flex min-h-16 items-center gap-3 rounded-cartao bg-cartao p-4 shadow-cartao active:bg-cartao-2">
                   <div className="w-12 shrink-0 text-center">
-                    <p className="font-display text-2xl font-bold leading-none">{new Date(s.inicio).getDate()}</p>
+                    <p className="text-2xl font-semibold leading-none">{new Date(s.inicio).getDate()}</p>
                     <p className="text-xs text-secundario">{new Date(s.inicio).toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</p>
                   </div>
                   <div className="min-w-0 flex-1">

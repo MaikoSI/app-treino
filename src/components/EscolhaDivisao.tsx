@@ -39,7 +39,7 @@ export function EscolhaDivisao({
                 setDias(n);
                 setAberta(divisoesPara(n)[0]?.chave ?? null);
               }}
-              className={`flex aspect-square flex-col items-center justify-center rounded-xl text-2xl font-bold ${
+              className={`flex aspect-square flex-col items-center justify-center rounded-xl text-2xl font-semibold ${
                 dias === n ? 'bg-primaria text-sobre-primaria' : 'bg-cartao-2 text-texto active:bg-borda'
               }`}
             >
@@ -90,7 +90,7 @@ function CartaoDivisao({
   return (
     <Cartao className={aberta ? 'ring-2 ring-primaria' : ''}>
       <button type="button" onClick={aoAbrir} aria-expanded={aberta} className="w-full text-left">
-        <p className="text-lg font-bold">{divisao.nome}</p>
+        <p className="text-lg font-semibold">{divisao.nome}</p>
         <p className="text-sm text-secundario">{divisao.descricao}</p>
       </button>
       {aberta && (

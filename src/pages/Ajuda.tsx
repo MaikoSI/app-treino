@@ -24,7 +24,7 @@ export default function Ajuda() {
       <Cabecalho titulo="Como usar o app" voltar />
       <div className="flex flex-col gap-4 px-4 pb-10">
         <header>
-          <h2 className="font-display text-3xl font-bold leading-tight">O app em 4 passos</h2>
+          <h2 className="text-3xl font-semibold leading-tight">O app em 4 passos</h2>
           <p className="mt-2 text-secundario">Você não precisa decorar nada: monte o programa uma vez e depois é só abrir e treinar.</p>
         </header>
 
@@ -193,7 +193,7 @@ export default function Ajuda() {
           <Item titulo="Pergunta do sono">
             Antes do treino o app pergunta como você dormiu. Se foi mal, tira uma série dos exercícios com 3 ou mais.
           </Item>
-          <Item titulo="Tema">Escuro ou claro.</Item>
+          <Item titulo="Aparência">Automático (segue o modo claro ou escuro do aparelho), claro ou escuro.</Item>
           <Item titulo="Biblioteca de exercícios">Todos os exercícios, com os músculos que cada um trabalha.</Item>
         </Secao>
 
@@ -227,7 +227,7 @@ export default function Ajuda() {
           </Item>
         </Secao>
 
-        <Link to="/sobre" className="flex min-h-12 items-center justify-center rounded-xl bg-cartao px-4 text-center font-semibold text-primaria-texto">
+        <Link to="/sobre" className="flex min-h-12 items-center justify-center rounded-cartao bg-cartao shadow-cartao px-4 text-center font-semibold text-primaria-texto">
           Por que o app sugere isso? Veja a base científica
         </Link>
       </div>
@@ -259,10 +259,10 @@ function abrirSecao(id: string) {
 
 function Passo({ n, titulo, link, children }: { n: number; titulo: string; link?: { para: string; rotulo: string }; children: ReactNode }) {
   return (
-    <li className="flex gap-3 rounded-xl bg-cartao p-4">
+    <li className="flex gap-3 rounded-cartao bg-cartao p-4 shadow-cartao">
       <span
         aria-hidden="true"
-        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primaria font-bold text-sobre-primaria"
+        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primaria font-semibold text-sobre-primaria"
       >
         {n}
       </span>
@@ -284,7 +284,7 @@ function Passo({ n, titulo, link, children }: { n: number; titulo: string; link?
 
 function Secao({ id, titulo, Icone, children }: { id: string; titulo: string; Icone: Icone; children: ReactNode }) {
   return (
-    <details id={`ajuda-${id}`} className="group scroll-mt-20 rounded-xl bg-cartao">
+    <details id={`ajuda-${id}`} className="group scroll-mt-20 rounded-cartao bg-cartao shadow-cartao">
       <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3 font-semibold [&::-webkit-details-marker]:hidden">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-cartao-2 text-primaria-texto">
           <Icone width={20} height={20} />
@@ -323,7 +323,7 @@ function ExemploSerie() {
         <span className="text-secundario">1</span>
         <span className={celula}>60</span>
         <span className={celula}>10</span>
-        <span className="flex min-h-10 items-center justify-center rounded-lg bg-primaria text-sobre-primaria">
+        <span className="flex min-h-10 items-center justify-center rounded-lg bg-concluido text-sobre-concluido">
           <IconeCheck width={20} height={20} />
         </span>
       </div>

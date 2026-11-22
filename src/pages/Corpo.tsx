@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { IconeLixo } from '../components/Icones';
-import { Botao, Cabecalho, Carregando, Cartao } from '../components/ui';
+import { Botao, Cabecalho, Carregando, Cartao, Segmentado } from '../components/ui';
 import { salvarConfig, useConfig } from '../db/config';
 import { excluirPeso, registrarPeso, registrosDePeso } from '../db/pesos';
 import type { ObjetivoPeso } from '../db/tipos';
@@ -68,19 +68,12 @@ export default function Corpo() {
         {/* Meta */}
         <Cartao className="flex flex-col gap-3">
           <h2 className="font-semibold">Objetivo</h2>
-          <div className="grid grid-cols-3 gap-1 rounded-xl bg-cartao-2 p-1" role="group" aria-label="Objetivo de peso">
-            {(['ganhar', 'manter', 'perder'] as const).map((o) => (
-              <button
-                key={o}
-                type="button"
-                aria-pressed={objetivo === o}
-                onClick={() => salvarConfig({ objetivoPeso: o })}
-                className={`min-h-12 rounded-lg font-semibold ${objetivo === o ? 'bg-primaria text-sobre-primaria' : 'text-secundario active:bg-borda'}`}
-              >
-                {ROTULO_OBJETIVO[o]}
-              </button>
-            ))}
-          </div>
+          <Segmentado
+            rotulo="Objetivo de peso"
+            valor={objetivo}
+            aoMudar={(o) => salvarConfig({ objetivoPeso: o })}
+            opcoes={(['ganhar', 'manter', 'perder'] as const).map((o) => ({ valor: o, rotulo: ROTULO_OBJETIVO[o] }))}
+          />
           <p className="text-sm text-secundario">
             Meta do guia: {faixaTexto(min, max)} do peso por semana
             {pesoRef && ` (${faixaKg(min, max, pesoRef)})`}. {DICA_OBJETIVO[objetivo]}
@@ -91,7 +84,7 @@ export default function Corpo() {
             ) : (
               <>
                 <p className="text-sm text-secundario">Ritmo atual (média desta semana com registro × a anterior)</p>
-                <p className="mt-1 font-display text-3xl font-bold tabular-nums">
+                <p className="mt-1 text-3xl font-semibold tabular-nums">
                   {ritmo > 0 ? '+' : ''}
                   {num(ritmo)}% <span className="text-base font-normal text-secundario">por semana</span>
                 </p>
@@ -223,7 +216,7 @@ function Proteina({ peso }: { peso: number }) {
   const p = proteinaDiaria(peso);
   return (
     <>
-      <p className="font-display text-3xl font-bold tabular-nums">
+      <p className="text-3xl font-semibold tabular-nums">
         {p.minG}–{p.maxG} g <span className="text-base font-normal text-secundario">para {kg(peso)}</span>
       </p>
       <p className="text-sm">

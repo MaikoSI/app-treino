@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0A0A0A" />
+    <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     <meta name="description" content="Registro de treinos de musculação que funciona offline." />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
@@ -13,11 +14,14 @@
     <meta name="apple-mobile-web-app-title" content="Treino" />
     <title>Treino</title>
     <script>
-      // Aplica o tema claro antes do app carregar (o escuro é o padrão do CSS).
+      // Aplica a escolha manual de tema antes do app carregar. Sem escolha ("sistema"), o CSS segue o aparelho.
       try {
-        if (localStorage.getItem('tema') === 'claro') {
-          document.documentElement.dataset.theme = 'claro';
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#F4F6F5');
+        var tema = localStorage.getItem('tema');
+        if (tema === 'claro' || tema === 'escuro') {
+          document.documentElement.dataset.theme = tema;
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+            m.setAttribute('content', tema === 'claro' ? '#F2F2F7' : '#000000');
+          });
         }
       } catch (e) {}
     </script>
