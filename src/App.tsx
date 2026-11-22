@@ -4,6 +4,7 @@ import { Navegacao } from './components/Navegacao';
 import { Carregando } from './components/ui';
 import { useConfig } from './db/config';
 import { aplicarTema } from './lib/tema';
+import { registrarNavegacao } from './observabilidade';
 import Config from './pages/Config';
 import Historico from './pages/Historico';
 import Inicio from './pages/Inicio';
@@ -36,6 +37,7 @@ function adiado(elemento: ReactNode, fallback: ComponentProps<typeof Carregando>
 export default function App() {
   const config = useConfig();
   const { pathname } = useLocation();
+  useEffect(() => registrarNavegacao(pathname), [pathname]);
   const tema = config?.tema;
 
   useEffect(() => {

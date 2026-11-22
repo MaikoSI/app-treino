@@ -1,0 +1,54 @@
+# Exemplo de OpenTelemetry Collector (distribuição "contrib") para receber a telemetria do app
+# e repassar ao Datadog ou ao New Relic. Rode o Collector num servidor seu, com HTTPS, e aponte
+# VITE_OTEL_ENDPOINT para ele (ex.: https://otel.seudominio.com).
+#
+# As chaves ficam SÓ aqui (variáveis de ambiente do Collector), nunca no app: o código do
+# navegador é público e qualquer chave nele vazaria.
+
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          # Só o endereço onde o app está publicado
+          allowed_origins:
+            - https://maikosi.github.io
+
+processors:
+  batch: {}
+  # Proteção extra no servidor: descarta atributos que não sejam os que o app envia
+  attributes/somente-permitidos:
+    actions:
+      - key: http.user_agent
+        action: delete
+      - key: client.address
+        action: delete
+
+exporters:
+  # Datadog: defina DD_API_KEY e DD_SITE (ex.: datadoghq.com) no ambiente do Collector
+  datadog:
+    api:
+      key: ${env:DD_API_KEY}
+      site: ${env:DD_SITE}
+
+  # New Relic (OTLP nativo): defina NEW_RELIC_LICENSE_KEY no ambiente do Collector
+  otlphttp/newrelic:
+    endpoint: https://otlp.nr-data.net
+    headers:
+      api-key: ${env:NEW_RELIC_LICENSE_KEY}
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [attributes/somente-permitidos, batch]
+      exporters: [datadog] # ou [otlphttp/newrelic]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [datadog]
+    logs:
+      receivers: [otlp]
+      processors: [attributes/somente-permitidos, batch]
+      exporters: [datadog]
