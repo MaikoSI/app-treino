@@ -3,9 +3,9 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { CalculadoraAnilhas } from '../components/CalculadoraAnilhas';
 import { Comemoracao } from '../components/Comemoracao';
-import { MapaMuscular } from '../components/MapaMuscular';
 import { BarraDescanso, useDescanso } from '../components/Descanso';
 import { IconeCheck, IconeMais, IconeMenu } from '../components/Icones';
+import { MapaMuscular } from '../components/MapaMuscular';
 import { SeletorExercicio } from '../components/SeletorExercicio';
 import { Botao, Carregando, Painel } from '../components/ui';
 import { useConfig } from '../db/config';
@@ -26,7 +26,7 @@ import {
   ultimasSeries,
 } from '../db/sessoes';
 import type { Exercicio, SessaoSerie } from '../db/tipos';
-import { detectarRecordes, estagnado, sugestaoProgressao, TREINOS_ESTAGNACAO, type SerieFeita } from '../lib/forca';
+import { detectarRecordes, estagnado, type SerieFeita, sugestaoProgressao, TREINOS_ESTAGNACAO } from '../lib/forca';
 import { duracao, kg, lerNumero, num, rotuloRir } from '../lib/formato';
 import { ROTULO_AJUSTE } from '../lib/metas';
 import { agruparPorExercicio, type GrupoExercicio } from '../lib/treino';
@@ -114,7 +114,10 @@ export default function Treino() {
         </div>
         {/* Progresso do treino: séries feitas / total */}
         <div className="h-1 bg-trilho" aria-hidden="true">
-          <div className="h-full bg-concluido transition-[width] duration-300" style={{ width: `${series.length ? (feitas / series.length) * 100 : 0}%` }} />
+          <div
+            className="h-full bg-concluido transition-[width] duration-300"
+            style={{ width: `${series.length ? (feitas / series.length) * 100 : 0}%` }}
+          />
         </div>
       </header>
 
@@ -143,7 +146,11 @@ export default function Treino() {
       </div>
 
       {/* Menu do exercício */}
-      <Painel aberto={acao?.tipo === 'menu'} aoFechar={() => setAcao(null)} titulo={acao ? exercicios.get(acao.grupo.exercicioId)?.nome ?? '' : ''}>
+      <Painel
+        aberto={acao?.tipo === 'menu'}
+        aoFechar={() => setAcao(null)}
+        titulo={acao ? (exercicios.get(acao.grupo.exercicioId)?.nome ?? '') : ''}
+      >
         {acao && (
           <div className="flex flex-col gap-2">
             <Botao onClick={() => setAcao({ ...acao, tipo: 'musculos' })}>Músculos trabalhados</Botao>
@@ -166,7 +173,7 @@ export default function Treino() {
       <Painel
         aberto={acao?.tipo === 'musculos'}
         aoFechar={() => setAcao(null)}
-        titulo={acao ? exercicios.get(acao.grupo.exercicioId)?.nome ?? '' : ''}
+        titulo={acao ? (exercicios.get(acao.grupo.exercicioId)?.nome ?? '') : ''}
       >
         {acao && exercicios.get(acao.grupo.exercicioId) && <MapaMuscular exercicio={exercicios.get(acao.grupo.exercicioId)!} />}
       </Painel>
@@ -285,7 +292,8 @@ const CartaoExercicio = memo(function CartaoExercicio({
         <div className="min-w-0 flex-1">
           <h2 className="text-xl leading-tight font-semibold">{exercicio?.nome ?? 'Exercício removido'}</h2>
           <p className="text-sm text-secundario">
-            Meta: {meta.repsMin === meta.repsMax ? meta.repsMax : `${meta.repsMin}–${meta.repsMax}`} reps · descanso {duracao(meta.descansoSeg * 1000)}
+            Meta: {meta.repsMin === meta.repsMax ? meta.repsMax : `${meta.repsMin}–${meta.repsMax}`} reps · descanso{' '}
+            {duracao(meta.descansoSeg * 1000)}
           </p>
           {ultimas.length > 0 && (
             <p className="mt-0.5 text-sm text-secundario tabular-nums">
@@ -312,7 +320,9 @@ const CartaoExercicio = memo(function CartaoExercicio({
             <button
               type="button"
               className="min-h-12 rounded-lg bg-primaria px-3 text-sm font-semibold text-sobre-primaria"
-              onClick={() => pendentes.forEach((s) => atualizarSerie(s.id, { carga: dica.novaCarga }))}
+              onClick={() => {
+                for (const s of pendentes) void atualizarSerie(s.id, { carga: dica.novaCarga });
+              }}
             >
               Usar {num(dica.novaCarga)}
             </button>
@@ -334,7 +344,9 @@ const CartaoExercicio = memo(function CartaoExercicio({
         </div>
       )}
 
-      <div className={`mt-3 grid items-center gap-2 text-xs text-secundario ${mostrarRir ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'}`}>
+      <div
+        className={`mt-3 grid items-center gap-2 text-xs text-secundario ${mostrarRir ? 'grid-cols-[2rem_1fr_1fr_3.5rem_3.5rem]' : 'grid-cols-[2rem_1fr_1fr_3.5rem]'}`}
+      >
         <span className="text-center">Série</span>
         <span className="text-center">kg</span>
         <span className="text-center">Reps</span>
@@ -382,8 +394,17 @@ const LinhaSerie = memo(function LinhaSerie({
       }`}
     >
       <span className={`text-center text-xl font-semibold ${feita ? 'text-texto' : 'text-secundario'}`}>{indice}</span>
-      <CampoNumero valor={serie.carga} decimal rotulo={`Carga da série ${indice}`} aoMudar={(carga) => atualizarSerie(serie.id, { carga })} />
-      <CampoNumero valor={serie.reps} rotulo={`Repetições da série ${indice}`} aoMudar={(reps) => atualizarSerie(serie.id, { reps: Math.round(reps) })} />
+      <CampoNumero
+        valor={serie.carga}
+        decimal
+        rotulo={`Carga da série ${indice}`}
+        aoMudar={(carga) => atualizarSerie(serie.id, { carga })}
+      />
+      <CampoNumero
+        valor={serie.reps}
+        rotulo={`Repetições da série ${indice}`}
+        aoMudar={(reps) => atualizarSerie(serie.id, { reps: Math.round(reps) })}
+      />
       {mostrarRir && (
         <select
           aria-label={`Repetições em reserva da série ${indice}`}
@@ -399,6 +420,7 @@ const LinhaSerie = memo(function LinhaSerie({
           ))}
         </select>
       )}
+      {/* biome-ignore lint/a11y/useSemanticElements: botão grande de marcar série no padrão ARIA checkbox (alvo de toque de 48px) */}
       <button
         type="button"
         role="checkbox"
@@ -434,6 +456,7 @@ function CampoNumero({
   const [texto, setTexto] = useState(formatar(valor));
   const focado = useRef(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: só ressincroniza quando o valor salvo muda (formatar é recriado a cada render)
   useEffect(() => {
     if (!focado.current) setTexto(formatar(valor));
   }, [valor]);

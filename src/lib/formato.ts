@@ -23,8 +23,7 @@ export function duracaoCurta(ms: number): string {
   return h > 0 ? `${h}h ${String(min % 60).padStart(2, '0')}min` : `${min}min`;
 }
 
-export const dataCurta = (t: number) =>
-  new Date(t).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+export const dataCurta = (t: number) => new Date(t).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
 
 /** "Sexta-feira, 20 de novembro" */
 export const dataLonga = (t: number) => {

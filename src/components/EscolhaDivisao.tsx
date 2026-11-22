@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useConfig } from '../db/config';
-import { divisoesPara, type Divisao } from '../db/divisoes';
+import { type Divisao, divisoesPara } from '../db/divisoes';
 import { EXERCICIOS_INICIAIS } from '../db/exerciciosIniciais';
 import { CONFIG_PADRAO } from '../db/tipos';
 import { metaPadrao } from '../lib/metas';
 
 const TIPO_POR_NOME = new Map(EXERCICIOS_INICIAIS.map((e) => [e.nome, e.tipo]));
+
 import { Botao, Cartao } from './ui';
 
 /**

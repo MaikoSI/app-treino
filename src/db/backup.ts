@@ -1,4 +1,4 @@
-import { db, TABELAS, type NomeTabela } from './index';
+import { db, type NomeTabela, TABELAS } from './index';
 import { migrarConfig, migrarExercicio, migrarSerie } from './migracoes';
 import { CONFIG_PADRAO } from './tipos';
 
@@ -14,9 +14,13 @@ export interface Backup {
 
 export async function gerarBackup(): Promise<Backup> {
   const dados = {} as Record<NomeTabela, unknown[]>;
-  await db.transaction('r', TABELAS.map((t) => db[t]), async () => {
-    for (const t of TABELAS) dados[t] = await db[t].toArray();
-  });
+  await db.transaction(
+    'r',
+    TABELAS.map((t) => db[t]),
+    async () => {
+      for (const t of TABELAS) dados[t] = await db[t].toArray();
+    },
+  );
   return { app: APP_BACKUP, versao: VERSAO_BACKUP, exportadoEm: new Date().toISOString(), dados };
 }
 
@@ -93,18 +97,22 @@ export function validarBackup(texto: string): { backup: Backup; resumo: ResumoBa
 
 /** Substitui TODOS os dados do aparelho pelos do backup (tudo ou nada). */
 export async function restaurarBackup(backup: Backup): Promise<void> {
-  await db.transaction('rw', TABELAS.map((t) => db[t]), async () => {
-    for (const t of TABELAS) {
-      // Tabela genérica: as linhas já foram validadas em validarBackup.
-      const tabela = db.table(t);
-      await tabela.clear();
-      const linhas = backup.dados[t] ?? [];
-      if (linhas.length) await tabela.bulkAdd(linhas);
-    }
-    // Garante uma config válida (e não mostra a boas-vindas de novo).
-    const cfg = await db.config.get('app');
-    await db.config.put({ ...CONFIG_PADRAO, ...cfg, chave: 'app', onboardingConcluido: true });
-  });
+  await db.transaction(
+    'rw',
+    TABELAS.map((t) => db[t]),
+    async () => {
+      for (const t of TABELAS) {
+        // Tabela genérica: as linhas já foram validadas em validarBackup.
+        const tabela = db.table(t);
+        await tabela.clear();
+        const linhas = backup.dados[t] ?? [];
+        if (linhas.length) await tabela.bulkAdd(linhas);
+      }
+      // Garante uma config válida (e não mostra a boas-vindas de novo).
+      const cfg = await db.config.get('app');
+      await db.config.put({ ...CONFIG_PADRAO, ...cfg, chave: 'app', onboardingConcluido: true });
+    },
+  );
 }
 
 /** Apaga tudo e volta ao estado do primeiro acesso. */

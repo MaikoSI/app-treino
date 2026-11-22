@@ -1,6 +1,6 @@
 import 'fake-indexeddb/auto';
-import { afterEach, describe, expect, it } from 'vitest';
 import Dexie from 'dexie';
+import { afterEach, describe, expect, it } from 'vitest';
 import { TreinoDB } from './index';
 
 let banco: TreinoDB;

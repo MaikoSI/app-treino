@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { celulasDoMes, recordesPessoais, serieTemporal, seriesPorGrupo } from './progresso';
+import { celulasDoMes, recordesPessoais, seriesPorGrupo, serieTemporal } from './progresso';
 
 const s = (sessaoId: number, inicio: number, carga: number, reps: number, exercicioId = 1) => ({
   exercicioId,
@@ -40,7 +40,7 @@ describe('recordesPessoais', () => {
 
 describe('seriesPorGrupo', () => {
   it('conta séries por grupo, do maior para o menor', () => {
-    const grupo = (id: number) => ({ 1: 'Peito', 2: 'Costas', 3: 'Peito' } as Record<number, string>)[id];
+    const grupo = (id: number) => (({ 1: 'Peito', 2: 'Costas', 3: 'Peito' }) as Record<number, string>)[id];
     expect(seriesPorGrupo([{ exercicioId: 1 }, { exercicioId: 2 }, { exercicioId: 3 }, { exercicioId: 9 }], grupo)).toEqual([
       { grupo: 'Peito', series: 2 },
       { grupo: 'Costas', series: 1 },

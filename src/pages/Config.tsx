@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalculadoraAnilhas } from '../components/CalculadoraAnilhas';
 import { Botao, Cabecalho, Carregando, Cartao, Contador, Girando, Interruptor, Painel, Segmentado } from '../components/ui';
@@ -62,7 +62,13 @@ export default function Config() {
       <div className="flex flex-col gap-4 px-4 pb-8">
         <Cartao className="flex flex-col divide-y divide-borda/70 py-1">
           <Linha rotulo="Meta de treinos por semana">
-            <Contador rotulo="meta semanal" valor={config.metaSemanal} min={1} max={7} aoMudar={(metaSemanal) => salvarConfig({ metaSemanal })} />
+            <Contador
+              rotulo="meta semanal"
+              valor={config.metaSemanal}
+              min={1}
+              max={7}
+              aoMudar={(metaSemanal) => salvarConfig({ metaSemanal })}
+            />
           </Linha>
           <Linha rotulo="Unidade de peso">
             <span className="rounded-xl bg-cartao-2 px-4 py-3 font-semibold">kg</span>
@@ -71,7 +77,11 @@ export default function Config() {
             <Interruptor rotulo="Registrar RIR" ligado={config.mostrarRir} aoMudar={(mostrarRir) => salvarConfig({ mostrarRir })} />
           </Linha>
           <Linha rotulo="Perguntar sobre o sono" detalhe="Antes do treino; se dormiu mal, o treino fica um pouco mais leve">
-            <Interruptor rotulo="Perguntar sobre o sono" ligado={config.checkinSono} aoMudar={(checkinSono) => salvarConfig({ checkinSono })} />
+            <Interruptor
+              rotulo="Perguntar sobre o sono"
+              ligado={config.checkinSono}
+              aoMudar={(checkinSono) => salvarConfig({ checkinSono })}
+            />
           </Linha>
           <div className="flex flex-col gap-2 py-3">
             <p>Aparência</p>
@@ -132,7 +142,11 @@ export default function Config() {
               if (!p) return setMsgMetas('Nenhum programa ativo.');
               if (!confirm(`Aplicar estas repetições e descansos a todos os exercícios de "${p.nome}"? As séries não mudam.`)) return;
               const n = await aplicarMetasPadrao(p.id);
-              setMsgMetas(n ? `${plural(n, 'exercício atualizado', 'exercícios atualizados')} em "${p.nome}".` : 'O programa ativo já usa estas metas.');
+              setMsgMetas(
+                n
+                  ? `${plural(n, 'exercício atualizado', 'exercícios atualizados')} em "${p.nome}".`
+                  : 'O programa ativo já usa estas metas.',
+              );
             }}
           >
             Aplicar ao programa ativo
@@ -168,7 +182,9 @@ export default function Config() {
             <strong className="text-texto">Exporte um backup de vez em quando</strong> e guarde fora do celular.
           </p>
           {persistente === false && (
-            <p className="text-sm text-alerta-texto">O navegador ainda não garantiu armazenamento permanente. Instalar o app na tela inicial ajuda.</p>
+            <p className="text-sm text-alerta-texto">
+              O navegador ainda não garantiu armazenamento permanente. Instalar o app na tela inicial ajuda.
+            </p>
           )}
           <Botao variante="primario" onClick={exportar}>
             Exportar backup
@@ -239,4 +255,3 @@ function useArmazenamentoPersistente() {
   }, []);
   return valor;
 }
-

@@ -25,6 +25,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Lint e formatação (Biome)
+        run: npm run lint
       - name: Tipos
         run: npm run typecheck
       - name: Testes

@@ -37,7 +37,10 @@ export const FRENTE: Forma[] = [
   { grupo: 'Bíceps', d: 'M22 45 C25 47 29 47 31 45.5 C31.5 53 30 59 27.5 63 C24.5 63.5 21.5 62 20.5 58.5 C19.5 53 20.5 48 22 45Z' },
   { grupo: 'Antebraço', d: 'M20.5 61 C22.5 64 25.5 65.5 27.5 65 C27 73 25.5 81 23 88 C21 88.5 18.5 88 17 87 C16.5 79 17.5 69 20.5 61Z' },
   { grupo: 'Quadríceps', d: 'M34 89 C39 93 44 96 49 99 C49 114 47.5 127 45.5 138 C41.5 139.5 37.5 139.5 35 138 C32.5 123 31.5 105 34 89Z' },
-  { grupo: 'Panturrilha', d: 'M35.5 150 C38.5 149 42.5 149 45 150 C46 160 45 171 43.5 181 C41 182 39 182 37.5 181 C35 171 34.5 160 35.5 150Z' },
+  {
+    grupo: 'Panturrilha',
+    d: 'M35.5 150 C38.5 149 42.5 149 45 150 C46 160 45 171 43.5 181 C41 182 39 182 37.5 181 C35 171 34.5 160 35.5 150Z',
+  },
 ];
 
 export const COSTAS: Forma[] = [
@@ -49,7 +52,10 @@ export const COSTAS: Forma[] = [
   { grupo: 'Tríceps', d: 'M22 45 C25 47 29 47 31 45.5 C31.5 53 30 59 27.5 63 C24.5 63.5 21.5 62 20.5 58.5 C19.5 53 20.5 48 22 45Z' },
   { grupo: 'Antebraço', d: 'M20.5 61 C22.5 64 25.5 65.5 27.5 65 C27 73 25.5 81 23 88 C21 88.5 18.5 88 17 87 C16.5 79 17.5 69 20.5 61Z' },
   { grupo: 'Glúteos', d: 'M49.5 75.5 L36 75.5 C33 81 32 89 34.5 95 C39.5 99 45.5 99 49.5 96Z' },
-  { grupo: 'Posteriores', d: 'M34.5 97.5 C39.5 100.5 45 100.5 49 99.5 C49 114 47.5 127 45.5 138 C41.5 139.5 37.5 139.5 35 138 C32.5 124 32.5 110 34.5 97.5Z' },
+  {
+    grupo: 'Posteriores',
+    d: 'M34.5 97.5 C39.5 100.5 45 100.5 49 99.5 C49 114 47.5 127 45.5 138 C41.5 139.5 37.5 139.5 35 138 C32.5 124 32.5 110 34.5 97.5Z',
+  },
   { grupo: 'Panturrilha', d: 'M35 150 C39 148 44 148.5 46 150.5 C47.5 160 45.5 170 43.5 180 C41 182 39 182 37 180 C34 170 33 159 35 150Z' },
 ];
 
@@ -66,7 +72,14 @@ function Figura({ formas, niveis, rotulo }: { formas: Forma[]; niveis: Map<Grupo
   const cor = (f: Forma) => COR[(f.grupo && niveis.get(f.grupo)) || 'nenhum'];
   return (
     <figure className="flex flex-1 flex-col items-center gap-1">
-      <svg viewBox="12 0 76 195" className="h-auto w-full max-w-36" aria-hidden="true" stroke="var(--cartao)" strokeWidth={1.2} strokeLinejoin="round">
+      <svg
+        viewBox="12 0 76 195"
+        className="h-auto w-full max-w-36"
+        aria-hidden="true"
+        stroke="var(--cartao)"
+        strokeWidth={1.2}
+        strokeLinejoin="round"
+      >
         {formas.map((f, i) =>
           f.centro ? (
             <path key={i} d={f.d} fill={cor(f)} />

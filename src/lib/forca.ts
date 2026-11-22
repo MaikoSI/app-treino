@@ -41,10 +41,7 @@ export interface Progressao {
  * pelo menos repsMax, sugere subir a carga: +5 kg para perna, +2,5 kg para o resto.
  * Exercícios sem carga (peso corporal) não recebem sugestão.
  */
-export function sugestaoProgressao(
-  series: SerieParaProgressao[],
-  grupo: GrupoMuscular,
-): Progressao | null {
+export function sugestaoProgressao(series: SerieParaProgressao[], grupo: GrupoMuscular): Progressao | null {
   if (series.length === 0) return null;
   const todasNoTopo = series.every((s) => s.concluida && s.repsMax > 0 && s.reps >= s.repsMax);
   if (!todasNoTopo) return null;

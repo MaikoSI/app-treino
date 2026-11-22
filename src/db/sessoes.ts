@@ -1,10 +1,10 @@
-import { db } from './index';
-import { lerConfig } from './config';
-import { exerciciosDoDia } from './programas';
-import type { AjusteTreino, Sessao, SessaoSerie } from './tipos';
 import type { SerieFeita, TreinoDoExercicio } from '../lib/forca';
 import { metaPadrao, semanaLeveAtiva, seriesComAjuste } from '../lib/metas';
 import type { SerieComData } from '../lib/progresso';
+import { lerConfig } from './config';
+import { db } from './index';
+import { exerciciosDoDia } from './programas';
+import type { AjusteTreino, Sessao, SessaoSerie } from './tipos';
 
 /** O treino que ainda não foi finalizado (no máximo um). */
 export async function sessaoEmAndamento(): Promise<Sessao | undefined> {
@@ -193,7 +193,10 @@ export async function excluirSessao(sessaoId: number): Promise<void> {
 export async function seriesAnteriores(antesDe: number, exercicioIds?: number[]): Promise<SerieFeita[]> {
   const sessoes = (await db.sessoes.where('inicio').below(antesDe).toArray()).filter((s) => s.concluida);
   if (sessoes.length === 0) return [];
-  const series = await db.sessaoSeries.where('sessaoId').anyOf(sessoes.map((s) => s.id)).toArray();
+  const series = await db.sessaoSeries
+    .where('sessaoId')
+    .anyOf(sessoes.map((s) => s.id))
+    .toArray();
   const filtro = exercicioIds ? new Set(exercicioIds) : null;
   return series.filter((s) => s.concluida && (!filtro || filtro.has(s.exercicioId)));
 }
@@ -202,9 +205,7 @@ export async function seriesAnteriores(antesDe: number, exercicioIds?: number[])
 export async function historicoDeSeries(exercicioId?: number): Promise<SerieComData[]> {
   const sessoes = new Map((await sessoesConcluidas()).map((s) => [s.id, s]));
   const series =
-    exercicioId === undefined
-      ? await db.sessaoSeries.toArray()
-      : await db.sessaoSeries.where('exercicioId').equals(exercicioId).toArray();
+    exercicioId === undefined ? await db.sessaoSeries.toArray() : await db.sessaoSeries.where('exercicioId').equals(exercicioId).toArray();
   return series.flatMap((s) => {
     const sessao = sessoes.get(s.sessaoId);
     return sessao && s.concluida

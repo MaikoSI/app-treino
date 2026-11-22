@@ -1,8 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo, useState } from 'react';
-import { db } from '../db';
-import { EQUIPAMENTOS, GRUPOS_MUSCULARES, type Equipamento, type Exercicio, type GrupoMuscular, type TipoExercicio } from '../db/tipos';
 import { Link } from 'react-router-dom';
+import { db } from '../db';
+import { EQUIPAMENTOS, type Equipamento, type Exercicio, GRUPOS_MUSCULARES, type GrupoMuscular, type TipoExercicio } from '../db/tipos';
 import { IconeAvancar, IconeInfo } from './Icones';
 import { MapaMuscular } from './MapaMuscular';
 import { Botao, EsqueletoLista, Painel, Segmentado } from './ui';
@@ -190,6 +190,7 @@ function FormNovoExercicio({
     <div className="flex flex-col gap-4">
       <label className="flex flex-col gap-1">
         <span className="text-sm text-secundario">Nome</span>
+        {/* biome-ignore lint/a11y/noAutofocus: a sheet "Novo exercício" abre para digitar o nome; o foco vai direto ao campo */}
         <input className={campo} value={nome} onChange={(e) => setNome(e.target.value)} autoFocus />
       </label>
       <label className="flex flex-col gap-1">

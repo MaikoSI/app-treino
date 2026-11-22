@@ -1,9 +1,9 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { apagarTudo, gerarBackup, restaurarBackup, validarBackup } from './backup';
-import { db } from './index';
 import { salvarConfig } from './config';
 import { DIVISOES } from './divisoes';
+import { db } from './index';
 import { registrarPeso } from './pesos';
 import { criarProgramaDeDivisao, diasDoPrograma } from './programas';
 import { finalizarTreino, iniciarTreino, seriesDaSessao } from './sessoes';
@@ -21,7 +21,14 @@ async function popular() {
   const [serie] = await seriesDaSessao(s);
   await db.sessaoSeries.update(serie.id, { concluida: true, carga: 100, reps: 5 });
   await finalizarTreino(s);
-  await db.exercicios.add({ nome: 'Meu exercício', grupoMuscular: 'Peito', equipamento: 'Outro', tipo: 'isolado', secundarios: [], personalizado: true });
+  await db.exercicios.add({
+    nome: 'Meu exercício',
+    grupoMuscular: 'Peito',
+    equipamento: 'Outro',
+    tipo: 'isolado',
+    secundarios: [],
+    personalizado: true,
+  });
 }
 
 describe('backup', () => {
@@ -76,7 +83,12 @@ describe('backup', () => {
     await restaurarBackup(backup);
     expect(await db.exercicios.get(1)).toMatchObject({ tipo: 'composto', secundarios: ['Bíceps'] });
     expect((await db.sessaoSeries.get(1))?.rir).toBe(1);
-    expect(await db.config.get('app')).toMatchObject({ metaSemanal: 2, descansoCompostoSeg: 150, descansoIsoladoSeg: 90, mostrarRir: false });
+    expect(await db.config.get('app')).toMatchObject({
+      metaSemanal: 2,
+      descansoCompostoSeg: 150,
+      descansoIsoladoSeg: 90,
+      mostrarRir: false,
+    });
     expect(await db.pesos.count()).toBe(0);
   });
 

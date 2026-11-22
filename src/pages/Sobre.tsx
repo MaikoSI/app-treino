@@ -14,13 +14,13 @@ export default function Sobre() {
           <p className="text-sm font-semibold text-primaria-texto">Base científica</p>
           <h2 className="mt-1 text-3xl font-semibold leading-tight">Guia científico de musculação: hipertrofia, força e nutrição</h2>
           <p className="mt-3 text-secundario">
-            O que mais faz o corpo mudar é treinar com regularidade, progredir a carga, comer proteína suficiente e dormir bem. O resto
-            é ajuste fino. Este guia reúne o que as melhores pesquisas dizem sobre treino, nutrição, suplementos e recuperação.
+            O que mais faz o corpo mudar é treinar com regularidade, progredir a carga, comer proteína suficiente e dormir bem. O resto é
+            ajuste fino. Este guia reúne o que as melhores pesquisas dizem sobre treino, nutrição, suplementos e recuperação.
           </p>
           <p className="mt-3 text-sm text-secundario">
-            <strong className="text-texto">Como ler as evidências:</strong> quase tudo aqui vem de meta-análises e revisões
-            sistemáticas, estudos que juntam os resultados de dezenas de pesquisas. São a forma mais forte de evidência na área. Quando
-            algo ainda é incerto, o guia avisa.
+            <strong className="text-texto">Como ler as evidências:</strong> quase tudo aqui vem de meta-análises e revisões sistemáticas,
+            estudos que juntam os resultados de dezenas de pesquisas. São a forma mais forte de evidência na área. Quando algo ainda é
+            incerto, o guia avisa.
           </p>
         </header>
 
@@ -52,39 +52,37 @@ export default function Sobre() {
               na de 2 dias, faixa de iniciante). Panturrilha, abdômen e antebraço entram como complementares.
             </Item>
             <Item titulo="Repetições e descanso">
-              Compostos: 6–10 repetições e 2:30 de descanso. Isolados: 10–15 repetições e 1:30. No modo Força (em Ajustes), compostos
-              usam 3–6 repetições e pelo menos 3:00. Os descansos são ajustáveis, e “Aplicar ao programa ativo” reaplica essas metas.
+              Compostos: 6–10 repetições e 2:30 de descanso. Isolados: 10–15 repetições e 1:30. No modo Força (em Ajustes), compostos usam
+              3–6 repetições e pelo menos 3:00. Os descansos são ajustáveis, e “Aplicar ao programa ativo” reaplica essas metas.
             </Item>
             <Item titulo="Contador de volume">
-              Na tela Progresso, séries de trabalho por músculo em cada semana. Compostos contam meia série para os músculos auxiliares
-              (o supino conta para tríceps e ombros). Abaixo de 10 aparece como “abaixo”; acima de 20, como “alto”.
+              Na tela Progresso, séries de trabalho por músculo em cada semana. Compostos contam meia série para os músculos auxiliares (o
+              supino conta para tríceps e ombros). Abaixo de 10 aparece como “abaixo”; acima de 20, como “alto”.
             </Item>
             <Item titulo="Análise do programa">
-              Ao editar um programa, “Volume por semana” mostra séries e frequência de cada músculo e avisa quando algum fica abaixo de
-              10 séries, acima de 20 ou treinado só 1x por semana.
+              Ao editar um programa, “Volume por semana” mostra séries e frequência de cada músculo e avisa quando algum fica abaixo de 10
+              séries, acima de 20 ou treinado só 1x por semana.
             </Item>
             <Item titulo="RIR">
               Campo opcional em cada série (ligue em Ajustes), de 0 a 5+. Séries com RIR 5 ou mais não contam no volume.
             </Item>
             <Item titulo="Progressão dupla">
-              Quando todas as séries de um exercício chegam ao topo da faixa de repetições, o próximo treino mostra “Tente +2,5 kg”
-              (+5 kg em quadríceps, posteriores, glúteos e panturrilha). Carga e repetições já vêm com o que você fez da última vez.
+              Quando todas as séries de um exercício chegam ao topo da faixa de repetições, o próximo treino mostra “Tente +2,5 kg” (+5 kg
+              em quadríceps, posteriores, glúteos e panturrilha). Carga e repetições já vêm com o que você fez da última vez.
             </Item>
             <Item titulo="Estagnação">
-              Se um exercício passa 3 treinos sem superar o melhor anterior (nem em 1RM estimado, nem em volume), o treino sugere
-              conferir sono, alimentação e fadiga e trocar por uma variação ou fazer uma semana leve.
+              Se um exercício passa 3 treinos sem superar o melhor anterior (nem em 1RM estimado, nem em volume), o treino sugere conferir
+              sono, alimentação e fadiga e trocar por uma variação ou fazer uma semana leve.
             </Item>
-            <Item titulo="Semana leve (deload)">
-              Botão na tela Início: por 7 dias, mesmos exercícios com metade das séries.
-            </Item>
+            <Item titulo="Semana leve (deload)">Botão na tela Início: por 7 dias, mesmos exercícios com metade das séries.</Item>
             <Item titulo="Check-in de sono">
-              Antes do treino, o app pergunta como você dormiu. Se dormiu mal, tira uma série dos exercícios com 3 ou mais. Dá para
-              desligar em Ajustes.
+              Antes do treino, o app pergunta como você dormiu. Se dormiu mal, tira uma série dos exercícios com 3 ou mais. Dá para desligar
+              em Ajustes.
             </Item>
             <Item titulo="1RM e recordes">1RM estimado pela fórmula de Epley; o app comemora quando você bate um recorde.</Item>
             <Item titulo="Peso e nutrição">
-              Registro de peso com média semanal e ritmo comparado à meta (ganhar +0,25 a +0,5%, perder −0,5 a −1% por semana), proteína
-              de 1,6–2,2 g/kg em 4 refeições e as doses de creatina e cafeína, com o aviso médico.
+              Registro de peso com média semanal e ritmo comparado à meta (ganhar +0,25 a +0,5%, perder −0,5 a −1% por semana), proteína de
+              1,6–2,2 g/kg em 4 refeições e as doses de creatina e cafeína, com o aviso médico.
             </Item>
           </ul>
         </Secao>
@@ -96,33 +94,33 @@ export default function Sobre() {
           </p>
           <ul className="flex flex-col gap-3">
             <Item titulo="Diretriz do ACSM 2026">
-              Primeira grande atualização desde 2009, baseada em 137 revisões sistemáticas com mais de 30.000 participantes. Qualquer
-              treino de força melhora força, tamanho muscular e função física, e o melhor programa é o que a pessoa mantém.
+              Primeira grande atualização desde 2009, baseada em 137 revisões sistemáticas com mais de 30.000 participantes. Qualquer treino
+              de força melhora força, tamanho muscular e função física, e o melhor programa é o que a pessoa mantém.
             </Item>
             <Item titulo="Sobrecarga progressiva">
               O músculo só continua se adaptando se o estímulo aumenta com o tempo: mais carga, mais repetições ou mais séries. Por isso
               registrar cada treino é essencial.
             </Item>
             <Item titulo="Especificidade">
-              O corpo melhora naquilo que é treinado. Quem quer força máxima precisa treinar com cargas pesadas; quem quer músculo tem
-              mais liberdade de carga.
+              O corpo melhora naquilo que é treinado. Quem quer força máxima precisa treinar com cargas pesadas; quem quer músculo tem mais
+              liberdade de carga.
             </Item>
             <Item titulo="Individualidade">
-              Pessoas respondem de formas diferentes ao mesmo treino. As regras deste guia são ponto de partida, ajustadas pelos
-              resultados registrados.
+              Pessoas respondem de formas diferentes ao mesmo treino. As regras deste guia são ponto de partida, ajustadas pelos resultados
+              registrados.
             </Item>
           </ul>
         </Secao>
 
         <Secao titulo="Volume: séries por semana">
           <p>
-            Faça no mínimo <strong>10 séries por semana</strong> para cada grupo muscular. Volume é a variável que mais pesa no
-            crescimento depois da constância.
+            Faça no mínimo <strong>10 séries por semana</strong> para cada grupo muscular. Volume é a variável que mais pesa no crescimento
+            depois da constância.
           </p>
           <ul className="flex flex-col gap-3">
             <Item titulo="Schoenfeld, Ogborn & Krieger (2017)">
-              Relação dose-resposta, com mais hipertrofia até 10 ou mais séries semanais por músculo. Havia poucos dados para volumes
-              muito maiores.
+              Relação dose-resposta, com mais hipertrofia até 10 ou mais séries semanais por músculo. Havia poucos dados para volumes muito
+              maiores.
             </Item>
             <Item titulo="ACSM 2026">Reforça o mínimo de cerca de 10 séries por grupo muscular por semana.</Item>
             <Item titulo="Acima de ~20 séries">Resultados inconsistentes e mais fadiga. Mais não é sempre melhor.</Item>
@@ -137,15 +135,15 @@ export default function Sobre() {
             ]}
           />
           <p className="text-sm text-secundario">
-            Como contar: só contam séries de trabalho (perto da falha), não aquecimento. Compostos contam para os músculos principais:
-            o supino conta para peito e meia série para tríceps e ombro anterior.
+            Como contar: só contam séries de trabalho (perto da falha), não aquecimento. Compostos contam para os músculos principais: o
+            supino conta para peito e meia série para tríceps e ombro anterior.
           </p>
         </Secao>
 
         <Secao titulo="Frequência e divisões de treino">
           <p>
-            Treine cada músculo <strong>pelo menos 2 vezes por semana</strong>. Mantendo o volume semanal igual, a frequência exata
-            importa pouco: escolha a divisão que cabe na sua rotina.
+            Treine cada músculo <strong>pelo menos 2 vezes por semana</strong>. Mantendo o volume semanal igual, a frequência exata importa
+            pouco: escolha a divisão que cabe na sua rotina.
           </p>
           <ul className="flex flex-col gap-3">
             <Item titulo="Schoenfeld, Ogborn & Krieger (2016)">
@@ -167,20 +165,20 @@ export default function Sobre() {
             ]}
           />
           <p className="text-sm text-secundario">
-            O clássico ABCDE (cada músculo 1x por semana) funciona, mas fica abaixo da frequência recomendada; por isso o app não o
-            oferece pronto. Se preferir montá-lo, garanta pelo menos 10 séries semanais por músculo.
+            O clássico ABCDE (cada músculo 1x por semana) funciona, mas fica abaixo da frequência recomendada; por isso o app não o oferece
+            pronto. Se preferir montá-lo, garanta pelo menos 10 séries semanais por músculo.
           </p>
         </Secao>
 
         <Secao titulo="Carga e faixas de repetição">
           <p>
-            Para ganhar músculo, cargas leves e pesadas funcionam igual se a série for até perto da falha. Para força máxima, cargas
-            pesadas são superiores.
+            Para ganhar músculo, cargas leves e pesadas funcionam igual se a série for até perto da falha. Para força máxima, cargas pesadas
+            são superiores.
           </p>
           <ul className="flex flex-col gap-3">
             <Item titulo="Schoenfeld, Grgic, Ogborn & Krieger (2017)">
-              21 estudos com séries até a falha: hipertrofia parecida com cargas ≤60% e &gt;60% de 1RM, mas a força máxima cresceu mais
-              com cargas pesadas.
+              21 estudos com séries até a falha: hipertrofia parecida com cargas ≤60% e &gt;60% de 1RM, mas a força máxima cresceu mais com
+              cargas pesadas.
             </Item>
             <Item titulo="ACSM 2026">Para força, cargas de pelo menos 80% de 1RM, 2–3 séries por exercício.</Item>
           </ul>
@@ -213,8 +211,8 @@ export default function Sobre() {
           </p>
           <ul className="flex flex-col gap-3">
             <Item titulo="Robinson et al. (2024)">
-              Meta-regressão com 55 estudos: a hipertrofia aumenta conforme a série termina mais perto da falha, de forma não linear.
-              Para força, isso importa pouco.
+              Meta-regressão com 55 estudos: a hipertrofia aumenta conforme a série termina mais perto da falha, de forma não linear. Para
+              força, isso importa pouco.
             </Item>
             <Item titulo="Refalo, Helms et al. (2023)">Não há prova de que ir até a falha seja melhor do que parar um pouco antes.</Item>
             <Item titulo="Refalo et al. (2024)">
@@ -232,15 +230,15 @@ export default function Sobre() {
             ]}
           />
           <p className="text-sm text-secundario">
-            Compostos pesados a RIR 1–3, por segurança. Isoladores e máquinas podem ir a RIR 0–1, especialmente na última série.
-            Iniciantes costumam subestimar quanto ainda aguentam.
+            Compostos pesados a RIR 1–3, por segurança. Isoladores e máquinas podem ir a RIR 0–1, especialmente na última série. Iniciantes
+            costumam subestimar quanto ainda aguentam.
           </p>
         </Secao>
 
         <Secao titulo="Descanso entre séries">
           <p>
-            Descanse <strong>pelo menos 60–90 segundos</strong>. Acima de 90 segundos não há diferença clara na hipertrofia; descansar
-            mais serve para conseguir repetir o desempenho.
+            Descanse <strong>pelo menos 60–90 segundos</strong>. Acima de 90 segundos não há diferença clara na hipertrofia; descansar mais
+            serve para conseguir repetir o desempenho.
           </p>
           <ul className="flex flex-col gap-3">
             <Item titulo="Singer, Wolf… Schoenfeld (2024)">
@@ -272,8 +270,8 @@ export default function Sobre() {
               Stiff/terra romeno, rosca no banco inclinado, tríceps francês, panturrilha com pausa embaixo, agachamento profundo.
             </Item>
             <Item titulo="Schoenfeld, Ogborn & Krieger (2015)">
-              Repetições de 0,5 a 8 segundos dão hipertrofia parecida; muito lentas (mais de 10 s) parecem inferiores. Suba com intenção
-              e desça controlado (2–3 s), sem quicar.
+              Repetições de 0,5 a 8 segundos dão hipertrofia parecida; muito lentas (mais de 10 s) parecem inferiores. Suba com intenção e
+              desça controlado (2–3 s), sem quicar.
             </Item>
             <Item titulo="Escolha dos exercícios">
               Cubra todos os grupos, combine compostos e isoladores. Máquinas e halteres são tão bons quanto barra para hipertrofia.
@@ -298,40 +296,42 @@ export default function Sobre() {
           </div>
           <ul className="flex flex-col gap-3">
             <Item titulo="Estagnação">
-              Se um exercício não progride em 2–3 treinos seguidos, verifique sono, alimentação e fadiga. Depois, considere trocar por
-              uma variação ou reduzir o volume por uma semana.
+              Se um exercício não progride em 2–3 treinos seguidos, verifique sono, alimentação e fadiga. Depois, considere trocar por uma
+              variação ou reduzir o volume por uma semana.
             </Item>
             <Item titulo="Periodização">
               Linear e ondulatória costumam dar resultados parecidos para hipertrofia. O decisivo é volume suficiente e progressão.
             </Item>
             <Item titulo="Coleman et al. (2024)">
-              Uma semana sem treino no meio de 9 semanas não mudou a hipertrofia, mas reduziu um pouco a força de membros inferiores.
-              Use deload quando houver sinais de fadiga acumulada; uma versão comum é manter os exercícios e cortar cerca de metade das
-              séries por uma semana.
+              Uma semana sem treino no meio de 9 semanas não mudou a hipertrofia, mas reduziu um pouco a força de membros inferiores. Use
+              deload quando houver sinais de fadiga acumulada; uma versão comum é manter os exercícios e cortar cerca de metade das séries
+              por uma semana.
             </Item>
           </ul>
         </Secao>
 
         <Secao titulo="Cardio junto com musculação">
           <p>
-            Cardio não “mata” o ganho de massa nem de força máxima. Pode reduzir um pouco a força explosiva, principalmente na mesma
-            sessão.
+            Cardio não “mata” o ganho de massa nem de força máxima. Pode reduzir um pouco a força explosiva, principalmente na mesma sessão.
           </p>
           <ul className="flex flex-col gap-3">
             <Item titulo="Schumann et al. (2022)">
-              43 estudos, 1.090 pessoas: o treino combinado não atrapalhou força máxima nem hipertrofia. A força explosiva foi
-              prejudicada, mais quando feitos na mesma sessão.
+              43 estudos, 1.090 pessoas: o treino combinado não atrapalhou força máxima nem hipertrofia. A força explosiva foi prejudicada,
+              mais quando feitos na mesma sessão.
             </Item>
             <Item titulo="Lundberg et al. (2022)">Pequeno efeito negativo nas fibras, mais forte com corrida do que com bicicleta.</Item>
             <Item titulo="Na prática">
-              Separe musculação e cardio por algumas horas ou dias. Bicicleta, elíptico e caminhada inclinada interferem menos nas
-              pernas. Na mesma sessão, faça a musculação primeiro.
+              Separe musculação e cardio por algumas horas ou dias. Bicicleta, elíptico e caminhada inclinada interferem menos nas pernas.
+              Na mesma sessão, faça a musculação primeiro.
             </Item>
           </ul>
         </Secao>
 
         <Secao titulo="Calorias: ganhar massa, perder gordura e recomposição">
-          <p>O ritmo de mudança do peso é o melhor guia: ganhe devagar para ganhar músculo com pouca gordura e perca devagar para preservar músculo.</p>
+          <p>
+            O ritmo de mudança do peso é o melhor guia: ganhe devagar para ganhar músculo com pouca gordura e perca devagar para preservar
+            músculo.
+          </p>
           <Tabela
             cabecalho={['Objetivo', 'Ritmo semanal', 'Calorias']}
             linhas={[
@@ -345,23 +345,21 @@ export default function Sobre() {
             <Item titulo="Iraki, Fitschen, Espinar & Helms (2019)">
               Superávit de ~10–20%, ganho de ~0,25–0,5% do peso por semana. Acompanhe a média semanal de várias pesagens.
             </Item>
-            <Item titulo="Helms, Aragon & Fitschen (2014)">
-              Perder ~0,5–1% do peso por semana para manter o máximo de músculo.
-            </Item>
+            <Item titulo="Helms, Aragon & Fitschen (2014)">Perder ~0,5–1% do peso por semana para manter o máximo de músculo.</Item>
             <Item titulo="Recomposição">
               Mais provável em iniciantes, em quem está voltando a treinar e em quem tem mais gordura corporal.
             </Item>
             <Item titulo="Como achar a manutenção">
-              Registre o que come por 2 semanas sem mudar nada. Se o peso médio ficou estável, essa é a sua manutenção. Ajuste em passos
-              de 100–200 kcal.
+              Registre o que come por 2 semanas sem mudar nada. Se o peso médio ficou estável, essa é a sua manutenção. Ajuste em passos de
+              100–200 kcal.
             </Item>
           </ul>
         </Secao>
 
         <Secao titulo="Proteína, carboidratos, gorduras e água">
           <p>
-            Coma cerca de <strong>1,6 g de proteína por kg</strong> de peso por dia (até 2,2 g/kg), em pelo menos 4 refeições. O total
-            do dia importa muito mais que o horário.
+            Coma cerca de <strong>1,6 g de proteína por kg</strong> de peso por dia (até 2,2 g/kg), em pelo menos 4 refeições. O total do
+            dia importa muito mais que o horário.
           </p>
           <ul className="flex flex-col gap-3">
             <Item titulo="Morton et al. (2018)">
@@ -405,8 +403,8 @@ export default function Sobre() {
               Mais de 200 estudos: melhora o desempenho em exercícios intensos e é segura em uso curto e longo em pessoas saudáveis.
             </Item>
             <Item titulo="Cafeína: ISSN (Guest et al., 2021)">
-              Benefício pequeno a moderado em força e resistência com 3–6 mg/kg. Doses ≥9 mg/kg aumentam efeitos colaterais; evite perto
-              da hora de dormir.
+              Benefício pequeno a moderado em força e resistência com 3–6 mg/kg. Doses ≥9 mg/kg aumentam efeitos colaterais; evite perto da
+              hora de dormir.
             </Item>
           </ul>
           <p className="text-sm font-semibold text-alerta-texto">
@@ -458,9 +456,15 @@ export default function Sobre() {
             cabecalho={['Mito', 'O que a ciência mostra']}
             linhas={[
               ['“Só cresce com peso pesado”', 'Cargas leves crescem igual se a série for perto da falha (Schoenfeld 2017)'],
-              ['“Tem que ir até a falha em toda série”', 'Parar a 1–3 reps da falha dá resultado parecido com menos fadiga (Refalo 2023, 2024)'],
+              [
+                '“Tem que ir até a falha em toda série”',
+                'Parar a 1–3 reps da falha dá resultado parecido com menos fadiga (Refalo 2023, 2024)',
+              ],
               ['“Proteína em até 30 min após o treino”', 'O total do dia é o que mais importa (Schoenfeld 2013)'],
-              ['“Só aproveita 20–30 g por refeição”', 'Refeições maiores também são aproveitadas; ~0,4 g/kg em 4+ refeições (Schoenfeld & Aragon 2018)'],
+              [
+                '“Só aproveita 20–30 g por refeição”',
+                'Refeições maiores também são aproveitadas; ~0,4 g/kg em 4+ refeições (Schoenfeld & Aragon 2018)',
+              ],
               ['“Cardio mata os ganhos”', 'Não atrapalha hipertrofia nem força máxima (Schumann 2022)'],
               ['“Cada músculo só uma vez por semana”', '2x por semana é melhor quando o volume não é igualado (Schoenfeld 2016)'],
               ['“Mulher que treina pesado fica enorme”', 'Ganham músculo na mesma proporção, com menos massa absoluta (Roberts 2020)'],

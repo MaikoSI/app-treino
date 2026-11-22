@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { db } from './index';
 import { DIVISOES } from './divisoes';
+import { db } from './index';
 import { criarProgramaDeDivisao, diasDoPrograma } from './programas';
 import {
   adicionarExercicioNoTreino,
@@ -94,8 +94,29 @@ describe('treinosPorExercicio', () => {
   it('agrupa por treino em ordem e ignora semanas leves, sono ruim e o treino atual', async () => {
     const ex = (await db.exercicios.where('nome').equals('Supino reto').first())!.id;
     const sessao = async (inicio: number, ajuste?: 'normal' | 'sono' | 'deload') => {
-      const id = await db.sessoes.add({ programaDiaId: null, programaId: null, nomeDia: 'T', inicio, fim: inicio + 1, concluida: true, observacao: '', ajuste });
-      await db.sessaoSeries.add({ sessaoId: id, exercicioId: ex, ordem: 0, numero: 1, carga: inicio, reps: 5, rir: null, concluida: true, repsMin: 6, repsMax: 10, descansoSeg: 90 });
+      const id = await db.sessoes.add({
+        programaDiaId: null,
+        programaId: null,
+        nomeDia: 'T',
+        inicio,
+        fim: inicio + 1,
+        concluida: true,
+        observacao: '',
+        ajuste,
+      });
+      await db.sessaoSeries.add({
+        sessaoId: id,
+        exercicioId: ex,
+        ordem: 0,
+        numero: 1,
+        carga: inicio,
+        reps: 5,
+        rir: null,
+        concluida: true,
+        repsMin: 6,
+        repsMax: 10,
+        descansoSeg: 90,
+      });
       return id;
     };
     await sessao(30);

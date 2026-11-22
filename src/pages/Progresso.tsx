@@ -6,11 +6,11 @@ import { IconeTrofeu, IconeVoltar } from '../components/Icones';
 import { Cabecalho, Carregando, Vazio } from '../components/ui';
 import { useExerciciosMap } from '../db/hooks';
 import { historicoDeSeries } from '../db/sessoes';
-import { dataCurta, kg, num } from '../lib/formato';
 import { GRUPOS_MUSCULARES, GRUPOS_PRINCIPAIS } from '../db/tipos';
+import { dataCurta, kg, num } from '../lib/formato';
 import { recordesPessoais } from '../lib/progresso';
-import { volumePorMusculo } from '../lib/volume';
 import { inicioDaSemana } from '../lib/semana';
+import { volumePorMusculo } from '../lib/volume';
 
 export default function Progresso() {
   const exercicios = useExerciciosMap();
@@ -24,7 +24,10 @@ export default function Progresso() {
         <Cabecalho titulo="Progresso" />
         <Vazio>Finalize seu primeiro treino para ver gráficos e recordes aqui.</Vazio>
         <div className="px-4">
-          <Link to="/corpo" className="flex min-h-14 items-center justify-between rounded-cartao bg-cartao shadow-cartao px-4 active:bg-cartao-2">
+          <Link
+            to="/corpo"
+            className="flex min-h-14 items-center justify-between rounded-cartao bg-cartao shadow-cartao px-4 active:bg-cartao-2"
+          >
             <span className="font-semibold">Peso corporal e nutrição</span>
             <IconeVoltar className="rotate-180 text-secundario" />
           </Link>
@@ -47,7 +50,11 @@ export default function Progresso() {
   }));
   const ultimoDia = new Date(fim.getTime() - 1);
   const rotuloSemana =
-    semanasAtras === 0 ? 'Esta semana' : semanasAtras === 1 ? 'Semana passada' : `${dataCurta(ini.getTime())} a ${dataCurta(ultimoDia.getTime())}`;
+    semanasAtras === 0
+      ? 'Esta semana'
+      : semanasAtras === 1
+        ? 'Semana passada'
+        : `${dataCurta(ini.getTime())} a ${dataCurta(ultimoDia.getTime())}`;
 
   const recordes = recordesPessoais(series)
     .map((r) => ({ ...r, ex: exercicios.get(r.exercicioId) }))
@@ -57,7 +64,10 @@ export default function Progresso() {
     <>
       <Cabecalho titulo="Progresso" />
       <div className="flex flex-col gap-6 px-4">
-        <Link to="/corpo" className="flex min-h-14 items-center justify-between rounded-cartao bg-cartao shadow-cartao px-4 active:bg-cartao-2">
+        <Link
+          to="/corpo"
+          className="flex min-h-14 items-center justify-between rounded-cartao bg-cartao shadow-cartao px-4 active:bg-cartao-2"
+        >
           <span className="font-semibold">Peso corporal e nutrição</span>
           <IconeVoltar className="rotate-180 text-secundario" />
         </Link>

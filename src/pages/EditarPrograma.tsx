@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useState, type ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BarrasVolume } from '../components/BarrasVolume';
 import { IconeBaixo, IconeCima, IconeLixo, IconeMais } from '../components/Icones';
@@ -35,13 +35,17 @@ export default function EditarPrograma() {
   if (programa === null) return <Vazio>Programa não encontrado.</Vazio>;
 
   async function moverDia(i: number, delta: number) {
-    await salvarOrdem('programaDias', mover(dias!, i, delta).map((d) => d.id!));
+    await salvarOrdem(
+      'programaDias',
+      mover(dias!, i, delta).map((d) => d.id!),
+    );
   }
 
   return (
     <>
       <Cabecalho titulo="Editar programa" voltar />
       <div className="flex flex-col gap-4 px-4 pb-8">
+        {/* biome-ignore lint/a11y/noLabelWithoutControl: CampoTexto renderiza o <input> dentro do label */}
         <label className="flex flex-col gap-1">
           <span className="text-sm text-secundario">Nome do programa</span>
           <CampoTexto valor={programa.nome} aoSalvar={(nome) => db.programas.update(programaId, { nome })} />
@@ -67,13 +71,7 @@ export default function EditarPrograma() {
         <AnalisePrograma programaId={programaId} diasPorSemana={programa.diasPorSemana} totalDias={dias.length} />
 
         {dias.map((dia, i) => (
-          <EditorDia
-            key={dia.id}
-            dia={dia}
-            primeiro={i === 0}
-            ultimo={i === dias.length - 1}
-            aoMover={(delta) => moverDia(i, delta)}
-          />
+          <EditorDia key={dia.id} dia={dia} primeiro={i === 0} ultimo={i === dias.length - 1} aoMover={(delta) => moverDia(i, delta)} />
         ))}
 
         <Botao onClick={() => adicionarDia(programaId)}>
@@ -169,17 +167,16 @@ function EditorDia({
   const [editando, setEditando] = useState<ProgramaExercicio | null>(null);
 
   async function moverItem(i: number, delta: number) {
-    await salvarOrdem('programaExercicios', mover(itens!, i, delta).map((x) => x.id!));
+    await salvarOrdem(
+      'programaExercicios',
+      mover(itens!, i, delta).map((x) => x.id!),
+    );
   }
 
   return (
     <Cartao className="flex flex-col gap-3">
       <div className="flex items-center gap-1">
-        <CampoTexto
-          valor={dia.nome}
-          aoSalvar={(nome) => db.programaDias.update(dia.id!, { nome })}
-          className={`${campo} font-semibold`}
-        />
+        <CampoTexto valor={dia.nome} aoSalvar={(nome) => db.programaDias.update(dia.id!, { nome })} className={`${campo} font-semibold`} />
         <button type="button" aria-label="Mover dia para cima" className={botaoIcone} disabled={primeiro} onClick={() => aoMover(-1)}>
           <IconeCima />
         </button>
@@ -201,7 +198,11 @@ function EditorDia({
           const ex = exercicios?.get(item.exercicioId);
           return (
             <li key={item.id} className="flex items-center gap-1 py-1">
-              <button type="button" onClick={() => setEditando(item)} className="flex min-h-12 flex-1 flex-col items-start justify-center text-left">
+              <button
+                type="button"
+                onClick={() => setEditando(item)}
+                className="flex min-h-12 flex-1 flex-col items-start justify-center text-left"
+              >
                 <span className="font-medium">{ex?.nome ?? 'Exercício removido'}</span>
                 <span className="text-sm text-secundario tabular-nums">
                   {item.series} × {item.repsMin}–{item.repsMax} · {item.descansoSeg}s descanso
@@ -263,7 +264,13 @@ function EditorItem({
     // mantém repsMin ≤ repsMax
     if (mudanca.repsMin !== undefined && novo.repsMin > novo.repsMax) novo.repsMax = novo.repsMin;
     if (mudanca.repsMax !== undefined && novo.repsMax < novo.repsMin) novo.repsMin = novo.repsMax;
-    db.programaExercicios.update(p.id!, { series: novo.series, repsMin: novo.repsMin, repsMax: novo.repsMax, descansoSeg: novo.descansoSeg, exercicioId: novo.exercicioId });
+    db.programaExercicios.update(p.id!, {
+      series: novo.series,
+      repsMin: novo.repsMin,
+      repsMax: novo.repsMax,
+      descansoSeg: novo.descansoSeg,
+      exercicioId: novo.exercicioId,
+    });
   };
 
   return (

@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Link, useParams } from 'react-router-dom';
 import { MapaMuscular } from '../components/MapaMuscular';
-import { Cabecalho, Cartao, Carregando, Vazio } from '../components/ui';
+import { Cabecalho, Carregando, Cartao, Vazio } from '../components/ui';
 import { db } from '../db';
 import { useConfig } from '../db/config';
 import { duracao } from '../lib/formato';

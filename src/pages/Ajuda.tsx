@@ -88,9 +88,7 @@ export default function Ajuda() {
           <Item titulo="Programa ativo">
             É o programa que aparece no Início. Só um fica ativo por vez; troque em <strong>Tornar este o programa ativo</strong>.
           </Item>
-          <Item titulo="Pode mexer sem medo">
-            Editar ou apagar um programa não muda os treinos que você já fez.
-          </Item>
+          <Item titulo="Pode mexer sem medo">Editar ou apagar um programa não muda os treinos que você já fez.</Item>
         </Secao>
 
         <Secao id="exercicios" titulo="Exercícios e músculos" Icone={IconeHalter}>
@@ -115,8 +113,8 @@ export default function Ajuda() {
             Já vêm preenchidos com o que você fez da última vez. Mude se precisar e toque no ✓ quando terminar a série.
           </Item>
           <Item titulo="Sugestão de carga">
-            Quando você chega ao máximo de repetições em todas as séries, aparece <strong>Tente +2,5 kg</strong> (+5 kg em exercícios
-            de perna). O botão <strong>Usar</strong> já coloca a carga nova.
+            Quando você chega ao máximo de repetições em todas as séries, aparece <strong>Tente +2,5 kg</strong> (+5 kg em exercícios de
+            perna). O botão <strong>Usar</strong> já coloca a carga nova.
           </Item>
           <Item titulo="Mais ou menos séries">
             Use <strong>+ Série</strong> e <strong>− Série</strong> embaixo de cada exercício. Séries não marcadas são descartadas ao
@@ -128,8 +126,8 @@ export default function Ajuda() {
           </Item>
           <Item titulo="Adicionar exercício">Botão no fim da lista, para incluir algo que não estava no programa.</Item>
           <Item titulo="Recordes">
-            Quando você bate seu melhor peso ou seu melhor 1RM estimado, o app comemora na hora. Só conta a partir da segunda vez que
-            você faz o exercício.
+            Quando você bate seu melhor peso ou seu melhor 1RM estimado, o app comemora na hora. Só conta a partir da segunda vez que você
+            faz o exercício.
           </Item>
           <Item titulo="Finalizar">
             Toque em <strong>Finalizar</strong> no topo, escreva uma observação se quiser e veja o resumo. Para jogar o treino fora, use{' '}
@@ -146,8 +144,8 @@ export default function Ajuda() {
             funciona).
           </Item>
           <Item titulo="Quanto descansar">
-            Compostos (supino, agachamento, remada): cerca de 2 a 3 min. Isolados (rosca, elevação lateral): 1 a 1,5 min. Mude o padrão
-            em Ajustes.
+            Compostos (supino, agachamento, remada): cerca de 2 a 3 min. Isolados (rosca, elevação lateral): 1 a 1,5 min. Mude o padrão em
+            Ajustes.
           </Item>
         </Secao>
 
@@ -183,8 +181,8 @@ export default function Ajuda() {
 
         <Secao id="ajustes" titulo="Ajustes" Icone={IconeAjustes}>
           <Item titulo="Objetivo">
-            Hipertrofia (músculo) ou Força. Muda as repetições e o descanso sugeridos para os exercícios novos. Para aplicar a um
-            programa que já existe, toque em <strong>Aplicar ao programa ativo</strong>.
+            Hipertrofia (músculo) ou Força. Muda as repetições e o descanso sugeridos para os exercícios novos. Para aplicar a um programa
+            que já existe, toque em <strong>Aplicar ao programa ativo</strong>.
           </Item>
           <Item titulo="RIR (opcional)">
             “Repetições em reserva”: quantas repetições ainda daria para fazer. 0 = não conseguiria mais nenhuma. Ligue para registrar em
@@ -227,7 +225,10 @@ export default function Ajuda() {
           </Item>
         </Secao>
 
-        <Link to="/sobre" className="flex min-h-12 items-center justify-center rounded-cartao bg-cartao shadow-cartao px-4 text-center font-semibold text-primaria-texto">
+        <Link
+          to="/sobre"
+          className="flex min-h-12 items-center justify-center rounded-cartao bg-cartao shadow-cartao px-4 text-center font-semibold text-primaria-texto"
+        >
           Por que o app sugere isso? Veja a base científica
         </Link>
       </div>

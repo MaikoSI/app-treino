@@ -8,8 +8,7 @@ describe('divisões prontas', () => {
 
   it('todo exercício citado existe na biblioteca', () => {
     for (const div of DIVISOES)
-      for (const dia of div.dias)
-        for (const ex of dia.exercicios) expect(nomes, `${div.nome} / ${dia.nome}`).toContain(ex.nome);
+      for (const dia of div.dias) for (const ex of dia.exercicios) expect(nomes, `${div.nome} / ${dia.nome}`).toContain(ex.nome);
   });
 
   it('uma divisão para cada número de dias, de 2 a 6, com um dia de treino por dia da semana', () => {
@@ -23,7 +22,10 @@ describe('divisões prontas', () => {
     for (const div of DIVISOES)
       for (const dia of div.dias) {
         for (const ex of dia.exercicios) expect(ex.series).toBeGreaterThan(0);
-        expect(dia.exercicios.reduce((s, x) => s + x.series, 0), `${div.nome} / ${dia.nome}`).toBeLessThanOrEqual(24);
+        expect(
+          dia.exercicios.reduce((s, x) => s + x.series, 0),
+          `${div.nome} / ${dia.nome}`,
+        ).toBeLessThanOrEqual(24);
       }
   });
 
