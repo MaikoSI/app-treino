@@ -15,6 +15,7 @@ npx vitest run src/lib/forca.test.ts      # single file
 npx vitest run -t "sugestaoProgressao"    # tests matching a name
 npm run typecheck    # tsc --noEmit
 npm run lint         # Biome: lint + format check (CI fails on errors)
+npm run knip         # Knip: unused files, exports and dependencies (CI fails on findings)
 npm run format       # Biome: apply formatting, import order and safe fixes
 npm run build        # typecheck + production build into dist/ (with service worker)
 npm run preview      # serve dist/ (needed to test offline/PWA; dev mode has no SW)
