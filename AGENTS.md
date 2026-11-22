@@ -32,7 +32,7 @@ These rules come from the project owner and apply to every task, whatever the mo
 - **Never commit to `main`.** One branch per Issue (`feat/…`, `fix/…`, `chore/…`, `docs/…`), then a Pull Request.
 - **PR description:** reference the Issue (`Closes #12`), explain what changed and how to test it.
 - **PRs gate deploys.** Only what is reviewed, approved and merged into `main` reaches production (the Pages deploy runs on `main`).
-- **Commit messages follow Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `ci:`…), enforced by commitlint.
+- **Commit messages follow Conventional Commits** (`feat:`, `fix:`, `docs:`, `chore:`, `refactor:`, `test:`, `ci:`…), enforced by commitlint (`commitlint.config.js`) in a Husky `commit-msg` hook (installed by `npm install` via `prepare`) and in CI for every commit of the PR. Subject in Portuguese, any case; body explains why.
 - **Privacy:** commits use the GitHub noreply e-mail already set in `git config user.email`. Never commit backups, `.env`, tokens, DSNs or personal data. Push, Issue and PR creation are outward-facing: do them only when the owner asked.
 
 ### 2. UI and UX

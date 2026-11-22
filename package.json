@@ -11,7 +11,9 @@
     "typecheck": "tsc --noEmit",
     "test:watch": "vitest",
     "lint": "biome check .",
-    "format": "biome check --write ."
+    "format": "biome check --write .",
+    "prepare": "husky",
+    "commitlint": "commitlint"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -25,12 +27,15 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.8",
+    "@commitlint/cli": "20.5.3",
+    "@commitlint/config-conventional": "20.5.3",
     "@tailwindcss/vite": "^4.3.5",
     "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.3.0",
     "fake-indexeddb": "^6.2.8",
+    "husky": "9.1.7",
     "tailwindcss": "^4.3.5",
     "typescript": "^7.0.2",
     "vite": "^8.3.8",
