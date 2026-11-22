@@ -6,7 +6,7 @@
 import { type Articulacao, foraDosLimites, ORDEM, type Ponto, type Pose, posicoes, type Vec3 } from './esqueleto';
 
 /** Onde um objeto móvel fica preso: um ponto do corpo ou o meio entre dois pontos. */
-export type Fixacao = Ponto | 'maos' | 'pes' | 'ombros';
+export type Fixacao = Ponto | 'maos' | 'pes' | 'ombros' | { art: Articulacao; desloc: Vec3 };
 
 export type Acessorio = 'corda' | 'barra' | 'triangulo' | 'puxador' | 'tornozeleira';
 
@@ -31,6 +31,8 @@ export interface Quadro {
   /** Duração (ms) da transição deste quadro até o próximo (o último volta ao primeiro). */
   ms: number;
   fase: Fase;
+  /** Transição linear até o próximo quadro (quadros intermediários de um movimento já suavizado). */
+  linear?: boolean;
 }
 
 export type Contato =
@@ -78,7 +80,8 @@ export function poseNoTempo(r: ReceitaExecucao, ms: number): Pose {
     const q = r.quadros[i];
     if (t < q.ms) {
       if (t === 0) return q.pose;
-      return interpolar(q.pose, r.quadros[(i + 1) % r.quadros.length].pose, suavizar(t / q.ms));
+      const u = t / q.ms;
+      return interpolar(q.pose, r.quadros[(i + 1) % r.quadros.length].pose, q.linear ? u : suavizar(u));
     }
     t -= q.ms;
   }

@@ -48,8 +48,8 @@ function resolver(a: number[][], b: number[]): number[] {
   return x;
 }
 
-const AMORTECIMENTO = 1e-4;
-const PASSO_MAX = 8; // graus por iteração
+const AMORTECIMENTO = 2e-5;
+const PASSO_MAX = 15; // graus por iteração
 const H = 0.25; // graus, para a derivada numérica
 
 export function resolverIK(semente: Pose, alvos: Alvo[], livres: Livre[], iteracoes = 300): Pose {
@@ -65,9 +65,17 @@ export function resolverIK(semente: Pose, alvos: Alvo[], livres: Livre[], iterac
   };
   const limitar = (g: Grau, v: number) => Math.min(LIMITES[g.art].max[g.eixo], Math.max(LIMITES[g.art].min[g.eixo], v));
 
+  let melhor = Number.POSITIVE_INFINITY;
+  let parado = 0;
   for (let it = 0; it < iteracoes; it++) {
     const e = erro();
-    if (Math.max(...e.map(Math.abs)) < 1e-4) break;
+    const maior = Math.max(...e.map(Math.abs));
+    if (maior < 2e-4) break;
+    // Alvo inalcançável (ou preso num limite): para quando deixa de melhorar.
+    if (maior > melhor * 0.995) {
+      if (++parado >= 10) break;
+    } else parado = 0;
+    melhor = Math.min(melhor, maior);
     // Jacobiano numérico: J[i][j] = ∂(posição i)/∂(grau j); como e = alvo − posição, ∂e = −J.
     const jac = gs.map((g) => {
       const v = rot[g.art]![g.eixo];

@@ -125,8 +125,8 @@ export const LIMITES: Record<Filha, Limite> = {
   quadrilD: { min: [-130, -50, -60], max: [40, 50, 30] },
   joelhoE: { min: [0, -10, -5], max: [150, 10, 5] },
   joelhoD: { min: [0, -10, -5], max: [150, 10, 5] },
-  tornozeloE: { min: [-30, -20, -20], max: [50, 20, 20] },
-  tornozeloD: { min: [-30, -20, -20], max: [50, 20, 20] },
+  tornozeloE: { min: [-40, -20, -20], max: [50, 20, 20] },
+  tornozeloD: { min: [-40, -20, -20], max: [50, 20, 20] },
 };
 
 // Matriz 3×3 em linhas.
@@ -172,11 +172,23 @@ function compor(pai: Transformacao, desloc: Vec3, rot: Vec3): Transformacao {
 
 const ZERO: Vec3 = [0, 0, 0];
 
-/** Posição no mundo de cada articulação e extremidade. */
-export function posicoes(pose: Pose): Record<Ponto, Vec3> {
+function transformacoes(pose: Pose): Record<Articulacao, Transformacao> {
   const tr = {} as Record<Articulacao, Transformacao>;
   tr.quadril = { r: matrizEuler(pose.raiz.rot), t: [...pose.raiz.pos] };
   for (const a of ORDEM.slice(1) as Filha[]) tr[a] = compor(tr[PAI[a]], OSSO[a], pose.rot[a] ?? ZERO);
+  return tr;
+}
+
+/** Posição no mundo de um ponto preso a uma articulação (deslocamento no referencial dela). */
+export function pontoLocal(pose: Pose, art: Articulacao, desloc: Vec3): Vec3 {
+  const t = transformacoes(pose)[art];
+  const d = aplicar(t.r, desloc);
+  return [t.t[0] + d[0], t.t[1] + d[1], t.t[2] + d[2]];
+}
+
+/** Posição no mundo de cada articulação e extremidade. */
+export function posicoes(pose: Pose): Record<Ponto, Vec3> {
+  const tr = transformacoes(pose);
   const out = {} as Record<Ponto, Vec3>;
   for (const a of ORDEM) out[a] = tr[a].t;
   for (const [e, { de, desloc }] of Object.entries(EXTREMIDADE) as [Extremidade, (typeof EXTREMIDADE)[Extremidade]][]) {

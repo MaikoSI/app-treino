@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ALTURA_QUADRIL, foraDosLimites, POSE_NEUTRA, type Pose, posicoes, type Vec3 } from './esqueleto';
+import { ALTURA_QUADRIL, foraDosLimites, POSE_NEUTRA, type Pose, pontoLocal, posicoes, type Vec3 } from './esqueleto';
 
 const dist = (a: Vec3, b: Vec3) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 
@@ -43,6 +43,16 @@ describe('posicoes', () => {
     const p = posicoes({ raiz: { pos: [0, 0.5, 0], rot: [-90, 0, 0] }, rot: {} });
     expect(p.cabeca[1]).toBeCloseTo(p.quadril[1], 1);
     expect(p.cabeca[2]).toBeLessThan(-0.5);
+  });
+});
+
+describe('pontoLocal', () => {
+  it('acompanha a rotação da articulação', () => {
+    const inclinado: Pose = { ...POSE_NEUTRA, rot: { coluna: [90, 0, 0] } };
+    const p = posicoes(inclinado);
+    const q = pontoLocal(inclinado, 'coluna', [0, 0.4, 0]);
+    expect(q).toEqual(p.pescoco);
+    expect(pontoLocal(POSE_NEUTRA, 'quadril', [0, 0, 0])).toEqual(POSE_NEUTRA.raiz.pos);
   });
 });
 

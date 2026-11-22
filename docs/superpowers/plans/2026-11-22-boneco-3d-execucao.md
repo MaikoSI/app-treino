@@ -36,9 +36,11 @@
 ### Task 1: Issue, branch e esqueleto com cinemática direta
 
 **Files:**
+
 - Create: `src/lib/esqueleto.ts`, `src/lib/esqueleto.test.ts`
 
 **Interfaces:**
+
 - Produces:
   - `type Articulacao = 'quadril' | 'coluna' | 'pescoco' | 'ombroE' | 'ombroD' | 'cotoveloE' | 'cotoveloD' | 'punhoE' | 'punhoD' | 'quadrilE' | 'quadrilD' | 'joelhoE' | 'joelhoD' | 'tornozeloE' | 'tornozeloD'` (quadril = raiz; `quadrilE/D` = articulação da coxa).
   - `type Vec3 = [number, number, number]` (metros; y para cima, z para frente do boneco, x para a esquerda do boneco).
@@ -58,6 +60,7 @@ git switch -c feat/boneco-3d
 - [ ] **Step 2: Escrever os testes**
 
 `esqueleto.test.ts`:
+
 - `posicoes(POSE_NEUTRA)`: cabeça ≈ 1,6–1,75 m de altura; pés em y ≈ 0 quando `raiz.pos = [0, ALTURA_QUADRIL, 0]`; `maoE.x > 0` e `maoD.x < 0` (simetria espelhada: `maoE.x ≈ -maoD.x`).
 - Flexionar `cotoveloD` 90° em X leva `maoD` para frente (`z` maior que o cotovelo) e mantém o comprimento antebraço constante (`dist(cotoveloD, maoD)` igual antes/depois, tolerância 1e-6).
 - Rodar a raiz 90° em X (deitado de costas) deixa a cabeça com `y ≈ raiz.y` e `z` negativo… ajustar ao sentido escolhido; o teste fixa: deitado de barriga para cima ⇒ `cabeca.y ≈ quadril.y` e `peito` voltado para +y.
@@ -74,9 +77,11 @@ git switch -c feat/boneco-3d
 ### Task 2: Receita, interpolação no tempo
 
 **Files:**
+
 - Create: `src/lib/execucao.ts`, `src/lib/execucao.test.ts`
 
 **Interfaces:**
+
 - Consumes: `Pose`, `Articulacao`, `Vec3` (Task 1).
 - Produces:
   - `type Equipamento3D = { tipo: 'banco'; inclinacao: number } | { tipo: 'barra'; presaEm: 'maos' | 'costas' | 'quadril' } | { tipo: 'halter'; mao: 'E' | 'D' | 'ambas' } | { tipo: 'polia'; origem: Vec3; acessorio: 'corda' | 'barra' | 'triangulo' | 'puxador' | 'tornozeleira'; presaEm: Extremidade | 'maos' } | { tipo: 'maquina'; modelo: 'legPress45' | 'extensora' | 'mesaFlexora' | 'cadeiraFlexora' | 'flexoraEmPe' | 'hack' | 'smith' | 'scott' | 'voador' | 'abdutora' | 'paralelas' | 'barraFixa' | 'panturrilhaEmPe' | 'panturrilhaSentado' | 'supinoMaquina' | 'remadaArticulada' | 'desenvolvimentoMaquina' | 'crucifixoInverso' | 'cavalinho' }`.
@@ -98,9 +103,11 @@ git switch -c feat/boneco-3d
 ### Task 3: Validação de receita
 
 **Files:**
+
 - Modify: `src/lib/execucao.ts`, `src/lib/execucao.test.ts`
 
 **Interfaces:**
+
 - Produces: `validarReceita(r: ReceitaExecucao, amostras = 60): string[]` — amostra `poseNoTempo` ao longo do ciclo e acusa:
   - menos de 2 quadros, ou `ms <= 0`;
   - qualquer `foraDosLimites` (prefixo `"t=<ms>: "`);
@@ -116,10 +123,12 @@ git switch -c feat/boneco-3d
 ### Task 4: Cinco exercícios-modelo + tipo da explicação + teste de cobertura
 
 **Files:**
+
 - Create: `src/lib/execucoes/tipos.ts`, `src/lib/execucoes/poses.ts` (poses-base reutilizáveis: `emPe`, `deitadoNoBanco(inclinacao)`, `sentado`, `pendurado`), `src/lib/execucoes/peito.ts`, `costas.ts`, `ombros.ts`, `bracos.ts`, `pernas.ts`, `abdomen.ts`, `src/lib/execucoes/index.ts`
 - Test: `src/db/execucoes.test.ts` (em `db/` porque precisa de `EXERCICIOS_INICIAIS`)
 
 **Interfaces:**
+
 - Produces:
   - `interface Explicacao { posicao: string[]; execucao: string[]; respiracao: string; erros: string[]; dica?: string }`.
   - `interface Execucao { receita: ReceitaExecucao; explicacao: Explicacao; descricao: string }` (`descricao` = frase única para `aria-label`).
@@ -152,11 +161,13 @@ explicacao: {
 ### Task 5: Componente Boneco3D (three.js, lazy)
 
 **Files:**
+
 - Create: `src/components/Boneco3D.tsx` (default export, lazy), `src/components/cena3d/manequim.ts`, `src/components/cena3d/equipamentos.ts`, `src/components/Demonstracao.tsx` (wrapper leve, no bundle inicial: decide 3D vs. poses estáticas vs. sem WebGL, faz o `lazy()` e mostra o `Esqueleto` 4:3)
 - Modify: `package.json` (add `three` + `@types/three` em versões exatas), `src/lib/tema.ts` se precisar de helper de cor
 - Test: `src/components/Boneco3D.test.ts` (funções puras de `cena3d/` sem WebGL: montar a hierarquia de `Object3D`, aplicar pose, cores)
 
 **Interfaces:**
+
 - Consumes: `posicoes`, `Pose` (Task 1); `poseNoTempo`, `posesExtremas`, `ReceitaExecucao` (Task 2); `Execucao` (Task 4); `corDoTema`, `temaEfetivo`, `useSistemaEscuro`.
 - Produces:
   - `<Demonstracao execucao={Execucao} />` — único ponto que telas usam.
@@ -175,11 +186,13 @@ explicacao: {
 ### Task 6: Telas — detalhe, painel no treino, nome clicável, anotações próprias
 
 **Files:**
+
 - Modify: `src/pages/ExercicioDetalhe.tsx`, `src/pages/Treino.tsx`, `src/pages/Exercicios.tsx`, `src/components/SeletorExercicio.tsx`, `src/db/tipos.ts` (`comoFazer?: string` em `Exercicio`), `src/components/ui.tsx` (formato `'detalhe'` do `Carregando` ganha o retângulo 4:3 no topo)
 - Create: `src/components/ComoFazer.tsx` (lista os passos de `Explicacao`; para exercício personalizado, `textarea` "Como fazer (suas anotações)" salva com `db.exercicios.update(id, { comoFazer })` via nova função `salvarComoFazer(id: number, texto: string): Promise<void>` em `src/db/exercicios.ts` — criar o arquivo se não existir)
 - Test: `src/db/exercicios.test.ts` (`salvarComoFazer` grava e apaga com string vazia → `undefined`), `e2e/fluxos.spec.ts`
 
 **Interfaces:**
+
 - Consumes: `<Demonstracao />` (Task 5), `execucaoDe` (Task 4).
 - Produces: `<ComoFazer exercicio={Exercicio} />`.
 
@@ -205,6 +218,7 @@ Cada task segue o passo a passo da Task 4 (regras de autoria idênticas), remove
 ### Task 12: Documentação, revisão final e PR
 
 **Files:**
+
 - Modify: `src/pages/Ajuda.tsx` (seção do treino e de exercícios: "Toque no nome do exercício para ver o boneco fazendo o movimento e o passo a passo"), `src/pages/Sobre.tsx` (seção "Como o app usa este guia": demonstrações 3D e texto de execução em todos os exercícios prontos; anotações próprias nos criados por você), `AGENTS.md` (seção nova "Demonstração 3D": onde ficam receitas, regras de autoria, `validarReceita`, three.js só lazy em `components/`)
 
 - [ ] **Step 1: Editar os três arquivos.**

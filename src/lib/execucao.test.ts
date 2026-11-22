@@ -42,6 +42,10 @@ describe('poseNoTempo', () => {
     expect(fim).toBeCloseTo(-10, 6);
     expect(poseNoTempo(r, -100).rot.cotoveloD![0]).toBeCloseTo(poseNoTempo(r, 3700).rot.cotoveloD![0], 6);
   });
+  it('quadro linear interpola sem suavizar', () => {
+    const q = quadros(embaixo, emCima).map((x, i) => (i === 0 ? { ...x, linear: true } : x));
+    expect(poseNoTempo(rosca(q), 250).rot.cotoveloD![0]).toBeCloseTo(-10 + (-130 * 250) / 1000, 6);
+  });
   it('rotação ausente num quadro conta como 0', () => {
     const a = emPe();
     const b = emPe({ joelhoE: [40, 0, 0] });
