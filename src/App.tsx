@@ -48,7 +48,7 @@ export default function App() {
   const semNavegacao = pathname === '/boas-vindas' || pathname === '/treino' || pathname.startsWith('/resumo/');
 
   return (
-    <div className={`mx-auto min-h-dvh max-w-lg ${semNavegacao ? '' : 'pb-24'}`}>
+    <div className={`mx-auto min-h-dvh max-w-lg ${semNavegacao ? '' : 'pb-32'}`}>
       {/* key = rota: cada troca de tela reinicia a animação de entrada */}
       <div key={pathname} className="pagina-entra">
         <Routes>

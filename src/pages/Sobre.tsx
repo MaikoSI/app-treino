@@ -528,7 +528,7 @@ export default function Sobre() {
 
 function Aviso() {
   return (
-    <p className="rounded-xl border border-borda bg-cartao px-4 py-3 text-sm text-secundario">
+    <p className="rounded-cartao vidro-fino px-4 py-3 text-sm text-secundario">
       Conteúdo informativo. Não substitui orientação de médico, nutricionista ou profissional de educação física.
     </p>
   );
@@ -536,7 +536,7 @@ function Aviso() {
 
 function Secao({ titulo, aberta, children }: { titulo: string; aberta?: boolean; children: ReactNode }) {
   return (
-    <details open={aberta} className="group rounded-cartao bg-cartao shadow-cartao">
+    <details open={aberta} className="group rounded-cartao vidro-fino">
       <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3 font-semibold [&::-webkit-details-marker]:hidden">
         <span className="flex-1">{titulo}</span>
         <span aria-hidden="true" className="text-secundario transition-transform group-open:rotate-180">

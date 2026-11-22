@@ -47,7 +47,7 @@ export function ListaExercicios({ aoEscolher }: { aoEscolher?: (ex: Exercicio) =
       <Botao onClick={() => setCriando(true)}>+ Criar exercício próprio</Botao>
 
       {todos === undefined && <EsqueletoLista />}
-      <ul className={`divide-y divide-borda/70 rounded-cartao bg-cartao px-4 shadow-cartao ${todos === undefined ? 'hidden' : ''}`}>
+      <ul className={`divide-y divide-borda/70 rounded-cartao vidro-fino px-4 ${todos === undefined ? 'hidden' : ''}`}>
         {filtrados.map((ex) => {
           const conteudo = (
             <>

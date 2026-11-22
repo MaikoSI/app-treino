@@ -149,7 +149,7 @@ export default function Inicio() {
         {/* Guia de uso: em destaque enquanto a pessoa ainda não terminou nenhum treino */}
         <Link
           to="/ajuda"
-          className={`pressionavel flex min-h-16 items-center gap-3 rounded-cartao bg-cartao p-4 shadow-cartao ${
+          className={`pressionavel flex min-h-16 items-center gap-3 rounded-cartao vidro-fino p-4 ${
             datas.length === 0 ? 'ring-1 ring-tinta/50' : ''
           }`}
         >

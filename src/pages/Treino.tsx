@@ -90,7 +90,7 @@ export default function Treino() {
   const feitas = series.filter((s) => s.concluida).length;
 
   return (
-    <div className={descanso.estado ? 'pb-36' : 'pb-10'}>
+    <div className={descanso.estado ? 'pb-40' : 'pb-10'}>
       <header className="pt-seguro sticky top-0 z-20 vidro">
         <div className="flex min-h-16 items-center gap-3 px-4">
           <div className="min-w-0 flex-1">
@@ -287,7 +287,7 @@ const CartaoExercicio = memo(function CartaoExercicio({
   const todasFeitas = pendentes.length === 0;
 
   return (
-    <section className={`rounded-cartao bg-cartao p-4 shadow-cartao ${todasFeitas ? 'ring-1 ring-concluido/40' : ''}`}>
+    <section className={`rounded-cartao vidro-fino p-4 ${todasFeitas ? 'ring-1 ring-concluido/40' : ''}`}>
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
           <h2 className="text-xl leading-tight font-semibold">{exercicio?.nome ?? 'Exercício removido'}</h2>

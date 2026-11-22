@@ -84,28 +84,36 @@
   --cartao-2: rgb(118 118 128 / 0.12);
   --borda: #d1d1d6;
   --texto: #000000;
-  --secundario: #6c6c70;
+  --secundario: #545458;
   --primaria: #0071e3;
   --primaria-ativo: #0062c4;
   --sobre-primaria: #ffffff;
-  --primaria-texto: #0066cc;
+  --primaria-texto: #0058b0;
   --tinta: #007aff;
   --concluido: #248a3d;
   --sobre-concluido: #ffffff;
-  --concluido-texto: #1e7b34;
+  --concluido-texto: #17652a;
   --destaque: #ff9500;
   --sobre-destaque: #000000;
-  --destaque-texto: #c93400;
+  --destaque-texto: #a52a00;
   --alerta: #ff3b30;
-  --alerta-texto: #d70015;
+  --alerta-texto: #b8000f;
   --volume-baixo: #8e8e93;
   --volume-ideal: #248a3d;
   --volume-alto: #ff3b30;
   --trilho: #e5e5ea;
   --polegar: #ffffff;
-  --vidro: rgb(249 249 249 / 0.78);
-  --sombra-cartao: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 1px rgb(0 0 0 / 0.02);
-  --sombra-flutuante: 0 3px 8px rgb(0 0 0 / 0.12), 0 3px 1px rgb(0 0 0 / 0.04);
+  --vidro: rgb(255 255 255 / 0.35); /* vidro fino: cartões e botões */
+  --vidro-forte: rgb(255 255 255 / 0.72); /* vidro espesso: barras, abas, sheets (há conteúdo variável atrás) */
+  --vidro-borda: rgb(255 255 255 / 0.55);
+  --vidro-brilho: rgb(255 255 255 / 0.85); /* reflexo na borda de cima */
+  --vidro-sombra: 0 8px 32px rgb(0 0 0 / 0.08), 0 1px 3px rgb(0 0 0 / 0.05);
+  --mancha-1: rgb(0 122 255 / 0.22);
+  --mancha-2: rgb(175 82 222 / 0.22);
+  --mancha-3: rgb(52 199 89 / 0.22);
+  --mancha-4: rgb(255 149 0 / 0.22);
+  --sombra-cartao: var(--vidro-sombra);
+  --sombra-flutuante: 0 12px 40px rgb(0 0 0 / 0.14), 0 2px 6px rgb(0 0 0 / 0.06);
 }
 
 /* Tema escuro: segue o sistema (sem escolha manual) ou a escolha "escuro" em Ajustes */
@@ -117,11 +125,11 @@
     --cartao-2: rgb(118 118 128 / 0.24);
     --borda: #38383a;
     --texto: #ffffff;
-    --secundario: #98989f;
+    --secundario: #a1a1a8;
     --primaria: #0071e3;
     --primaria-ativo: #0a84ff;
     --sobre-primaria: #ffffff;
-    --primaria-texto: #409cff;
+    --primaria-texto: #4fa6ff;
     --tinta: #0a84ff;
     --concluido: #30d158;
     --sobre-concluido: #000000;
@@ -130,15 +138,23 @@
     --sobre-destaque: #000000;
     --destaque-texto: #ff9f0a;
     --alerta: #ff453a;
-    --alerta-texto: #ff6961;
+    --alerta-texto: #ff7b73;
     --volume-baixo: #8e8e93;
     --volume-ideal: #30d158;
     --volume-alto: #ff453a;
     --trilho: #3a3a3c;
     --polegar: #636366;
-    --vidro: rgb(22 22 24 / 0.72);
-    --sombra-cartao: none;
-    --sombra-flutuante: 0 3px 8px rgb(0 0 0 / 0.4);
+    --vidro: rgb(44 44 46 / 0.45);
+    --vidro-forte: rgb(28 28 30 / 0.72);
+    --vidro-borda: rgb(255 255 255 / 0.14);
+    --vidro-brilho: rgb(255 255 255 / 0.22);
+    --vidro-sombra: 0 8px 32px rgb(0 0 0 / 0.5);
+    --mancha-1: rgb(10 132 255 / 0.24);
+    --mancha-2: rgb(191 90 242 / 0.24);
+    --mancha-3: rgb(48 209 88 / 0.24);
+    --mancha-4: rgb(255 159 10 / 0.24);
+    --sombra-cartao: var(--vidro-sombra);
+    --sombra-flutuante: 0 12px 40px rgb(0 0 0 / 0.6);
   }
 }
 :root[data-theme="escuro"] {
@@ -148,11 +164,11 @@
   --cartao-2: rgb(118 118 128 / 0.24);
   --borda: #38383a;
   --texto: #ffffff;
-  --secundario: #98989f;
+  --secundario: #a1a1a8;
   --primaria: #0071e3;
   --primaria-ativo: #0a84ff;
   --sobre-primaria: #ffffff;
-  --primaria-texto: #409cff;
+  --primaria-texto: #4fa6ff;
   --tinta: #0a84ff;
   --concluido: #30d158;
   --sobre-concluido: #000000;
@@ -161,22 +177,89 @@
   --sobre-destaque: #000000;
   --destaque-texto: #ff9f0a;
   --alerta: #ff453a;
-  --alerta-texto: #ff6961;
+  --alerta-texto: #ff7b73;
   --volume-baixo: #8e8e93;
   --volume-ideal: #30d158;
   --volume-alto: #ff453a;
   --trilho: #3a3a3c;
   --polegar: #636366;
-  --vidro: rgb(22 22 24 / 0.72);
-  --sombra-cartao: none;
-  --sombra-flutuante: 0 3px 8px rgb(0 0 0 / 0.4);
+  --vidro: rgb(44 44 46 / 0.45);
+  --vidro-forte: rgb(28 28 30 / 0.72);
+  --vidro-borda: rgb(255 255 255 / 0.14);
+  --vidro-brilho: rgb(255 255 255 / 0.22);
+  --vidro-sombra: 0 8px 32px rgb(0 0 0 / 0.5);
+  --mancha-1: rgb(10 132 255 / 0.24);
+  --mancha-2: rgb(191 90 242 / 0.24);
+  --mancha-3: rgb(48 209 88 / 0.24);
+  --mancha-4: rgb(255 159 10 / 0.24);
+  --sombra-cartao: var(--vidro-sombra);
+  --sombra-flutuante: 0 12px 40px rgb(0 0 0 / 0.6);
 }
 
-/* Vidro: barras, tab bar, sheets e o cronômetro de descanso */
+/*
+ * Liquid glass. Três níveis:
+ *  - vidro            espesso (72%), sem borda: cabeçalho que fica sobre o conteúdo rolando;
+ *  - vidro-flutuante  espesso + borda clara + brilho na borda de cima + sombra: abas, sheets, cronômetro, avisos;
+ *  - vidro-fino       35% + borda + brilho + sombra suave: cartões e botões secundários.
+ * Contraste AA garantido no pior caso (mancha mais forte atrás), calculado para todos os
+ * tokens de texto; por isso o fino é só para superfícies sobre o fundo da página.
+ * Sem suporte a backdrop-filter ou com "reduzir transparência": superfícies sólidas.
+ */
 @utility vidro {
+  background-color: var(--vidro-forte);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+}
+@utility vidro-flutuante {
+  background-color: var(--vidro-forte);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--vidro-borda);
+  box-shadow:
+    inset 0 1px 0 var(--vidro-brilho),
+    var(--sombra-flutuante);
+}
+@utility vidro-fino {
   background-color: var(--vidro);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--vidro-borda);
+  box-shadow:
+    inset 0 1px 0 var(--vidro-brilho),
+    var(--vidro-sombra);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .vidro,
+  .vidro-flutuante,
+  .vidro-fino {
+    background-color: var(--cartao);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .vidro,
+  .vidro-flutuante,
+  .vidro-fino {
+    background-color: var(--cartao);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  body::before {
+    display: none;
+  }
+}
+
+/* Manchas de cor desfocadas atrás de tudo, para o vidro ter o que refratar. Fixas: não rolam com a página. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40vmax 40vmax at 8% 6%, var(--mancha-1), transparent 70%),
+    radial-gradient(36vmax 36vmax at 96% 18%, var(--mancha-2), transparent 70%),
+    radial-gradient(38vmax 38vmax at 4% 62%, var(--mancha-3), transparent 70%),
+    radial-gradient(42vmax 42vmax at 94% 92%, var(--mancha-4), transparent 70%);
 }
 
 /* Toque no estilo iOS: encolhe um pouco e fica mais opaco, com transição suave */
@@ -298,9 +381,12 @@
   }
 }
 
+/* O fundo fica só no html: se o body tivesse fundo, ele cobriria as manchas (body::before, z-index -1). */
+html {
+  background: var(--fundo);
+}
 html,
 body {
-  background: var(--fundo);
   color: var(--texto);
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior-y: none;
@@ -327,6 +413,10 @@ input[type="number"] {
 }
 .pt-seguro {
   padding-top: env(safe-area-inset-top);
+}
+/* Barras flutuantes: afastadas da borda de baixo (e da barra de gestos do aparelho) */
+.pb-flutuante {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
 }
 
 @keyframes confete {

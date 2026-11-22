@@ -99,7 +99,7 @@ function AnalisePrograma({ programaId, diasPorSemana, totalDias }: { programaId:
   const raras = analise.filter((m) => m.frequenciaBaixa);
 
   return (
-    <details className="group rounded-cartao bg-cartao shadow-cartao">
+    <details className="group rounded-cartao vidro-fino">
       <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
         <span className="flex-1">
           <span className="block font-semibold">Volume por semana</span>
