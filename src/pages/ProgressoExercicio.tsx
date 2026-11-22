@@ -3,12 +3,13 @@ import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Cabecalho, Carregando, Cartao, Vazio } from '../components/ui';
+import { useSistemaEscuro } from '../components/useSistemaEscuro';
 import { db } from '../db';
 import { useConfig } from '../db/config';
 import { historicoDeSeries } from '../db/sessoes';
 import { dataCurta, dataLonga, kg, num } from '../lib/formato';
 import { recordesPessoais, serieTemporal } from '../lib/progresso';
-import { corDoTema, temaEfetivo, useSistemaEscuro } from '../lib/tema';
+import { corDoTema, temaEfetivo } from '../lib/tema';
 
 /**
  * Cores do gráfico, lidas do tema ativo:
