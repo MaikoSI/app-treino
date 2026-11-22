@@ -4,7 +4,7 @@ import { execucaoDe, NOMES_COM_EXECUCAO } from '../lib/execucoes';
 import { EXERCICIOS_INICIAIS } from './exerciciosIniciais';
 
 /** Exercícios prontos que ainda não têm demonstração. Encolhe a cada lote; no fim, vazio. */
-const PENDENTES: string[] = ['Abdominal supra', 'Abdominal na polia', 'Elevação de pernas', 'Prancha (segundos)'];
+const PENDENTES: string[] = [];
 
 const DIRECAO = /sobe|suba|desce|desça|empurre|puxe|estenda|estique|flexione|dobre|leve|abra|feche|levante|abaixe|eleve|segure|mantenha/i;
 

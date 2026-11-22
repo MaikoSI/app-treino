@@ -38,6 +38,14 @@ export function Demonstracao({ execucao, grupo }: { execucao: Execucao; grupo?: 
 
   if (!temWebGL()) return <p className="rounded-controle bg-cartao-2 p-3 text-sm text-secundario">Animação indisponível neste aparelho.</p>;
 
+  // Exercício parado (prancha): uma pose só basta, inclusive sem animação.
+  if (reduzir && execucao.receita.isometrica)
+    return (
+      <Suspense fallback={<Esqueleto className="aspect-[4/3] w-full" />}>
+        <Boneco3D execucao={execucao} grupo={grupo} tema={tema} estatico="inicio" />
+      </Suspense>
+    );
+
   if (reduzir)
     return (
       <div className="grid grid-cols-2 gap-2">
