@@ -117,7 +117,7 @@ export const ABDOMEN: Catalogo = {
           'Segure as pontas da corda ao lado da cabeça, com os cotovelos apontando para a frente.',
         ],
         execucao: [
-          'Enrole o tronco para baixo, levando os cotovelos em direção às coxas e aproximando as costelas do quadril.',
+          'Leve os cotovelos para baixo, em direção às coxas, enrolando o tronco e aproximando as costelas do quadril.',
           'O quadril fica parado: quem se move é o tronco, não os braços.',
           'Volte devagar (cerca de 2 segundos) até o tronco ficar quase reto.',
         ],
