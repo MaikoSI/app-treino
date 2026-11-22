@@ -1,6 +1,6 @@
-import { useEffect, useRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IconeVoltar, IconeX } from './Icones';
+import { IconeCarregando, IconeVoltar, IconeX } from './Icones';
 import { usePresenca } from './usePresenca';
 
 /**
@@ -21,13 +21,52 @@ const estilos: Record<Variante, string> = {
   perigo: 'bg-cartao-2 text-alerta-texto font-medium',
 };
 
+/** Indicador de atividade (gira; parado com "reduzir movimento"). */
+export function Girando({ className = '' }: { className?: string }) {
+  return <IconeCarregando width={20} height={20} className={`shrink-0 animate-spin ${className}`} />;
+}
+
+/** Só mostra o indicador se a ação passar disso (evita piscar em ações rápidas). */
+const ATRASO_INDICADOR_MS = 150;
+
+/**
+ * Botão iOS. Se `onClick` devolver uma Promise (função async), o botão fica ocupado até
+ * ela terminar: desabilitado (sem clique duplo), aria-busy e, depois de 150 ms, com o
+ * indicador de atividade.
+ */
 export function Botao({
   variante = 'secundario',
   grande,
   pequeno,
   className = '',
+  onClick,
+  disabled,
+  children,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variante?: Variante; grande?: boolean; pequeno?: boolean }) {
+  const [ocupado, setOcupado] = useState(false);
+  const [mostrarIndicador, setMostrarIndicador] = useState(false);
+  const montado = useRef(true);
+  useEffect(() => {
+    montado.current = true;
+    return () => {
+      montado.current = false;
+    };
+  }, []);
+
+  function clicar(e: MouseEvent<HTMLButtonElement>) {
+    const r: unknown = onClick?.(e);
+    if (!(r instanceof Promise)) return;
+    setOcupado(true);
+    const t = setTimeout(() => montado.current && setMostrarIndicador(true), ATRASO_INDICADOR_MS);
+    void r.finally(() => {
+      clearTimeout(t);
+      if (!montado.current) return;
+      setOcupado(false);
+      setMostrarIndicador(false);
+    });
+  }
+
   const tamanho = grande
     ? 'min-h-14 rounded-controle px-5 text-[1.0625rem]'
     : pequeno
@@ -37,8 +76,14 @@ export function Botao({
     <button
       type="button"
       className={`pressionavel inline-flex items-center justify-center gap-2 select-none disabled:opacity-40 ${tamanho} ${estilos[variante]} ${className}`}
+      onClick={clicar}
+      disabled={disabled || ocupado}
+      aria-busy={ocupado || undefined}
       {...props}
-    />
+    >
+      {mostrarIndicador && <Girando />}
+      {children}
+    </button>
   );
 }
 

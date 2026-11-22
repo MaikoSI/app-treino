@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { CalculadoraAnilhas } from '../components/CalculadoraAnilhas';
-import { Botao, Cabecalho, Carregando, Cartao, Contador, Interruptor, Painel, Segmentado } from '../components/ui';
+import { Botao, Cabecalho, Carregando, Cartao, Contador, Girando, Interruptor, Painel, Segmentado } from '../components/ui';
 import { apagarTudo, gerarBackup, nomeArquivoBackup, restaurarBackup, validarBackup } from '../db/backup';
 import { salvarConfig, useConfig } from '../db/config';
 import { aplicarMetasPadrao, programaAtivo } from '../db/programas';
@@ -16,6 +16,7 @@ export default function Config() {
   const [anilhas, setAnilhas] = useState(false);
   const [msg, setMsg] = useState<{ tipo: 'ok' | 'erro'; texto: string } | null>(null);
   const [msgMetas, setMsgMetas] = useState<string | null>(null);
+  const [restaurando, setRestaurando] = useState(false);
   const arquivo = useRef<HTMLInputElement>(null);
   const persistente = useArmazenamentoPersistente();
 
@@ -45,10 +46,13 @@ export default function Config() {
           'Isso vai APAGAR todos os dados atuais deste aparelho e colocar os do backup no lugar. Continuar?',
       );
       if (!ok) return;
+      setRestaurando(true);
       await restaurarBackup(backup);
       setMsg({ tipo: 'ok', texto: `Backup restaurado: ${plural(resumo.sessoes, 'treino', 'treinos')}.` });
     } catch (e) {
       setMsg({ tipo: 'erro', texto: e instanceof Error ? e.message : 'Não foi possível ler o arquivo.' });
+    } finally {
+      setRestaurando(false);
     }
   }
 
@@ -169,7 +173,10 @@ export default function Config() {
           <Botao variante="primario" onClick={exportar}>
             Exportar backup
           </Botao>
-          <Botao onClick={() => arquivo.current?.click()}>Importar backup</Botao>
+          <Botao onClick={() => arquivo.current?.click()} disabled={restaurando} aria-busy={restaurando || undefined}>
+            {restaurando && <Girando />}
+            {restaurando ? 'Restaurando backup…' : 'Importar backup'}
+          </Botao>
           <input
             ref={arquivo}
             type="file"

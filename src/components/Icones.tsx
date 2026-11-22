@@ -13,6 +13,7 @@ import {
   Flame,
   House,
   Info,
+  LoaderCircle,
   type LucideIcon,
   type LucideProps,
   Plus,
@@ -53,3 +54,4 @@ export const IconeRelogio = icone(Timer);
 export const IconeMenu = icone(EllipsisVertical);
 export const IconeInfo = icone(Info);
 export const IconeAjuda = icone(CircleHelp);
+export const IconeCarregando = icone(LoaderCircle);
