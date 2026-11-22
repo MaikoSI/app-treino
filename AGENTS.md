@@ -117,6 +117,13 @@ All styling goes through the design tokens in `src/index.css` (colors, type, spa
 
 `e2e/` (Playwright, emulated Pixel 7, production build with service worker): onboarding, full workout, resume after closing the app, backup export → restore on a fresh device. Each test starts with an empty IndexedDB. Use role/label locators (the app's aria-labels), helpers in `e2e/ajudantes.ts`. When a flow's labels change, update these tests.
 
+## Observability (optional, off by default)
+
+`src/observabilidade/`: `iniciarObservabilidade()` (called in `main.tsx`) turns on only what build-time env vars configure (see `.env.example`). With a var unset, Vite drops that code entirely: no bytes, no requests. React render errors go through `relatarErro` (`createRoot` `onUncaughtError`/`onCaughtError`).
+
+- **Sentry** (`VITE_SENTRY_DSN`, `sentry.ts`, lazy chunk): errors only. No default integrations except global handlers, linked errors, dedupe and navigation breadcrumbs; `dataCollection` all off (no IP, user, cookies, headers, bodies, query strings); no tracing, no replay; no source maps published.
+- **Privacy** (`privacidade.ts`, unit-tested): every outgoing event goes through `limparEvento` (drops user/extra/request data and non-device contexts, keeps only navigation breadcrumbs) and routes lose numeric ids (`/exercicios/:id`). Never attach workout, body or config data to telemetry. To check a change, build with a fake DSN and intercept `*ingest.sentry.io` in Playwright.
+
 ## CI
 
 `.github/workflows/ci.yml` runs on every PR (and pushes to other branches) in one job named `verificar`. Every new quality tool adds its step there. `scripts/proteger-main.sh` (needs `gh` with admin rights) makes `main` PR-only with `verificar` required, also for admins. Reviews required = 0 because a solo owner can't approve their own PR on GitHub; the PR + green CI is the gate.
