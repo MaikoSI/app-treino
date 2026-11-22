@@ -48,3 +48,13 @@ export function torrePolia(roldana: Vec3, base: [number, number] = [roldana[0], 
     { tipo: 'caixa', pos: roldana, tam: [0.05, 0.1, 0.1], material: 'metal' },
   ];
 }
+
+/** Banco de máquina com encosto vertical (o corpo de `sentadoComEncosto` encaixa nele). */
+export function maquinaSentado(): Equipamento3D[] {
+  return [
+    { tipo: 'caixa', pos: [0, 0.46, 0.08], tam: [0.42, 0.08, 0.42], material: 'estofado' },
+    { tipo: 'caixa', pos: [0, 0.9, -0.2], tam: [0.42, 0.7, 0.08], material: 'estofado' },
+    { tipo: 'caixa', pos: [0, 0.21, 0.05], tam: [0.1, 0.42, 0.3], material: 'metal' },
+    { tipo: 'caixa', pos: [0, 0.75, -0.29], tam: [0.1, 1.5, 0.1], material: 'metal' },
+  ];
+}

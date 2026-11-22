@@ -1,5 +1,5 @@
 /** Ferramentas para montar receitas: ciclo suavizado, alternância de lados e alvos de mãos/pés. */
-import { ALTURA_QUADRIL, type Articulacao, type Pose, type Vec3 } from '../esqueleto';
+import { ALTURA_QUADRIL, type Articulacao, type Ponto, type Pose, posicoes, type Vec3 } from '../esqueleto';
 import { espelhar, type Fase, type Quadro } from '../execucao';
 import { type Alvo, type Livre, resolverIK } from '../ik';
 
@@ -81,7 +81,81 @@ export const IK_BRACOS: Livre[] = ['ombroE', 'ombroD', 'cotoveloE', 'cotoveloD']
 
 export const ik = resolverIK;
 
+/** Sentado num banco de máquina (assento a `assento` m), tronco inclinado `inclinacao` graus (negativo = para trás). */
+export function sentado(inclinacao = 0, assento = 0.5, peZ = 0.45, z = 0): Pose {
+  const semente: Pose = {
+    raiz: { pos: [0, assento + 0.1, z], rot: [inclinacao, 0, 0] },
+    rot: {
+      quadrilE: [-90 - inclinacao, 0, 6],
+      quadrilD: [-90 - inclinacao, 0, -6],
+      joelhoE: [90, 0, 0],
+      joelhoD: [90, 0, 0],
+    },
+  };
+  return ik(semente, pesNoChao(0.16, peZ, 10), IK_PERNAS);
+}
+
+/** Sentado ereto com as costas no encosto de uma máquina (ver cenas.maquinaSentado). */
+export const sentadoComEncosto = () => sentado(0, 0.5, 0.45, -0.04);
+
 /** Em pé, ereto, com a raiz na altura padrão. */
 export function emPe(rot: Pose['rot'] = {}, pos: Vec3 = [0, ALTURA_QUADRIL, 0], inclinacao: Vec3 = [0, 0, 0]): Pose {
   return { raiz: { pos, rot: inclinacao }, rot };
+}
+
+export const espelharX = (v: Vec3): Vec3 => [-v[0], v[1], v[2]];
+
+/** Leva as mãos até os alvos (o direito é o espelho do esquerdo, se omitido), partindo das rotações-semente. */
+export function maosEm(base: Pose, maoE: Vec3, semente: Pose['rot'], maoD: Vec3 = espelharX(maoE), livres: Livre[] = IK_BRACOS): Pose {
+  return ik(
+    { ...base, rot: { ...base.rot, ...semente } },
+    [
+      { ponto: 'maoE', pos: maoE },
+      { ponto: 'maoD', pos: maoD },
+    ],
+    livres,
+  );
+}
+
+/** Posiciona cotovelos e mãos (determina o braço inteiro, inclusive a rotação do ombro). */
+export function bracosEm(base: Pose, cotE: Vec3, maoE: Vec3, semente: Pose['rot'], cotD = espelharX(cotE), maoD = espelharX(maoE)): Pose {
+  return ik(
+    { ...base, rot: { ...base.rot, ...semente } },
+    [
+      { ponto: 'cotoveloE', pos: cotE },
+      { ponto: 'maoE', pos: maoE },
+      { ponto: 'cotoveloD', pos: cotD },
+      { ponto: 'maoD', pos: maoD },
+    ],
+    IK_BRACOS,
+  );
+}
+
+/** Desloca o corpo inteiro para que `ponto` fique em `alvo`. */
+export function apoiar(p: Pose, ponto: Ponto, alvo: Vec3): Pose {
+  const atual = posicoes(p)[ponto];
+  const d: Vec3 = [alvo[0] - atual[0], alvo[1] - atual[1], alvo[2] - atual[2]];
+  return { ...p, raiz: { ...p.raiz, pos: [p.raiz.pos[0] + d[0], p.raiz.pos[1] + d[1], p.raiz.pos[2] + d[2]] } };
+}
+
+/** Soma vetores. */
+export const mais = (a: Vec3, b: Vec3): Vec3 => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+
+/**
+ * Deitado de barriga para cima num banco com encosto inclinado `inclinacao` graus (0 = reto,
+ * positivo = cabeça mais alta). O quadril fica sobre a junção assento/encosto em z = 0, a 45 cm do chão,
+ * e os pés apoiados no chão.
+ */
+export function deitadoNoBanco(inclinacao = 0, assento = 0.45): Pose {
+  const a = (inclinacao * Math.PI) / 180;
+  const semente: Pose = {
+    raiz: { pos: [0, assento + 0.11 * Math.cos(a), 0.11 * Math.sin(a)], rot: [-90 + inclinacao, 0, 0] },
+    rot: {
+      quadrilE: [15 - inclinacao, 0, 12],
+      quadrilD: [15 - inclinacao, 0, -12],
+      joelhoE: [75, 0, 0],
+      joelhoD: [75, 0, 0],
+    },
+  };
+  return ik(semente, pesNoChao(0.3, inclinacao > 20 ? 0.6 : 0.5, 15), IK_PERNAS);
 }

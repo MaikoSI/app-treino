@@ -1,21 +1,7 @@
 import type { Pose, Vec3 } from '../esqueleto';
 import { torrePolia } from './cenas';
-import { ciclo, IK_BRACOS, IK_PERNAS, ik, lerpV, misturarRot, pesNoChao } from './construir';
+import { ciclo, IK_BRACOS, ik, lerpV, misturarRot, sentado } from './construir';
 import type { Catalogo } from './tipos';
-
-/** Sentado num banco de máquina (assento a `assento` m), tronco inclinado `inclinacao` graus (negativo = para trás). */
-export function sentado(inclinacao = 0, assento = 0.5, peZ = 0.45): Pose {
-  const semente: Pose = {
-    raiz: { pos: [0, assento + 0.1, 0], rot: [inclinacao, 0, 0] },
-    rot: {
-      quadrilE: [-90 - inclinacao, 0, 6],
-      quadrilD: [-90 - inclinacao, 0, -6],
-      joelhoE: [90, 0, 0],
-      joelhoD: [90, 0, 0],
-    },
-  };
-  return ik(semente, pesNoChao(0.16, peZ, 10), IK_PERNAS);
-}
 
 export const COSTAS: Catalogo = {
   'Puxada alta': () => {

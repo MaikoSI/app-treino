@@ -5,15 +5,6 @@ import { EXERCICIOS_INICIAIS } from './exerciciosIniciais';
 
 /** Exercícios prontos que ainda não têm demonstração. Encolhe a cada lote; no fim, vazio. */
 const PENDENTES: string[] = [
-  'Supino reto com halteres',
-  'Supino inclinado',
-  'Supino inclinado com halteres',
-  'Supino declinado',
-  'Supino reto na máquina',
-  'Crucifixo com halteres',
-  'Voador (peck deck)',
-  'Crossover',
-  'Flexão de braço',
   'Puxada alta com triângulo',
   'Barra fixa',
   'Remada curvada',
