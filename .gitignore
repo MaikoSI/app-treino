@@ -20,3 +20,9 @@ Thumbs.db
 .vscode/
 .idea/
 .claude/
+
+# Relatórios de testes (Stryker, Playwright, cobertura)
+reports/
+.stryker-tmp/
+playwright-report/
+test-results/

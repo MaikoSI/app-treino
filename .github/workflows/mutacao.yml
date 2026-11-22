@@ -1,0 +1,30 @@
+# Testes de mutação (Stryker) em src/lib. Lento demais para cada PR: roda toda segunda e sob demanda.
+name: Testes de mutação
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  stryker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Stryker
+        run: npm run mutacao
+      - name: Relatório
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-mutacao
+          path: reports/mutation/
