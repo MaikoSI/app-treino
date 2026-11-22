@@ -11,6 +11,7 @@ treino-backup-*.json
 # Variáveis de ambiente e arquivos locais
 .env
 .env.*
+!.env.example
 *.local
 *.log
 
